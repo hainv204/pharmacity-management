@@ -1,0 +1,63 @@
+<!-- Sidebar Component -->
+<div class="sidebar bg-white">
+    <nav class="sidebar-nav">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/pages/dashboard.html" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item" data-role="manager,inventory,sales">
+                <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                    <i class="fas fa-pills"></i> Quản lý thuốc
+                </a>
+            </li>
+            <li class="nav-item" data-role="manager,sales">
+                <a class="nav-link" href="/pages/manage-order.html" data-page="manage-order">
+                    <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                </a>
+            </li>
+            <li class="nav-item" data-role="manager,sales,customer-service">
+                <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
+                    <i class="fas fa-users"></i> Quản lý khách hàng
+                </a>
+            </li>
+            <li class="nav-item" data-role="manager,inventory">
+                <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
+                    <i class="fas fa-truck"></i> Quản lý nhà cung cấp
+                </a>
+            </li>
+            <li class="nav-item" data-role="manager">
+                <a class="nav-link" href="/pages/report.html" data-page="report">
+                    <i class="fas fa-chart-bar"></i> Báo cáo thống kê
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    // Highlight active tab based on current page
+    function setActiveTab() {
+        const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const page = link.getAttribute('data-page');
+            if (page === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // Call setActiveTab when the sidebar is loaded
+    setActiveTab();
+
+    // Add event listener for navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
