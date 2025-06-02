@@ -7,257 +7,652 @@
     <meta name="theme-color" content="#4e73df">
     <title>Trang chủ - Pharmacity Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6.3.7/themes/light.css">
     <link href="/assets/css/style.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4154f1;
+            --secondary: #6c757d;
+            --success: #2eca6a;
+            --info: #4ac3f7;
+            --warning: #ffce3a;
+            --danger: #ff4d4d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --border-radius: 0.75rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f6f9ff;
+            color: #444444;
+        }
+
+        .dashboard-card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(1, 41, 112, 0.15);
+        }
+
+        .status-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card .icon {
+            font-size: 2.5rem;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .status-card .card-body {
+            z-index: 1;
+            position: relative;
+        }
+
+        .status-card .bg-icon {
+            font-size: 5rem;
+            opacity: 0.1;
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+        }
+
+        .status-card-good {
+            background-color: #e6f6ec;
+            color: var(--success);
+        }
+
+        .status-card-warning {
+            background-color: #fff8e6;
+            color: var(--warning);
+        }
+
+        .status-card-danger {
+            background-color: #ffe6e6;
+            color: var(--danger);
+        }
+
+        .status-card-info {
+            background-color: #e6f8ff;
+            color: var(--info);
+        }
+
+        .btn-action {
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            border-radius: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-action i {
+            margin-right: 0.25rem;
+        }
+
+        .stats-detail {
+            color: #67748e;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-period {
+            border: 1px solid #dee2e6;
+            border-radius: 30px;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Time greeting section */
+        .greeting-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-indicator {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #ffc107;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .greeting-text h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .greeting-text p {
+            margin: 0;
+            color: #6c757d;
+        }
+
+        /* Enhanced search bar */
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-control {
+            height: 46px;
+            border-radius: 30px;
+            padding-left: 45px;
+            padding-right: 15px;
+            border: 1px solid #e0e6ed;
+            background-color: #fff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .search-control:focus {
+            box-shadow: 0 3px 15px rgba(65, 84, 241, 0.2);
+            border-color: #4154f1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        /* Enhanced dropdown menu */
+        .sidebar-nav .nav-item {
+            position: relative;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav .nav-link {
+            padding: 0.75rem 1rem;
+            color: #67748e;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-nav .nav-link.active {
+            background-color: #4154f1;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(65, 84, 241, 0.5);
+        }
+
+        .sidebar-nav .nav-link:hover:not(.active) {
+            background-color: #f6f9ff;
+            color: #4154f1;
+        }
+
+        .sidebar-nav .nav-link i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-nav .has-submenu .nav-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-left: auto;
+        }
+
+        .sidebar-nav .submenu {
+            padding-left: 2.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sidebar-nav .submenu.show {
+            max-height: 200px;
+        }
+
+        .sidebar-nav .submenu .nav-link {
+            padding: 0.5rem 1rem;
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+
+        /* Quick report section */
+        .quick-report-card {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .quick-report-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .quick-report-label {
+            font-size: 0.875rem;
+            color: #67748e;
+        }
+
+        /* Tooltip styling */
+        .tooltip-inner {
+            max-width: 200px;
+            padding: 8px 12px;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e6ed;
+        }
+    </style>
 </head>
 
 <body>
     <div id="header"></div>
 
     <div class="container-fluid">
-        <div class="row g-3">
+        <div class="row">
             <!-- Sidebar -->
-            <div class="col-auto d-none d-lg-block">
-                <div id="sidebar"></div>
+            <div class="col-md-3 col-lg-2 d-none d-md-block sidebar-wrapper p-0">
+                <nav class="sidebar-nav py-3 px-2 h-100 bg-white shadow-sm">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/pages/dashboard.html" data-page="dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item has-submenu" data-role="manager,inventory,sales">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="fas fa-pills"></i> Quản lý thuốc
+                            </a>
+                            <ul class="submenu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                                        <i class="fas fa-list"></i> Danh sách thuốc
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="add-medicine">
+                                        <i class="fas fa-plus-circle"></i> Thêm thuốc mới
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="medicine-categories">
+                                        <i class="fas fa-tags"></i> Danh mục thuốc
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-submenu" data-role="manager,sales">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                            </a>
+                            <ul class="submenu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/pages/manage-order.html" data-page="manage-order">
+                                        <i class="fas fa-list"></i> Danh sách đơn hàng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="create-order">
+                                        <i class="fas fa-plus-circle"></i> Tạo đơn hàng
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-submenu" data-role="manager,sales,customer-service">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="fas fa-users"></i> Quản lý khách hàng
+                            </a>
+                            <ul class="submenu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
+                                        <i class="fas fa-list"></i> Danh sách khách hàng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="add-customer">
+                                        <i class="fas fa-user-plus"></i> Thêm khách hàng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="customer-groups">
+                                        <i class="fas fa-user-tag"></i> Nhóm khách hàng
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-submenu" data-role="manager,inventory">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="fas fa-truck"></i> Quản lý nhà cung cấp
+                            </a>
+                            <ul class="submenu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
+                                        <i class="fas fa-list"></i> Danh sách nhà cung cấp
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="add-supplier">
+                                        <i class="fas fa-plus-circle"></i> Thêm nhà cung cấp
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-submenu" data-role="manager">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="fas fa-chart-bar"></i> Báo cáo thống kê
+                            </a>
+                            <ul class="submenu nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/pages/report.html" data-page="report">
+                                        <i class="fas fa-chart-line"></i> Doanh thu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="sales-report">
+                                        <i class="fas fa-chart-pie"></i> Bán hàng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-page="inventory-report">
+                                        <i class="fas fa-warehouse"></i> Tồn kho
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" data-role="manager">
+                            <a class="nav-link" href="#" data-page="system-config">
+                                <i class="fas fa-cog"></i> Cấu hình hệ thống
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
-            <!-- Main Content -->
-            <main class="col px-md-4">
-                <!-- Welcome Section -->
-                <div class="d-flex justify-content-between align-items-center py-3">
+            <!-- Main Content - Giữ nguyên các phần nội dung -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <!-- Top Section: Search & Greeting -->
+                <div class="row mb-4 align-items-center">
+                    <div class="col-lg-7 mb-3 mb-lg-0">
+                        <div class="greeting-section">
+                            <div class="time-indicator">
+                                <i class="fas fa-sun text-white"></i>
+                            </div>
+                            <div class="greeting-text">
+                                <h1>Good Morning, Subash</h1>
+                                <p>14 January 2022 · 22:45:04</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="search-wrapper">
+                            <input type="text" class="form-control search-control"
+                                placeholder="Tìm kiếm thuốc, khách hàng, đơn hàng...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h1 class="h3 mb-0">Xin chào, <span id="userName" class="fw-bold text-primary"></span></h1>
-                        <p class="text-muted mb-0">Chúc bạn một ngày làm việc hiệu quả!</p>
+                        <h2 class="mb-1">Dashboard</h2>
+                        <p class="text-muted mb-0">A quick data overview of the inventory.</p>
                     </div>
-                    <button class="d-lg-none btn btn-light" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#mobileSidebar">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div> <!-- Stats Cards -->
+                    <div class="dropdown">
+                        <button class="btn btn-white border dropdown-toggle d-flex align-items-center" type="button"
+                            id="reportDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-file-download me-2"></i> Download Report
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="reportDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="far fa-file-excel me-2"></i> Excel</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="far fa-file-pdf me-2"></i> PDF</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="far fa-file-csv me-2"></i> CSV</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Status Cards -->
                 <div class="row g-3 mb-4">
-                    <!-- Orders Card - Visible to Manager and Sales -->
-                    <div class="col-sm-6 col-xl-3" data-section="orders">
-                        <div class="card stat-card stat-card-primary h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
-                                            <i class="fas fa-shopping-cart text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0">Đơn hàng</h6>
-                                            <h3 class="mb-0">254</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center text-success">
-                                    <i class="fas fa-arrow-up me-1"></i>
-                                    <span>12% so với tuần trước</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Revenue Card - Visible to Manager and Sales -->
-                    <div class="col-sm-6 col-xl-3" data-section="revenue">
-                        <div class="card stat-card stat-card-success h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
-                                            <i class="fas fa-dollar-sign text-success"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0">Doanh thu</h6>
-                                            <h3 class="mb-0">45.2M</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center text-success">
-                                    <i class="fas fa-arrow-up me-1"></i>
-                                    <span>8% so với tuần trước</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Products Card - Visible to Manager and Inventory -->
+                    <!-- Inventory Status Card -->
                     <div class="col-sm-6 col-xl-3" data-section="products">
-                        <div class="card stat-card stat-card-info h-100">
+                        <div class="card dashboard-card status-card status-card-good h-100">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
-                                            <i class="fas fa-pills text-info"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0">Sản phẩm</h6>
-                                            <h3 class="mb-0">1,520</h3>
-                                        </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="card-text mb-1">Inventory Status</p>
+                                        <h3 class="card-title mb-0">Good</h3>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-shield-alt" data-tippy-content="Stock levels are healthy"></i>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center text-danger">
-                                    <i class="fas fa-exclamation-circle me-1"></i>
-                                    <span>15 sản phẩm sắp hết hàng</span>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-sm btn-light btn-action">
+                                        <i class="fas fa-file-alt"></i> View Detailed Report
+                                    </a>
+                                </div>
+                            </div>
+                            <i class="fas fa-shield-alt bg-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Card -->
+                    <div class="col-sm-6 col-xl-3" data-section="revenue">
+                        <div class="card dashboard-card status-card status-card-info h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="card-text mb-1">Revenue</p>
+                                        <h3 class="card-title mb-0">Rs. 8,55,875</h3>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light dropdown-period" type="button"
+                                            data-bs-toggle="dropdown">
+                                            Jan 2022 <i class="fas fa-chevron-down ms-1"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#">January 2022</a></li>
+                                            <li><a class="dropdown-item" href="#">December 2021</a></li>
+                                            <li><a class="dropdown-item" href="#">November 2021</a></li>
+                                            <li><a class="dropdown-item" href="#">Custom Range</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-sm btn-light btn-action">
+                                        <i class="fas fa-file-alt"></i> View Detailed Report
+                                    </a>
+                                </div>
+                            </div>
+                            <i class="fas fa-coins bg-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Medicines Available Card -->
+                    <div class="col-sm-6 col-xl-3" data-section="products">
+                        <div class="card dashboard-card status-card status-card-info h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="card-text mb-1">Medicines Available</p>
+                                        <h3 class="card-title mb-0">298</h3>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-pills"
+                                            data-tippy-content="Total number of medicines in stock"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-sm btn-light btn-action">
+                                        <i class="fas fa-list"></i> Visit Inventory
+                                    </a>
+                                </div>
+                            </div>
+                            <i class="fas fa-pills bg-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Medicine Shortage Card -->
+                    <div class="col-sm-6 col-xl-3" data-section="products">
+                        <div class="card dashboard-card status-card status-card-danger h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="card-text mb-1">Medicine Shortage</p>
+                                        <h3 class="card-title mb-0">01</h3>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-exclamation-triangle"
+                                            data-tippy-content="Medications that need restocking"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-sm btn-danger btn-action">
+                                        <i class="fas fa-bolt"></i> Resolve Now
+                                    </a>
+                                </div>
+                            </div>
+                            <i class="fas fa-exclamation-triangle bg-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Summary & Quick Report Section -->
+                <div class="row g-3 mb-4">
+                    <!-- Inventory Summary -->
+                    <div class="col-lg-6 mb-4 mb-lg-0" data-section="products">
+                        <div class="card dashboard-card h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Inventory</h5>
+                                <a href="#" class="btn btn-sm btn-light">
+                                    Go to Configuration <i class="fas fa-chevron-right ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">298</span>
+                                            <span class="quick-report-label">Total no of Medicines</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">24</span>
+                                            <span class="quick-report-label">Medicine Groups</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Customers Card - Visible to Manager, Sales, and Customer Service -->
-                    <div class="col-sm-6 col-xl-3" data-section="customers">
-                        <div class="card stat-card stat-card-warning h-100">
+                    <!-- Quick Report -->
+                    <div class="col-lg-6 mb-4 mb-lg-0" data-section="revenue">
+                        <div class="card dashboard-card h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Quick Report</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light dropdown-period" type="button"
+                                        data-bs-toggle="dropdown">
+                                        January 2022 <i class="fas fa-chevron-down ms-1"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#">January 2022</a></li>
+                                        <li><a class="dropdown-item" href="#">December 2021</a></li>
+                                        <li><a class="dropdown-item" href="#">November 2021</a></li>
+                                        <li><a class="dropdown-item" href="#">Custom Range</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
-                                            <i class="fas fa-users text-warning"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0">Khách hàng</h6>
-                                            <h3 class="mb-0">852</h3>
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">70,856</span>
+                                            <span class="quick-report-label">Qty of Medicines Sold</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="d-flex align-items-center text-success">
-                                    <i class="fas fa-user-plus me-1"></i>
-                                    <span>25 khách hàng mới</span>
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">5,288</span>
+                                            <span class="quick-report-label">Invoices Generated</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> <!-- Recent Activity and Notifications -->
+                </div>
+
+                <!-- Pharmacy & Customer Information -->
                 <div class="row g-3">
-                    <!-- Recent Activity -->
-                    <div class="col-lg-8">
-                        <div class="card h-100">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Hoạt động gần đây</h5>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light active"
-                                        data-section="all-activities" data-role="manager">Tất cả</button>
-                                    <button type="button" class="btn btn-sm btn-light" data-section="order-activities"
-                                        data-role="sales">Đơn hàng</button>
-                                    <button type="button" class="btn btn-sm btn-light"
-                                        data-section="inventory-activities" data-role="inventory">Kho</button>
-                                    <button type="button" class="btn btn-sm btn-light"
-                                        data-section="customer-activities" data-role="customer-service">Khách
-                                        hàng</button>
-                                </div>
+                    <!-- My Pharmacy -->
+                    <div class="col-lg-6 mb-4 mb-lg-0" data-section="suppliers">
+                        <div class="card dashboard-card h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">My Pharmacy</h5>
+                                <a href="#" class="btn btn-sm btn-light">
+                                    Go to User Management <i class="fas fa-chevron-right ms-1"></i>
+                                </a>
                             </div>
-                            <div class="card-body p-0">
-                                <!-- Manager All Activities View -->
-                                <div class="list-group list-group-flush" data-section="all-activities">
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Đơn hàng mới #ORD123</h6>
-                                                <p class="mb-1">Khách hàng: Nguyễn Văn A</p>
-                                            </div>
-                                            <small class="text-muted">3 phút trước</small>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">04</span>
+                                            <span class="quick-report-label">Total no of Suppliers</span>
                                         </div>
                                     </div>
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Nhập kho thành công</h6>
-                                                <p class="mb-1">500 đơn vị Paracetamol</p>
-                                            </div>
-                                            <small class="text-muted">30 phút trước</small>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Khách hàng mới</h6>
-                                                <p class="mb-1">Đã thêm Trần Thị B</p>
-                                            </div>
-                                            <small class="text-muted">2 giờ trước</small>
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">05</span>
+                                            <span class="quick-report-label">Total no of Users</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Sales Activities View -->
-                                <div class="list-group list-group-flush" data-section="order-activities"
-                                    style="display:none">
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Đơn hàng mới #ORD123</h6>
-                                                <p class="mb-1">Khách hàng: Nguyễn Văn A</p>
-                                            </div>
-                                            <small class="text-muted">3 phút trước</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Inventory Activities View -->
-                                <div class="list-group list-group-flush" data-section="inventory-activities"
-                                    style="display:none">
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Nhập kho thành công</h6>
-                                                <p class="mb-1">500 đơn vị Paracetamol</p>
-                                            </div>
-                                            <small class="text-muted">30 phút trước</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Customer Service Activities View -->
-                                <div class="list-group list-group-flush" data-section="customer-activities"
-                                    style="display:none">
-                                    <div class="list-group-item">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <div>
-                                                <h6 class="mb-1">Khách hàng mới</h6>
-                                                <p class="mb-1">Đã thêm Trần Thị B</p>
-                                            </div>
-                                            <small class="text-muted">2 giờ trước</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer text-center">
-                                <a href="#" class="btn btn-link text-primary">Xem thêm</a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- System Notifications -->
-                    <div class="col-lg-4" data-section="all-activities">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="mb-0">Thông báo hệ thống</h5>
+                    <!-- Customers -->
+                    <div class="col-lg-6 mb-4 mb-lg-0" data-section="customers">
+                        <div class="card dashboard-card h-100">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Customers</h5>
+                                <a href="#" class="btn btn-sm btn-light">
+                                    Go to Customers Page <i class="fas fa-chevron-right ms-1"></i>
+                                </a>
                             </div>
-                            <div class="card-body p-0">
-                                <div class="list-group list-group-flush">
-                                    <!-- Inventory Alerts - Visible to Manager and Inventory -->
-                                    <div class="list-group-item" data-section="products">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fa-stack fa-lg me-3">
-                                                <i class="fas fa-circle fa-stack-2x text-danger text-opacity-25"></i>
-                                                <i class="fas fa-exclamation-triangle fa-stack-1x text-danger"></i>
-                                            </span>
-                                            <div>
-                                                <h6 class="mb-0">Cảnh báo tồn kho</h6>
-                                                <p class="mb-0 small text-muted">5 sản phẩm sắp hết hàng</p>
-                                            </div>
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">845</span>
+                                            <span class="quick-report-label">Total no of Customers</span>
                                         </div>
                                     </div>
-                                    <!-- Reports Alert - Visible to Manager only -->
-                                    <div class="list-group-item" data-section="reports">
-                                        <div class="d-flex align-items-center">
-                                            <span class="fa-stack fa-lg me-3">
-                                                <i class="fas fa-circle fa-stack-2x text-success text-opacity-25"></i>
-                                                <i class="fas fa-chart-line fa-stack-1x text-success"></i>
-                                            </span>
-                                            <div>
-                                                <h6 class="mb-0">Báo cáo mới</h6>
-                                                <p class="mb-0 small text-muted">Báo cáo doanh thu tháng đã sẵn sàng</p>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex flex-column">
+                                            <span class="quick-report-value text-primary">Adalimumab</span>
+                                            <span class="quick-report-label">Frequently bought Item</span>
                                         </div>
                                     </div>
                                 </div>
@@ -269,36 +664,95 @@
         </div>
     </div>
 
-    <!-- Mobile Sidebar -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body"></div>
-    </div>
-
+    <!-- Footer -->
     <div id="footer"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js"></script>
     <script src="/utils/auth.js"></script>
     <script>
         $(document).ready(function () {
             // Load components
-            $('#header').load('/components/header.html');
-            $('#sidebar').load('/components/sidebar.html', function () {
-                setupNavigation();
-                // Clone sidebar for mobile
-                $('.offcanvas-body').html($('#sidebar').html());
+            $('#header').load('/components/header.html', function () {
+                // Chú ý: Đừng tải sidebar từ components nếu bạn đã có sidebar nội tuyến
+                // Thay vì tải sidebar mới, hãy sử dụng sidebar đã có trong HTML
+                setupNavigationForDashboard();
             });
             $('#footer').load('/components/footer.html');
 
-            // Set user name
-            const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user'));
-            if (user) {
-                $('#userName').text(user.name);
+            // Hàm thiết lập phân quyền cho dashboard với sidebar nội tuyến
+            function setupNavigationForDashboard() {
+                // Gọi setupNavigation từ auth.js để xử lý phân quyền
+                setupNavigation();
+
+                // Cập nhật thông tin người dùng trên trang
+                const user = getCurrentUser();
+                if (user) {
+                    // Cập nhật tên người dùng trong greeting
+                    const greetingText = document.querySelector('.greeting-text h1');
+                    if (greetingText) {
+                        greetingText.textContent = `Good Morning, ${user.name}`;
+                    }
+                }
+
+                // Xử lý tương tác với sidebar đã có sẵn
+                setupSidebarDropdowns();
             }
+
+            // Hàm xử lý các dropdown trong sidebar
+            function setupSidebarDropdowns() {
+                console.log('Setting up sidebar dropdowns...');
+
+                // Xóa tất cả event handler cũ để tránh trùng lặp
+                $('.has-submenu > .nav-link').off('click');
+
+                // Thêm event handler mới
+                $('.has-submenu > .nav-link').on('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Submenu clicked');
+
+                    const submenu = $(this).next('.submenu');
+
+                    // Hiển thị/ẩn submenu khi click
+                    submenu.toggleClass('show');
+                    $(this).toggleClass('active');
+
+                    console.log('Submenu status:', submenu.hasClass('show'));
+                });
+
+                // Mở sẵn submenu của trang active
+                const activePage = window.location.pathname.split('/').pop().replace('.html', '');
+                const activeLink = document.querySelector(`.nav-link[data-page="${activePage}"]`);
+                if (activeLink) {
+                    console.log('Found active link:', activePage);
+                    const submenu = activeLink.closest('.submenu');
+                    if (submenu) {
+                        console.log('Found parent submenu, showing it');
+                        submenu.classList.add('show');
+                        const parentLink = submenu.previousElementSibling;
+                        if (parentLink) {
+                            parentLink.classList.add('active');
+                        }
+                    }
+                }
+            }
+
+            // Initialize tooltips
+            tippy('[data-tippy-content]', {
+                placement: 'top',
+                arrow: true,
+                theme: 'light',
+                animation: 'scale'
+            });
+
+            // Add hover effects to action buttons
+            $('.btn-action').hover(
+                function () { $(this).addClass('shadow-sm'); },
+                function () { $(this).removeClass('shadow-sm'); }
+            );
         });
     </script>
 </body>

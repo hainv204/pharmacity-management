@@ -7,18 +7,17 @@ const ROLES = {
     CUSTOMER_SERVICE: 'customer-service'
 };
 
+// Định nghĩa quyền truy cập - nguồn dữ liệu chính cho việc kiểm tra quyền
 const ACCESS_RIGHTS = {
-    // Medicine Management - Inventory, Sales, Manager can access
     'manage-medicine': [ROLES.MANAGER, ROLES.INVENTORY, ROLES.SALES],
-    'manage-order': [ROLES.MANAGER, ROLES.SALES], // Order Management - Sales and Manager
-    'manage-customer': [ROLES.MANAGER, ROLES.SALES, ROLES.CUSTOMER_SERVICE], // Customer Management - Sales, Customer Service, Manager
-    'manage-supplier': [ROLES.MANAGER, ROLES.INVENTORY], // Supplier Management - Inventory and Manager
-    'report': [ROLES.MANAGER], // Reports - Manager only
-    // Dashboard access is role-specific - each role sees their relevant data
+    'manage-order': [ROLES.MANAGER, ROLES.SALES],
+    'manage-customer': [ROLES.MANAGER, ROLES.SALES, ROLES.CUSTOMER_SERVICE],
+    'manage-supplier': [ROLES.MANAGER, ROLES.INVENTORY],
+    'report': [ROLES.MANAGER],
     'dashboard': [ROLES.MANAGER, ROLES.INVENTORY, ROLES.SALES, ROLES.CUSTOMER_SERVICE]
 };
 
-// Sample user data (in production, this would come from a backend)
+// Dữ liệu người dùng mẫu (trong thực tế sẽ lấy từ backend)
 const users = [
     { username: 'admin', password: 'admin123', role: ROLES.MANAGER, name: 'Quản lý' },
     { username: 'inventory', password: 'inv123', role: ROLES.INVENTORY, name: 'Nhân viên kho' },
@@ -35,7 +34,7 @@ function handleLogin(event) {
     const user = users.find(u => u.username === username && u.password === password);
 
     if (user) {
-        // Store user info in sessionStorage
+        // Lưu thông tin người dùng
         const userData = {
             username: user.username,
             role: user.role,
@@ -55,19 +54,27 @@ function handleLogin(event) {
     return false;
 }
 
+function getCurrentUser() {
+    const sessionUser = sessionStorage.getItem('user');
+    const localUser = localStorage.getItem('user');
+    return JSON.parse(sessionUser || localUser || 'null');
+}
+
 function checkAuth() {
-    const user = JSON.parse(sessionStorage.getItem('user') || localStorage.getItem('user'));
+    const user = getCurrentUser();
     if (!user) {
         window.location.href = '/login.html';
         return null;
     }
 
-    // Check if user has permission to access current page
+    // Kiểm tra quyền truy cập trang hiện tại
     const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
-    if (currentPage !== 'login' && currentPage !== '') {
+    // Các trang không cần kiểm tra quyền
+    const publicPages = ['login', '', 'index'];
+
+    if (!publicPages.includes(currentPage)) {
         if (!hasAccessToPage(user.role, currentPage)) {
-            // Redirect to dashboard if user doesn't have access
-            alert('You do not have permission to access this page.');
+            alert('Bạn không có quyền truy cập trang này.');
             window.location.href = '/pages/dashboard.html';
             return null;
         }
@@ -89,42 +96,86 @@ function setupNavigation() {
     const user = checkAuth();
     if (!user) return;
 
-    // Update user name in header
+    // Cập nhật tên người dùng trong header
     const currentUserElement = document.getElementById('currentUser');
     if (currentUserElement) {
         currentUserElement.textContent = user.name;
     }
 
-    // Show/hide navigation items based on user role and access rights
-    const navItems = document.querySelectorAll('[data-role]');
+    // Lấy trang hiện tại
     const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
 
-    navItems.forEach(item => {
-        const allowedRoles = item.dataset.role.split(',');
-        const link = item.querySelector('.nav-link');
-        const page = link ? link.getAttribute('data-page') : null;
+    // Xử lý tất cả các menu trong hệ thống (kể cả trong dashboard và sidebar)
+    setupMenuVisibility(user);
 
-        // Check both role and access rights
-        let hasAccess = allowedRoles.includes(user.role);
-        if (hasAccess && page && ACCESS_RIGHTS[page]) {
-            hasAccess = ACCESS_RIGHTS[page].includes(user.role);
-        }
-
-        if (!hasAccess) {
-            item.style.display = 'none';
-        } else if (link && page === currentPage) {
+    // Đánh dấu menu active
+    const navLinks = document.querySelectorAll('.nav-link[data-page]');
+    navLinks.forEach(link => {
+        const page = link.getAttribute('data-page');
+        if (page === currentPage) {
             link.classList.add('active');
         }
     });
 
-    // Handle role-specific dashboard content
-    if (currentPage === 'dashboard') {
+    // Xử lý nội dung dashboard riêng theo vai trò
+    if (currentPage === 'dashboard' || currentPage === '') {
         customizeDashboardForRole(user.role);
     }
 }
 
+// Hàm mới để xử lý việc hiển thị/ẩn menu
+function setupMenuVisibility(user) {
+    // 1. Xử lý menu có thuộc tính data-role
+    const navItemsWithRole = document.querySelectorAll('.nav-item[data-role]');
+    navItemsWithRole.forEach(item => {
+        const allowedRoles = item.dataset.role.split(',');
+        if (!allowedRoles.includes(user.role)) {
+            item.style.display = 'none';
+        }
+    });
+
+    // 2. Xử lý tất cả các menu có thuộc tính data-page, kiểm tra theo ACCESS_RIGHTS
+    const navLinks = document.querySelectorAll('.nav-link[data-page]');
+    navLinks.forEach(link => {
+        const page = link.getAttribute('data-page');
+        if (page && !hasAccessToPage(user.role, page)) {
+            // Ẩn cả nav-item cha nếu có
+            const parentItem = link.closest('.nav-item');
+            if (parentItem) {
+                parentItem.style.display = 'none';
+            } else {
+                link.style.display = 'none';
+            }
+        }
+    });
+
+    // 3. Xử lý các submenu (có cả trong dashboard)
+    const subMenus = document.querySelectorAll('.has-submenu');
+    subMenus.forEach(menu => {
+        // Lấy tất cả các liên kết trong submenu
+        const submenuLinks = menu.querySelectorAll('.nav-link');
+        let hasVisibleItem = false;
+
+        // Kiểm tra xem có ít nhất một liên kết con nào hiển thị không
+        submenuLinks.forEach(link => {
+            const style = window.getComputedStyle(link);
+            if (style.display !== 'none') {
+                const linkParent = link.closest('.nav-item');
+                if (!linkParent || window.getComputedStyle(linkParent).display !== 'none') {
+                    hasVisibleItem = true;
+                }
+            }
+        });
+
+        // Nếu không có liên kết con nào hiển thị, ẩn cả menu cha
+        if (!hasVisibleItem && submenuLinks.length > 0) {
+            menu.style.display = 'none';
+        }
+    });
+}
+
 function customizeDashboardForRole(role) {
-    // This function customizes dashboard elements based on user role
+    // Các phần tử dashboard tương ứng với mỗi vai trò
     const dashboardElements = {
         [ROLES.MANAGER]: ['orders', 'revenue', 'products', 'customers', 'reports', 'all-activities'],
         [ROLES.SALES]: ['orders', 'customers', 'revenue', 'order-activities'],
@@ -132,13 +183,15 @@ function customizeDashboardForRole(role) {
         [ROLES.CUSTOMER_SERVICE]: ['customers', 'customer-activities']
     };
 
-    // Hide all optional dashboard sections first
+    // Ẩn/hiện các phần tử dashboard dựa trên vai trò
     document.querySelectorAll('[data-section]').forEach(element => {
         const section = element.dataset.section;
-        if (dashboardElements[role] && dashboardElements[role].includes(section)) {
-            element.style.display = '';
+        const visibleSections = dashboardElements[role] || [];
+
+        if (visibleSections.includes(section)) {
+            element.style.display = ''; // Hiển thị phần tử
         } else {
-            element.style.display = 'none';
+            element.style.display = 'none'; // Ẩn phần tử
         }
     });
 }
