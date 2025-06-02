@@ -1,63 +1,118 @@
 <!-- Sidebar Component -->
-<div class="sidebar bg-white">
-    <nav class="sidebar-nav">
+<nav class="sidebar-wrapper">
+    <div class="sidebar-nav">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link" href="/pages/dashboard.html" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item" data-role="manager,inventory,sales">
-                <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
-                    <i class="fas fa-pills"></i> Quản lý thuốc
+
+            <li class="nav-item has-submenu" data-role="manager,inventory,sales">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <i class="fas fa-pills me-2"></i>
+                    <span class="text">Quản lý thuốc</span>
                 </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                            <i class="fas fa-list me-2"></i> <span class="text">Danh sách thuốc</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="add-medicine">
+                            <i class="fas fa-plus-circle me-2"></i> <span class="text">Thêm thuốc mới</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="medicine-categories">
+                            <i class="fas fa-tags me-2"></i> <span class="text">Danh mục thuốc</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item" data-role="manager,sales">
+
+            <li class="nav-item">
                 <a class="nav-link" href="/pages/manage-order.html" data-page="manage-order">
-                    <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    <span class="text">Quản lý hóa đơn</span>
                 </a>
             </li>
-            <li class="nav-item" data-role="manager,sales,customer-service">
-                <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
-                    <i class="fas fa-users"></i> Quản lý khách hàng
+
+            <li class="nav-item has-submenu" data-role="manager,sales,customer-service">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <i class="fas fa-users me-2"></i>
+                    <span class="text">Quản lý khách hàng</span>
                 </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
+                            <i class="fas fa-list me-2"></i> <span class="text">Danh sách khách hàng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="add-customer">
+                            <i class="fas fa-user-plus me-2"></i> <span class="text">Thêm khách hàng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="customer-groups">
+                            <i class="fas fa-user-tag me-2"></i> <span class="text">Nhóm khách hàng</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item" data-role="manager,inventory">
-                <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
-                    <i class="fas fa-truck"></i> Quản lý nhà cung cấp
+
+            <li class="nav-item has-submenu" data-role="manager,inventory">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <i class="fas fa-truck me-2"></i>
+                    <span class="text">Quản lý nhà cung cấp</span>
                 </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
+                            <i class="fas fa-list me-2"></i> <span class="text">Danh sách nhà cung cấp</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="add-supplier">
+                            <i class="fas fa-plus-circle me-2"></i> <span class="text">Thêm nhà cung cấp</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item" data-role="manager">
-                <a class="nav-link" href="/pages/report.html" data-page="report">
-                    <i class="fas fa-chart-bar"></i> Báo cáo thống kê
+
+            <li class="nav-item has-submenu" data-role="manager">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    <span class="text">Báo cáo thống kê</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/report.html" data-page="report">
+                            <i class="fas fa-chart-line me-2"></i> <span class="text">Doanh thu</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="sales-report">
+                            <i class="fas fa-chart-pie me-2"></i> <span class="text">Bán hàng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="inventory-report">
+                            <i class="fas fa-warehouse me-2"></i> <span class="text">Tồn kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-page="system-config">
+                    <i class="fas fa-cog me-2"></i>
+                    <span class="text">Cấu hình hệ thống</span>
                 </a>
             </li>
         </ul>
-    </nav>
-</div>
-
-<script>
-    // Highlight active tab based on current page
-    function setActiveTab() {
-        const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
-        document.querySelectorAll('.nav-link').forEach(link => {
-            const page = link.getAttribute('data-page');
-            if (page === currentPage) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-
-    // Call setActiveTab when the sidebar is loaded
-    setActiveTab();
-
-    // Add event listener for navigation
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function () {
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-</script>
+    </div>
+</nav>
