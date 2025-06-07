@@ -117,6 +117,15 @@
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
             transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .btn-action i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
         }
 
         .btn-action:hover {
@@ -358,6 +367,80 @@
         .dropdown-item:hover {
             background-color: #f1f5f9;
         }
+
+        /* Styles cho modal thanh toán tiền mặt */
+        #cashPaymentModal .modal-content {
+            border-left: 5px solid #198754;
+        }
+
+        #cashReceived,
+        #cashChange {
+            font-size: 1.25rem;
+            height: calc(1.5em + 1rem + 2px);
+            font-weight: 500;
+        }
+
+        /* Styles cho modal thanh toán chuyển khoản */
+        #transferPaymentModal .modal-content {
+            border-left: 5px solid #0dcaf0;
+        }
+
+        /* Styles cho modal thanh toán MoMo */
+        #momoPaymentModal .modal-content {
+            border-left: 5px solid #dc3545;
+        }
+
+        /* Hiệu ứng hover cho mã QR */
+        #momoPaymentModal img:hover,
+        #transferPaymentModal img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Hiệu ứng loading khi xử lý thanh toán */
+        .payment-processing {
+            position: relative;
+        }
+
+        .payment-processing::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Nút thanh toán theo màu sắc tương ứng với phương thức */
+        #cashPaymentModal .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        #transferPaymentModal .btn-info {
+            background-color: #0dcaf0;
+            border-color: #0dcaf0;
+        }
+
+        #momoPaymentModal .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        /* Tooltip thông tin */
+        .info-tooltip {
+            color: #6c757d;
+            cursor: pointer;
+        }
+
+        .info-tooltip:hover {
+            color: #212529;
+        }
     </style>
 </head>
 
@@ -411,23 +494,21 @@
                                     <button
                                         class="btn btn-outline-secondary dropdown-toggle w-100 d-flex align-items-center justify-content-between"
                                         type="button" id="statusFilterBtn" data-bs-toggle="dropdown">
-                                        <span><i class="fas fa-circle text-success me-1"></i> Đã thanh toán</span>
+                                        <span><i class="text-success me-1"></i> Tất cả trạng thái</span>
                                         <i class="fas fa-chevron-down"></i>
                                     </button>
                                     <ul class="dropdown-menu w-100">
-                                        <li><button class="dropdown-item active"><i
-                                                    class="fas fa-circle text-success me-1"></i>
+                                        <li><button class="dropdown-item active"><i class="text-success me-1"></i>
                                                 Đã thanh toán</button></li>
-                                        <li><button class="dropdown-item"><i
-                                                    class="fas fa-circle text-warning me-1"></i>
+                                        <li><button class="dropdown-item"><i class="text-warning me-1"></i>
                                                 Đang xử lý</button></li>
-                                        <li><button class="dropdown-item"><i class="fas fa-circle text-danger me-1"></i>
+                                        <li><button class="dropdown-item"><i class="text-danger me-1"></i>
                                                 Đã
                                                 hủy</button></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><button class="dropdown-item"><i class="fas fa-filter me-1"></i> Tất cả
+                                        <li><button class="dropdown-item"><i class="me-1"></i> Tất cả
                                                 trạng
                                                 thái</button></li>
                                     </ul>
@@ -455,53 +536,39 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="fw-medium">#HD001</td>
+                                        <td class="fw-medium">HD001</td>
                                         <td>20/05/2025 14:30</td>
                                         <td>Nguyễn Văn A</td>
                                         <td class="fw-medium">250.000 đ</td>
-                                        <td>
-                                            <span class="badge bg-light text-dark">Không có</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="status-indicator status-paid me-2"></span>
-                                                <span>Đã thanh toán</span>
-                                            </div>
-                                        </td>
+                                        <td>Không có</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
                                         <td>
                                             <div class="table-actions">
                                                 <button class="btn-action view" data-bs-toggle="tooltip"
                                                     title="Xem chi tiết">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn-action print" data-bs-toggle="tooltip"
-                                                    title="In hóa đơn">
-                                                    <i class="fas fa-print"></i>
-                                                </button>
-                                                <button class="btn-action cancel" data-bs-toggle="tooltip"
-                                                    title="Huỷ đơn" disabled>
-                                                    <i class="fas fa-times"></i>
+                                                <button class="btn-action trash-can" data-bs-toggle="tooltip"
+                                                    title="Xoá đơn" disabled>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-medium">#HD002</td>
+                                        <td class="fw-medium">HD002</td>
                                         <td>19/05/2025 10:15</td>
                                         <td>Trần Thị B</td>
                                         <td>
                                             <div class="d-flex flex-column">
                                                 <span class="fw-medium">450.000 đ</span>
-                                                <small class="text-decoration-line-through text-danger">500.000 đ</small>
+                                                <small class="text-decoration-line-through text-danger">500.000
+                                                    đ</small>
                                             </div>
                                         </td>
+                                        <td>Giảm 10%</td>
                                         <td>
-                                            <span class="badge bg-success text-white">Giảm 10%</span>
-                                        </td>
-                                        <td>
-                                            <span class="status-badge status-processing">
-                                                <i class="fas fa-clock"></i> Đang xử lý
-                                            </span>
+                                            <span class="text-warning">Đang xử lý</span>
                                         </td>
                                         <td>
                                             <div class="table-actions">
@@ -513,39 +580,65 @@
                                                     title="Chỉnh sửa">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn-action cancel" data-bs-toggle="tooltip"
-                                                    title="Huỷ đơn">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-medium">#HD003</td>
+                                        <td class="fw-medium">HD003</td>
                                         <td>18/05/2025 16:45</td>
                                         <td>Lê Văn C</td>
                                         <td class="fw-medium">180.000 đ</td>
-                                        <td>
-                                            <span class="badge bg-light text-dark">Không có</span>
-                                        </td>
-                                        <td>
-                                            <span class="status-badge status-cancelled">
-                                                <i class="fas fa-times-circle"></i> Đã huỷ
-                                            </span>
-                                        </td>
+                                        <td>Không có</td>
+                                        <td><span class="text-danger">Đã huỷ</span></td>
                                         <td>
                                             <div class="table-actions">
                                                 <button class="btn-action view" data-bs-toggle="tooltip"
                                                     title="Xem chi tiết">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn-action print" data-bs-toggle="tooltip"
-                                                    title="In hóa đơn" disabled>
-                                                    <i class="fas fa-print"></i>
-                                                </button>
                                                 <button class="btn-action cancel" data-bs-toggle="tooltip"
-                                                    title="Huỷ đơn" disabled>
-                                                    <i class="fas fa-times"></i>
+                                                    title="Xoá đơn">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD001</td>
+                                        <td>20/05/2025 14:30</td>
+                                        <td>Nguyễn Văn A</td>
+                                        <td class="fw-medium">250.000 đ</td>
+                                        <td>Không có</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" data-bs-toggle="tooltip"
+                                                    title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-action trash-can" data-bs-toggle="tooltip"
+                                                    title="Xoá đơn" disabled>
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD001</td>
+                                        <td>20/05/2025 14:30</td>
+                                        <td>Nguyễn Văn A</td>
+                                        <td class="fw-medium">250.000 đ</td>
+                                        <td>Không có</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" data-bs-toggle="tooltip"
+                                                    title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-action trash-can" data-bs-toggle="tooltip"
+                                                    title="Xoá đơn" disabled>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -640,7 +733,6 @@
                                                     <option value="">-- Chọn --</option>
                                                     <option value="male">Nam</option>
                                                     <option value="female">Nữ</option>
-                                                    <option value="other">Khác</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -707,13 +799,13 @@
                                             <tr>
                                                 <td>MED001</td>
                                                 <td>Paracetamol 500mg</td>
-                                                <td>2.000 đ</td>
+                                                <td>2.000đ</td>
                                                 <td>
                                                     <input type="number"
                                                         class="form-control form-control-sm quantity-input" value="5"
                                                         min="1" style="width: 70px">
                                                 </td>
-                                                <td>10.000 đ</td>
+                                                <td>10.000đ</td>
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-danger">
                                                         <i class="fas fa-times"></i>
@@ -723,13 +815,13 @@
                                             <tr>
                                                 <td>MED015</td>
                                                 <td>Vitamin C 500mg</td>
-                                                <td>15.000 đ</td>
+                                                <td>15.000đ</td>
                                                 <td>
                                                     <input type="number"
                                                         class="form-control form-control-sm quantity-input" value="2"
                                                         min="1" style="width: 70px">
                                                 </td>
-                                                <td>30.000 đ</td>
+                                                <td>30.000đ</td>
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-danger">
                                                         <i class="fas fa-times"></i>
@@ -740,15 +832,15 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4" class="text-end">Tổng phụ:</td>
-                                                <td colspan="2" class="fw-bold">40.000 đ</td>
+                                                <td colspan="2" class="fw-bold">40.000đ</td>
                                             </tr>
                                             <tr id="discountRow">
                                                 <td colspan="4" class="text-end">Giảm giá:</td>
-                                                <td colspan="2" class="fw-bold text-success">-4.000 đ (10%)</td>
+                                                <td colspan="2" class="fw-bold text-success">-4.000đ (10%)</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-end">Tổng thanh toán:</td>
-                                                <td colspan="2" class="fw-bold fs-5 text-primary">36.000 đ</td>
+                                                <td colspan="2" class="fw-bold fs-5 text-primary">36.000đ</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -770,12 +862,22 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Hình thức thanh toán</label>
-                                        <select class="form-select" id="paymentMethod">
-                                            <option value="cash">Tiền mặt</option>
-                                            <option value="card">Thẻ ngân hàng</option>
-                                            <option value="transfer">Chuyển khoản</option>
-                                            <option value="momo">Ví điện tử (MoMo)</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light">
+                                                <i id="paymentMethodIcon"
+                                                    class="fas fa-money-bill-wave text-success"></i>
+                                            </span>
+                                            <select class="form-select" id="paymentMethodSelect">
+                                                <option value="cash" selected data-icon="fa-money-bill-wave"
+                                                    data-color="text-success">Tiền mặt</option>
+                                                <option value="card" data-icon="fa-credit-card"
+                                                    data-color="text-primary">Thẻ ngân hàng</option>
+                                                <option value="transfer" data-icon="fa-university"
+                                                    data-color="text-info">Chuyển khoản</option>
+                                                <option value="momo" data-icon="fa-mobile-alt" data-color="text-danger">
+                                                    Ví MoMo</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ưu đãi áp dụng</label>
@@ -808,13 +910,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary me-2" id="saveInvoiceBtn">
+                    <button type="button" class="btn btn-outline-primary me-2" id="saveInvoiceBtn">
                         <i class="fas fa-save me-1"></i> Lưu hóa đơn
                     </button>
-                    <button type="button" class="btn btn-success">
-                        <i class="fas fa-print me-1"></i> In hóa đơn
-                    </button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy hoá đơn</button>
                 </div>
             </div>
         </div>
@@ -930,21 +1029,104 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                            <h6 class="fw-bold mb-3">Lịch sử giao dịch của khách hàng</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold mb-0">Lịch sử giao dịch của khách hàng</h6>
+                                <!-- Bộ lọc lịch sử giao dịch -->
+                                <div class="d-flex gap-2">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-calendar-alt text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control border-start-0 datepicker-range"
+                                            id="historyDateFilter" placeholder="Từ ngày - Đến ngày">
+                                    </div>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-pills text-muted"></i>
+                                        </span>
+                                        <input type="text" class="form-control border-start-0" id="historyProductFilter"
+                                            placeholder="Tìm theo thuốc">
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-filter me-1"></i> Lọc
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Lịch sử giao dịch -->
                             <div class="table-responsive">
                                 <table class="table border">
                                     <thead>
                                         <tr>
                                             <th>Mã hóa đơn</th>
                                             <th>Ngày giao dịch</th>
+                                            <th>Sản phẩm</th>
                                             <th>Tổng tiền</th>
                                             <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Dữ liệu lịch sử giao dịch -->
+                                        <tr>
+                                            <td class="fw-medium">HD001</td>
+                                            <td>20/05/2025 14:30</td>
+                                            <td>
+                                                <span class="d-block">Paracetamol 500mg (x50)</span>
+                                                <span class="text-muted small">Amoxicillin 500mg (x30), Vitamin C
+                                                    (x4)</span>
+                                            </td>
+                                            <td class="fw-medium">250.000 đ</td>
+                                            <td><span class="text-success">Đã thanh toán</span></td>
+                                            <td>
+                                                <button class="btn-action view" onclick="viewInvoiceDetails('HD001')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium">HD123</td>
+                                            <td>15/05/2025 10:15</td>
+                                            <td>
+                                                <span class="d-block">Vitamin B Complex (x2)</span>
+                                                <span class="text-muted small">Panadol Extra (x10)</span>
+                                            </td>
+                                            <td class="fw-medium">180.000 đ</td>
+                                            <td><span class="text-success">Đã thanh toán</span></td>
+                                            <td>
+                                                <button class="btn-action view" onclick="viewInvoiceDetails('HD123')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium">HD098</td>
+                                            <td>10/05/2025 17:45</td>
+                                            <td>
+                                                <span class="d-block">Efferalgan 500mg (x20)</span>
+                                            </td>
+                                            <td class="fw-medium">120.000 đ</td>
+                                            <td><span class="text-success">Đã thanh toán</span></td>
+                                            <td>
+                                                <button class="btn-action view" onclick="viewInvoiceDetails('HD098')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <!-- Phân trang và tổng kết -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="text-muted small">
+                                    Tổng cộng: <span class="fw-medium">3</span> giao dịch
+                                </div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <span class="fw-bold mb-1">Tổng chi tiêu: <span class="text-primary">550.000
+                                            đ</span></span>
+                                    <span class="small text-muted">Điểm tích luỹ: <span class="text-success">+55</span>
+                                        điểm</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1083,6 +1265,796 @@
 
     <script>
         $(document).ready(function () {
+            // Xử lý thêm thuốc khi chỉnh sửa hoá đơn - sửa lại để không mở modal thêm thuốc
+            $('#editAddMedicineBtn').off('click').on('click', function () {
+                // Lấy giá trị từ ô tìm kiếm
+                const searchValue = $('#editMedicineSearch').val().trim();
+
+                if (!searchValue) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập mã hoặc tên thuốc!', 'error');
+                    return;
+                }
+
+                // Giả lập kiểm tra thuốc có tồn tại trong hệ thống không
+                // Trong thực tế sẽ gọi API để kiểm tra
+                const isMedicineExist = searchValue.length > 2; // Giả sử thuốc tồn tại nếu chuỗi tìm kiếm > 2 ký tự
+
+                if (!isMedicineExist) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong hệ thống!', 'error');
+                    return;
+                }
+
+                // Giả lập tìm kiếm thuốc từ API (trong thực tế)
+                // Giả sử tìm được thuốc
+                const medicineId = searchValue.toUpperCase().includes('MED') ? searchValue : 'MED' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                const medicineName = searchValue.toUpperCase().includes('MED') ? 'Thuốc ' + Math.floor(Math.random() * 100) : searchValue;
+                const price = Math.floor(Math.random() * 20 + 1) * 1000; // Giá từ 1.000đ đến 20.000đ
+
+                // Kiểm tra thuốc đã tồn tại trong đơn hàng chưa
+                const existingRow = $('#editInvoiceItems').find(`tr[id="medicine-${medicineId}"]`);
+
+                if (existingRow.length > 0) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc này đã có trong đơn hàng!', 'error');
+                    return;
+                }
+
+                // Thêm thuốc vào bảng
+                addMedicineToEditTable(medicineId, medicineName, price, 1);
+
+                // Xóa nội dung ô tìm kiếm
+                $('#editMedicineSearch').val('');
+
+                // Cập nhật tổng tiền
+                updateEditTotals();
+
+                // Hiển thị thông báo
+                showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã thêm thuốc vào đơn hàng!');
+            });
+
+            // Hàm thêm thuốc vào bảng khi chỉnh sửa
+            function addMedicineToEditTable(id, name, price, quantity) {
+                // Tính thành tiền
+                const totalPrice = price * quantity;
+
+                // Tạo HTML cho dòng mới
+                const newRow = `
+                <tr id="medicine-${id}">
+                    <td>${id}</td>
+                    <td>${name}</td>
+                    <td>${price.toLocaleString('vi-VN')} đ</td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm edit-quantity-input" 
+                            value="${quantity}" min="1" style="width: 70px">
+                    </td>
+                    <td>${totalPrice.toLocaleString('vi-VN')} đ</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger edit-remove-medicine">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+                // Thêm dòng mới vào bảng
+                $('#editInvoiceItems').append(newRow);
+
+                // Cập nhật tổng tiền
+                updateEditTotals();
+
+                // Gắn sự kiện cho nút xóa và input số lượng
+                setupEditMedicineEvents();
+            }
+            // Xử lý sự kiện cho các phần tử trong bảng thuốc
+            function setupEditMedicineEvents() {
+                // Xử lý thay đổi số lượng thuốc
+                $('.edit-quantity-input').off('input').on('input', function () {
+                    const row = $(this).closest('tr');
+                    const quantity = parseInt($(this).val()) || 0;
+
+                    // Kiểm tra số lượng hợp lệ
+                    if (quantity <= 0) {
+                        $(this).val(1);
+                        showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số lượng phải lớn hơn 0!', 'error');
+                        return;
+                    }
+
+                    // Tính lại thành tiền
+                    const price = parseFloat(row.find('td:eq(2)').text().replace(/[^\d]/g, ''));
+                    const amount = price * quantity;
+                    row.find('td:eq(4)').text(amount.toLocaleString('vi-VN') + ' đ');
+
+                    // Cập nhật tổng tiền
+                    updateEditTotals();
+                });
+
+                // Xử lý xóa thuốc
+                $('.edit-remove-medicine').off('click').on('click', function () {
+                    const row = $(this).closest('tr');
+
+                    // Xóa thuốc
+                    row.remove();
+
+                    // Cập nhật tổng tiền
+                    updateEditTotals();
+
+                    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xóa thuốc khỏi đơn hàng!');
+                });
+            }
+            // Xử lý xóa thuốc trong phần lập hóa đơn
+            $(document).on('click', '.btn-danger', function () {
+                const row = $(this).closest('tr');
+
+                // Xóa thuốc
+                row.remove();
+
+                // Cập nhật tổng tiền
+                updateTotals();
+
+                showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xóa thuốc khỏi đơn hàng!');
+            });
+            // Cập nhật tổng tiền khi chỉnh sửa
+            function updateEditTotals() {
+                let subtotal = 0;
+
+                // Tính tổng phụ
+                $('#editInvoiceItems tr').each(function () {
+                    const priceText = $(this).find('td:eq(4)').text();
+                    const price = parseFloat(priceText.replace(/[^\d]/g, ''));
+                    subtotal += price;
+                });
+
+                // Hiển thị tổng phụ
+                $('#editInvoiceModal tfoot tr:eq(0) td:last').text(subtotal.toLocaleString('vi-VN') + 'đ');
+
+                // Áp dụng giảm giá (nếu có)
+                const discount = $('#editDiscountSelect').val();
+                let discountAmount = 0;
+                let discountText = "";
+
+                if (discount === 'percent10') {
+                    discountAmount = subtotal * 0.1;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ (10%)";
+                } else if (discount === 'amount20k') {
+                    discountAmount = 20000;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ";
+                } else if (discount === 'freeship') {
+                    discountText = "Miễn phí giao hàng";
+                } else {
+                    discountText = "0đ";
+                }
+
+                // Hiển thị giảm giá
+                $('#editInvoiceModal tfoot tr:eq(1) td:last').text(discountText);
+
+                // Tính tổng thanh toán
+                const finalTotal = subtotal - discountAmount;
+
+                // Hiển thị tổng thanh toán
+                $('#editInvoiceModal tfoot tr:eq(2) td:last').text(finalTotal.toLocaleString('vi-VN') + 'đ');
+            }
+
+            // Xử lý khi thay đổi ưu đãi áp dụng
+            $('#editDiscountSelect').change(function () {
+                // Nếu chọn tự động áp dụng ưu đãi tốt nhất
+                if ($('#autoDiscountEdit').is(':checked')) {
+                    // Hiển thị trạng thái đang xử lý
+                    $(this).prop('disabled', true);
+                    setTimeout(() => {
+                        // Giả lập tìm thấy ưu đãi tốt nhất là giảm 10%
+                        $(this).val('percent10');
+                        $(this).prop('disabled', false);
+
+                        // Tính lại tổng tiền
+                        updateEditTotals();
+                        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng ưu đãi tốt nhất cho khách hàng!');
+                    }, 800);
+                } else {
+                    // Tính lại tổng tiền
+                    updateEditTotals();
+                }
+            });
+
+            // Xử lý checkbox áp dụng ưu đãi tự động
+            $('#autoDiscountEdit').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#editDiscountSelect').prop('disabled', true);
+                    setTimeout(() => {
+                        $('#editDiscountSelect').val('percent10');
+                        $('#editDiscountSelect').prop('disabled', false);
+                        updateEditTotals();
+                    }, 800);
+                }
+            });
+
+            // Gắn sự kiện cho các phần tử trong bảng thuốc khi trang tải
+            setupEditMedicineEvents();
+
+            // Đăng ký sự kiện cho nút xoá hoá đơn
+            $(document).on('click', '.btn-action.trash-can, .btn-action.cancel', function () {
+                if (!$(this).prop('disabled')) {
+                    const row = $(this).closest('tr');
+                    const invoiceId = row.find('td:first').text();
+                    const customerName = row.find('td:eq(2)').text();
+                    const totalAmount = row.find('td:eq(3)').text();
+                    // Thêm hiệu ứng highlight cho dòng được chọn - sử dụng màu xám thay vì đỏ
+                    $('.table-secondary').removeClass('table-secondary');
+                    row.addClass('table-secondary');
+
+                    // Hiển thị modal xác nhận xoá với animation
+                    $('#deleteInvoiceConfirmModal').modal('show');
+
+                    // Lưu ID hóa đơn vào nút xác nhận
+                    $('#confirmDeleteInvoiceBtn').data('invoice-id', invoiceId).data('row', row);
+                }
+            });
+
+            // Xử lý xác nhận xoá hoá đơn
+            $(document).on('click', '#confirmDeleteInvoiceBtn', function () {
+                const invoiceId = $(this).data('invoice-id');
+                const row = $(this).data('row');
+                // Giả lập gọi API xoá hoá đơn (trong thực tế sẽ gọi API)
+                // Thêm hiệu ứng fade-out trước khi xoá dòng
+                row.fadeOut(200, function () {
+                    // Xoá dòng hoá đơn sau khi hiệu ứng hoàn tất
+                    $(this).remove();
+
+                    // Đóng modal
+                    $('#deleteInvoiceConfirmModal').modal('hide');
+
+                    // Hiển thị thông báo thành công
+                    showToast(`<i class="fas fa-check-circle text-success me-2"></i> Đã xoá hoá đơn <b>${invoiceId}</b> thành công!`);
+                });
+            });
+            $('#addMedicineBtn').off('click').on('click', function () {
+                // Lấy giá trị từ ô tìm kiếm
+                const searchValue = $('#medicineSearch').val().trim();
+
+                if (!searchValue) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập mã hoặc tên thuốc!', 'error');
+                    return;
+                }
+
+                // Giả lập kiểm tra thuốc có tồn tại trong hệ thống không
+                // Trong thực tế sẽ gọi API để kiểm tra
+                const isMedicineExist = searchValue.length > 2; // Giả sử thuốc tồn tại nếu chuỗi tìm kiếm > 2 ký tự
+
+                if (!isMedicineExist) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong hệ thống!', 'error');
+                    return;
+                }
+                // Giả lập tìm kiếm thuốc từ API (trong thực tế)
+                // Giả sử tìm được thuốc
+                const medicineId = searchValue.toUpperCase().includes('MED') ? searchValue : 'MED' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                const medicineName = searchValue.toUpperCase().includes('MED') ? 'Thuốc ' + Math.floor(Math.random() * 100) : searchValue;
+                const price = Math.floor(Math.random() * 20 + 1) * 1000; // Giá từ 1.000đ đến 20.000đ
+                // Kiểm tra thuốc đã tồn tại trong đơn hàng chưa
+                const existingRow = $('#medicineList').find(`tr[data-id="${medicineId}"]`);
+
+                if (existingRow.length > 0) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc này đã có trong đơn hàng!', 'error');
+                    return;
+                }
+                // Thêm thuốc vào bảng
+                addMedicineToEditTable(medicineId, medicineName, price, 1);
+
+                // Xóa nội dung ô tìm kiếm
+                $('#medicineSearch').val('');
+
+                // Cập nhật tổng tiền
+                updateTotals();
+
+                // Hiển thị thông báo
+                showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã thêm thuốc vào đơn hàng!');
+            });
+            // THÊM HÀM NÀY - cập nhật tổng tiền
+            function updateTotals() {
+                let subtotal = 0;
+
+                // Tính tổng phụ
+                $('#medicineList tr').each(function () {
+                    const priceText = $(this).find('td:eq(4)').text();
+                    const price = parseFloat(priceText.replace(/[^\d]/g, ''));
+                    subtotal += price;
+                });
+
+                // Hiển thị tổng phụ
+                $('tfoot tr:eq(0) td:last').text(subtotal.toLocaleString('vi-VN') + 'đ');
+
+                // Áp dụng giảm giá (nếu có)
+                const discount = $('#discountSelect').val();
+                let discountAmount = 0;
+                let discountText = "";
+
+                if (discount === 'percent10') {
+                    discountAmount = subtotal * 0.1;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ (10%)";
+                } else if (discount === 'amount20k') {
+                    discountAmount = 20000;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ";
+                } else if (discount === 'freeship') {
+                    discountText = "Miễn phí giao hàng";
+                } else {
+                    discountText = "0đ";
+                }
+
+                // Hiển thị giảm giá
+                $('tfoot tr:eq(1) td:last').text(discountText);
+
+                // Tính tổng thanh toán
+                const finalTotal = subtotal - discountAmount;
+
+                // Hiển thị tổng thanh toán
+                $('tfoot tr:eq(2) td:last').text(finalTotal.toLocaleString('vi-VN') + 'đ');
+            }
+            // THÊM HÀM NÀY - Hàm cập nhật thành tiền khi thay đổi số lượng
+            function updateMedicineTotal(input) {
+                const row = $(input).closest('tr');
+                const price = parseFloat(row.find('td:eq(2)').text().replace(/[^\d]/g, ''));
+                const quantity = parseInt($(input).val()) || 0;
+
+                // Kiểm tra số lượng hợp lệ
+                if (quantity <= 0) {
+                    $(input).val(1);
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số lượng phải lớn hơn 0!', 'error');
+                    return;
+                }
+
+                // Tính và cập nhật thành tiền
+                const totalPrice = price * quantity;
+                row.find('td:eq(4)').text(totalPrice.toLocaleString('vi-VN') + 'đ');
+
+                // Cập nhật tổng tiền đơn hàng
+                updateTotals();
+            }
+
+            // THÊM HÀM NÀY - Hàm xóa thuốc khỏi đơn hàng
+            function removeMedicine(button) {
+                const row = $(button).closest('tr');
+                row.remove();
+
+                // Cập nhật tổng tiền đơn hàng
+                updateTotals();
+            }
+            // THÊM ĐOẠN NÀY - xử lý sự kiện nút xoá thuốc
+            $(document).ready(function () {
+                // Gắn sự kiện cho các nút xóa đã có sẵn trong bảng
+                $('.btn-danger').click(function () {
+                    $(this).closest('tr').remove();
+                    updateTotals();
+                });
+
+                // Xử lý thay đổi số lượng trực tiếp
+                $('.quantity-input').change(function () {
+                    updateMedicineTotal(this);
+                });
+            });
+            // Xử lý khi thay đổi ưu đãi áp dụng
+            $('#editDiscountSelect').change(function () {
+                // Nếu chọn tự động áp dụng ưu đãi tốt nhất
+                if ($('#autoDiscountEdit').is(':checked')) {
+                    // Hiển thị trạng thái đang xử lý
+                    $(this).prop('disabled', true);
+                    setTimeout(() => {
+                        // Giả lập tìm thấy ưu đãi tốt nhất là giảm 10%
+                        $(this).val('percent10');
+                        $(this).prop('disabled', false);
+
+                        // Tính lại tổng tiền
+                        calculateInvoiceTotal();
+                        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng ưu đãi tốt nhất cho khách hàng!');
+                    }, 800);
+                } else {
+                    // Tính lại tổng tiền
+                    calculateInvoiceTotal();
+                }
+
+            });
+            // Xử lý nút Thanh toán lại
+            $('#proceedToPaymentBtn').click(function () {
+                // Kiểm tra dữ liệu
+                let isValid = true;
+                let errorMessage = '';
+
+                $('.medicine-quantity').each(function () {
+                    const value = $(this).val();
+                    if (!value || isNaN(value) || parseInt(value) <= 0) {
+                        isValid = false;
+                        errorMessage = 'Số lượng thuốc phải là số dương';
+                        return false;
+                    }
+                });
+
+                if (!isValid) {
+                    showToast(errorMessage, 'error');
+                    return;
+                }
+
+                // Lấy phương thức thanh toán hiện tại
+                const paymentMethod = 'transfer'; // Giả sử là chuyển khoản, trong thực tế lấy từ dữ liệu hoá đơn
+
+                // Hiện thị trạng thái đang xử lý
+                $(this).prop('disabled', true);
+                $(this).html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...');
+
+                // Giả lập lưu thay đổi
+                setTimeout(() => {
+                    // Đóng modal chỉnh sửa
+                    $('#editInvoiceModal').modal('hide');
+
+                    // Hiển thị modal thanh toán tương ứng
+                    if (paymentMethod === 'cash') {
+                        $('#cashPaymentModal').modal('show');
+                    } else if (paymentMethod === 'card') {
+                        $('#paymentModal').modal('show');
+                    } else if (paymentMethod === 'transfer') {
+                        $('#transferPaymentModal').modal('show');
+                    } else if (paymentMethod === 'momo') {
+                        $('#momoPaymentModal').modal('show');
+                    }
+
+                    // Reset nút
+                    $(this).prop('disabled', false);
+                    $(this).html('<i class="fas fa-money-bill-wave me-1"></i> Thanh toán lại');
+                }, 1000);
+            });
+            // Xử lý nút chỉnh sửa trong danh sách hóa đơn
+            $('.btn-action.edit').click(function () {
+                // Đóng modal chi tiết nếu đang mở
+                $('#invoiceDetailModal').modal('hide');
+
+                // Mở modal chỉnh sửa
+                $('#editInvoiceModal').modal('show');
+            });
+            // ===== 1. Xử lý chỉnh sửa hóa đơn =====
+
+            // Khi thay đổi số lượng thuốc, hiển thị nút lưu
+            $(document).on('input', '.medicine-quantity', function () {
+                const row = $(this).closest('tr');
+                const btnSave = row.find('.btn-save-item');
+                const originalValue = $(this).data('original');
+                const currentValue = parseInt($(this).val());
+
+                // Chỉ hiện nút lưu khi số lượng thay đổi và hợp lệ
+                if (currentValue !== originalValue && currentValue > 0) {
+                    btnSave.prop('disabled', false);
+                } else {
+                    btnSave.prop('disabled', true);
+                }
+            });
+
+            // Xử lý lưu thay đổi số lượng thuốc
+            $(document).on('click', '.btn-save-item', function () {
+                const row = $(this).closest('tr');
+                const quantityInput = row.find('.medicine-quantity');
+                const newQuantity = parseInt(quantityInput.val());
+
+                if (newQuantity > 0) {
+                    // Cập nhật giá trị gốc
+                    quantityInput.data('original', newQuantity);
+
+                    // Tính lại thành tiền
+                    const price = parseFloat(row.find('td:eq(2)').text().replace(/[^\d]/g, ''));
+                    const amount = price * newQuantity;
+                    row.find('td:eq(4)').text(amount.toLocaleString('vi-VN') + ' đ');
+
+                    // Tính lại tổng tiền và hiển thị
+                    calculateInvoiceTotal();
+
+                    // Disable nút lưu
+                    $(this).prop('disabled', true);
+
+                    // Hiển thị thông báo
+                    showToast('Đã cập nhật số lượng thành công!');
+                }
+            });
+
+            // Xử lý xoá một sản phẩm khỏi hoá đơn
+            $(document).on('click', '.btn-delete-item', function () {
+                const row = $(this).closest('tr');
+                const itemId = row.attr('id').split('-')[1];
+                const itemName = row.find('td:eq(1)').text();
+
+                // Hiển thị tên sản phẩm trong modal xác nhận
+                $('#deleteItemName').text(itemName);
+                $('#confirmDeleteItemBtn').data('item-id', itemId);
+
+                // Hiển thị modal xác nhận xoá
+                $('#deleteItemConfirmModal').modal('show');
+            });
+
+            // Xử lý xác nhận xoá sản phẩm
+            $('#confirmDeleteItemBtn').click(function () {
+                const itemId = $(this).data('item-id');
+
+                // Đếm số sản phẩm còn lại trong hoá đơn
+                const remainingItems = $('#editInvoiceItems tr').length;
+
+                if (remainingItems <= 1) {
+                    // Hiển thị thông báo lỗi nếu chỉ còn 1 sản phẩm theo luồng ngoại lệ E-2.3.4.3.2
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Hóa đơn phải có ít nhất một sản phẩm', 'error');
+                    $('#deleteItemConfirmModal').modal('hide');
+                    return;
+                }
+
+                // Hiệu ứng loading
+                $(this).prop('disabled', true);
+                $(this).html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý');
+
+                // Giả lập xóa dữ liệu
+                setTimeout(() => {
+                    // Xoá sản phẩm khỏi bảng
+                    $(`#medicine-${itemId}`).remove();
+
+                    // Tính lại tổng tiền
+                    calculateInvoiceTotal();
+
+                    // Đóng modal và hiển thị thông báo
+                    $('#deleteItemConfirmModal').modal('hide');
+                    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xoá sản phẩm khỏi hoá đơn!');
+
+                    // Reset nút
+                    $(this).prop('disabled', false);
+                    $(this).html('<i class="fas fa-trash-alt me-1"></i> Xoá sản phẩm');
+                }, 800);
+            });
+
+            // Thêm thuốc mới vào hoá đơn
+            $('#addMedicineToInvoice').click(function () {
+                // Reset dữ liệu trong modal thêm thuốc
+                $('#medicineSearchInput').val('');
+                $('#selectedMedicineQuantity').val(1);
+
+                // Hiển thị modal thêm thuốc
+                $('#addMedicineModal').modal('show');
+                $('#editInvoiceModal').modal('hide');
+            });
+
+            // Chọn thuốc từ danh sách kết quả tìm kiếm
+            $(document).on('click', '.select-medicine', function () {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const price = $(this).data('price');
+
+                // Hiển thị thông tin thuốc đã chọn
+                $('#selectedMedicineId').text(id);
+                $('#selectedMedicineName').text(name);
+                $('#selectedMedicinePrice').text((price).toLocaleString('vi-VN') + ' đ');
+                $('#selectedMedicineQuantity').val(1);
+
+                // Hiển thị phần thông tin thuốc, ẩn thông báo chưa chọn thuốc
+                $('#noMedicineSelected').addClass('d-none');
+                $('#medicineDetails').removeClass('d-none');
+            });
+
+            // Thêm thuốc đã chọn vào hoá đơn
+            // Thêm thuốc đã chọn vào hoá đơn - Cập nhật lại phần xử lý
+            $('#addSelectedMedicineBtn').click(function () {
+                const id = $('#selectedMedicineId').text();
+                const name = $('#selectedMedicineName').text();
+                const price = parseFloat($('#selectedMedicinePrice').text().replace(/[^\d]/g, ''));
+                const quantity = parseInt($('#selectedMedicineQuantity').val());
+
+                // Kiểm tra thuốc đã tồn tại trong hoá đơn chưa theo luồng ngoại lệ E-1.4.10
+                if ($(`#medicine-${id}`).length > 0) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Mã thuốc đã tồn tại trong danh sách', 'error');
+                    return;
+                }
+
+                // Kiểm tra số lượng hợp lệ theo luồng ngoại lệ E-1.4.5
+                if (!quantity || isNaN(quantity) || quantity <= 0) {
+                    showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số lượng phải là số nguyên dương', 'error');
+                    return;
+                }
+
+                // Hiệu ứng loading
+                $(this).prop('disabled', true);
+                $(this).html('<i class="fas fa-spinner fa-spin me-1"></i> Đang thêm');
+
+                // Tính thành tiền
+                const amount = price * quantity;
+
+                // Giả lập thêm dữ liệu
+                setTimeout(() => {
+                    // Tạo HTML cho hàng mới
+                    const newRow = `
+            <tr id="medicine-${id}">
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${price.toLocaleString('vi-VN')} đ</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm medicine-quantity" 
+                        value="${quantity}" min="1" style="width: 70px" data-original="${quantity}">
+                </td>
+                <td>${amount.toLocaleString('vi-VN')} đ</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="btn-action btn-save-item" disabled data-bs-toggle="tooltip"
+                            title="Lưu thay đổi">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn-action btn-delete-item" data-bs-toggle="tooltip"
+                            title="Xoá sản phẩm">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+                    // Thêm hàng mới vào bảng
+                    $('#editInvoiceItems').append(newRow);
+
+                    // Tính lại tổng tiền
+                    calculateInvoiceTotal();
+
+                    // Đóng modal và hiển thị thông báo
+                    $('#addMedicineModal').modal('hide');
+                    $('#editInvoiceModal').modal('show');
+                    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã thêm thuốc vào hoá đơn!');
+
+                    // Reset nút
+                    $(this).prop('disabled', false);
+                    $(this).html('<i class="fas fa-plus me-1"></i> Thêm vào hoá đơn');
+
+                    // Khởi tạo lại tooltip
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+                }, 800);
+            });
+
+            // ===== 2. Xử lý lịch sử giao dịch =====
+
+            // Khởi tạo date picker cho bộ lọc lịch sử
+            flatpickr('#historyDateFilter', {
+                mode: "range",
+                dateFormat: "d/m/Y",
+                locale: "vn",
+                placeholder: "Từ ngày - Đến ngày"
+            });
+
+            // Hàm xem chi tiết hoá đơn từ lịch sử giao dịch
+            window.viewInvoiceDetails = function (invoiceId) {
+                // Đổi tab sang chi tiết hoá đơn
+                $('#invoiceDetailTabs button[data-bs-target="#details"]').tab('show');
+
+                // Cuộn lên đầu modal
+                $('#invoiceDetailModal .modal-body').scrollTop(0);
+            };
+
+            // ===== 3. Các hàm tiện ích =====
+
+            // Tính tổng tiền hoá đơn
+            function calculateInvoiceTotal() {
+                let total = 0;
+
+                // Tính tổng phụ
+                $('#editInvoiceItems tr').each(function () {
+                    const amount = parseFloat($(this).find('td:eq(4)').text().replace(/[^\d]/g, ''));
+                    total += amount;
+                });
+
+                // Hiển thị tổng phụ
+                $('tfoot tr:eq(0) td:last').text(total.toLocaleString('vi-VN') + 'đ');
+
+                // Áp dụng giảm giá (nếu có)
+                const discount = $('#editDiscountSelect').val();
+                let discountAmount = 0;
+                let discountText = "";
+
+                if (discount === 'percent10') {
+                    discountAmount = total * 0.1;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ (10%)";
+                } else if (discount === 'amount20k') {
+                    discountAmount = 20000;
+                    discountText = "-" + discountAmount.toLocaleString('vi-VN') + "đ";
+                } else if (discount === 'freeship') {
+                    discountText = "Miễn phí giao hàng";
+                } else {
+                    discountText = "0đ";
+                }
+
+                // Hiển thị giảm giá
+                $('tfoot tr:eq(1) td:last').text(discountText);
+
+                // Tính tổng thanh toán
+                const finalTotal = total - discountAmount;
+
+                // Hiển thị tổng thanh toán
+                $('tfoot tr:eq(2) td:last').text(finalTotal.toLocaleString('vi-VN') + 'đ');
+            }
+            // Nút "Quay lại" trong modal thanh toán thẻ
+            $('#paymentModal .btn-light').click(function (e) {
+                e.preventDefault(); // Ngăn hành vi mặc định
+                $('#paymentModal').modal('hide');
+                // Đợi modal thanh toán đóng hoàn toàn rồi mới mở modal lập hóa đơn
+                $('#createInvoiceModal').modal('show');
+            });
+
+            // Nút "Quay lại" trong modal thanh toán tiền mặt
+            $('#cashPaymentModal .btn-light').click(function (e) {
+                e.preventDefault();
+                $('#cashPaymentModal').modal('hide');
+                $('#createInvoiceModal').modal('show');
+            });
+
+            // Nút "Quay lại" trong modal thanh toán chuyển khoản
+            $('#transferPaymentModal .btn-light').click(function (e) {
+                e.preventDefault();
+                $('#transferPaymentModal').modal('hide');
+                $('#createInvoiceModal').modal('show');
+            });
+
+            // Nút "Quay lại" trong modal thanh toán MoMo
+            $('#momoPaymentModal .btn-light').click(function (e) {
+                e.preventDefault();
+                $('#momoPaymentModal').modal('hide');
+                $('#createInvoiceModal').modal('show');
+            });
+            // Sửa hàm completeInvoice để đảm bảo popup thông báo hiển thị sau khi thanh toán
+            function completeInvoice(paymentMethod) {
+                // Lưu thông tin hóa đơn vào cơ sở dữ liệu (trong thực tế)
+
+                // Hiển thị thông báo thành công
+                const methodText = {
+                    'cash': 'tiền mặt',
+                    'card': 'thẻ ngân hàng',
+                    'transfer': 'chuyển khoản',
+                    'momo': 'ví MoMo'
+                };
+
+                const methodIcon = {
+                    'cash': 'fa-money-bill-wave',
+                    'card': 'fa-credit-card',
+                    'transfer': 'fa-university',
+                    'momo': 'fa-mobile-alt'
+                };
+
+                // Thêm timeout nhỏ để đảm bảo modal đã đóng hoàn toàn trước khi hiển thị toast
+                setTimeout(function () {
+                    // Sử dụng hàm showToast toàn cục
+                    window.showToast(`<i class="fas fa-check-circle text-success me-2"></i> Lập hóa đơn thành công! Thanh toán bằng <i class="fas ${methodIcon[paymentMethod]} ms-1 me-1"></i> ${methodText[paymentMethod]}.`);
+                }, 300);
+
+                // Reset form lập hóa đơn cho lần sử dụng tiếp theo
+                resetInvoiceForm();
+
+                // Đóng modal lập hóa đơn nếu đang mở
+                $('#createInvoiceModal').modal('hide');
+            }
+
+            // Thêm hàm showToast toàn cục để có thể truy cập từ bất kỳ đâu
+            window.showToast = function (message, type = 'success') {
+                // Tạo toast nếu chưa có
+                if ($('#customToast').length === 0) {
+                    const toastHtml = `
+            <div class="toast align-items-center border-0 bg-white" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body"></div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+                    $('.toast-container').append(toastHtml);
+                }
+
+                const toast = $('#customToast');
+
+                // Cập nhật nội dung toast
+                toast.find('.toast-body').html(message);
+
+                // Cập nhật style dựa trên type
+                if (type === 'error') {
+                    toast.removeClass('bg-success bg-white').addClass('bg-danger text-white');
+                } else {
+                    toast.removeClass('bg-danger text-white').addClass('bg-white');
+                }
+
+                // Hiển thị toast
+                const bsToast = new bootstrap.Toast(toast, {
+                    delay: 3000
+                });
+                bsToast.show();
+            };
             // Tải các thành phần chung
             $('#header').load('/components/header.html');
             $('#sidebar').load('/components/sidebar.html', function () {
@@ -1123,7 +2095,15 @@
                 altFormat: "d/m/Y",
                 allowInput: true
             });
+            // Xử lý khi thay đổi phương thức thanh toán
+            $('#paymentMethodSelect').change(function () {
+                const selectedOption = $(this).find('option:selected');
+                const icon = selectedOption.data('icon');
+                const color = selectedOption.data('color');
 
+                // Cập nhật icon và màu sắc
+                $('#paymentMethodIcon').attr('class', 'fas ' + icon + ' ' + color);
+            });
             // Xử lý khách hàng mới
             $('#newCustomer').change(function () {
                 if ($(this).is(':checked')) {
@@ -1167,19 +2147,37 @@
                 updateEditButtonStatus();
             });
 
-            // Xử lý hiển thị toast thông báo
+            // Hàm hiển thị toast thông báo
             function showToast(message, type = 'success') {
-                const toast = $('#successToast');
+                // Tạo toast nếu chưa có
+                if ($('#customToast').length === 0) {
+                    const toastHtml = `
+            <div class="toast align-items-center border-0 bg-white" id="customToast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body"></div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+                    $('.toast-container').append(toastHtml);
+                }
+
+                const toast = $('#customToast');
 
                 // Cập nhật nội dung toast
-                toast.find('.toast-body').html(
-                    type === 'success'
-                        ? `<i class="fas fa-check-circle text-success me-2"></i>${message}`
-                        : `<i class="fas fa-exclamation-circle text-danger me-2"></i>${message}`
-                );
+                toast.find('.toast-body').html(message);
+
+                // Cập nhật style dựa trên type
+                if (type === 'error') {
+                    toast.removeClass('bg-success bg-white').addClass('bg-danger text-white');
+                } else {
+                    toast.removeClass('bg-danger text-white').addClass('bg-white');
+                }
 
                 // Hiển thị toast
-                const bsToast = new bootstrap.Toast(toast);
+                const bsToast = new bootstrap.Toast(toast, {
+                    delay: 3000
+                });
                 bsToast.show();
             }
 
@@ -1204,7 +2202,38 @@
             $('#resetFilter').click(function () {
                 $('#advancedFilterForm')[0].reset();
             });
+            // Xử lý khi thay đổi ưu đãi áp dụng trong lập hoá đơn
+            $('#discountSelect').change(function () {
+                // Nếu chọn tự động áp dụng ưu đãi tốt nhất
+                if ($('#autoDiscount').is(':checked')) {
+                    // Hiển thị trạng thái đang xử lý
+                    $(this).prop('disabled', true);
+                    setTimeout(() => {
+                        // Giả lập tìm thấy ưu đãi tốt nhất là giảm 10%
+                        $(this).val('percent10');
+                        $(this).prop('disabled', false);
 
+                        // Tính lại tổng tiền
+                        updateTotals();
+                        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng ưu đãi tốt nhất cho khách hàng!');
+                    }, 800);
+                } else {
+                    // Tính lại tổng tiền
+                    updateTotals();
+                }
+            });
+            // Xử lý checkbox áp dụng ưu đãi tự động trong lập hoá đơn
+            $('#autoDiscount').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#discountSelect').prop('disabled', true);
+                    setTimeout(() => {
+                        $('#discountSelect').val('percent10');
+                        $('#discountSelect').prop('disabled', false);
+                        updateTotals();
+                        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng ưu đãi tốt nhất cho khách hàng!');
+                    }, 800);
+                }
+            });
             // Thêm vào script
             function validateInvoiceForm() {
                 let isValid = true;
@@ -1242,55 +2271,1543 @@
                 return isValid;
             }
 
-            // Sử dụng khi lưu hóa đơn
+            // Xử lý khi nhấn nút Lưu hóa đơn
             $('#saveInvoiceBtn').click(function () {
-                if (validateInvoiceForm()) {
-                    // Tiến hành lưu hóa đơn
-                    showToast('Lập hóa đơn thành công!');
+                // Kiểm tra thông tin cơ bản của hóa đơn
+                if (!validateInvoiceForm()) {
+                    return;
+                }
+
+                const paymentMethod = $('#paymentMethodSelect').val();
+
+                // Nếu thanh toán bằng thẻ ngân hàng, mở modal thanh toán
+                if (paymentMethod === 'card') {
+                    // Hiển thị thông tin tổng tiền trong modal thanh toán
+                    const totalAmount = $('.fw-bold.fs-5.text-primary').text();
+                    $('#paymentTotalAmount').text(totalAmount);
+
+                    // Mở modal thanh toán
                     $('#createInvoiceModal').modal('hide');
+                    $('#paymentModal').modal('show');
+                } else if (paymentMethod === 'cash') {
+                    // Thanh toán tiền mặt
+                    $('#createInvoiceModal').modal('hide');
+                    $('#cashPaymentModal').modal('show');
+                } else if (paymentMethod === 'transfer') {
+                    // Thanh toán chuyển khoản
+                    $('#createInvoiceModal').modal('hide');
+                    $('#transferPaymentModal').modal('show');
+                } else if (paymentMethod === 'momo') {
+                    // Thanh toán MoMo
+                    $('#createInvoiceModal').modal('hide');
+                    $('#momoPaymentModal').modal('show');
                 }
             });
 
-            // Thêm vào script
-            function checkDiscountEligibility(discountId, customerPoints) {
-                // Dữ liệu mô phỏng về các ưu đãi và điều kiện
-                const discounts = {
-                    'percent10': { minPoints: 100, description: 'Giảm 10% tổng hóa đơn' },
-                    'amount20k': { minPoints: 200, description: 'Giảm 20.000đ' },
-                    'freeship': { minPoints: 300, description: 'Miễn phí giao hàng' }
-                };
+            // 2. Xử lý khi click vào nút xác nhận thanh toán thẻ
+            $('#confirmPaymentBtn').click(function () {
+                console.log("Xác nhận thanh toán thẻ");
+                // Kiểm tra thông tin thẻ
+                if (!validateCardInfo()) {
+                    return;
+                }
+                // Xử lý thanh toán
+                processPayment();
+            });
 
-                if (!discounts[discountId]) return { eligible: false, message: 'Ưu đãi không tồn tại' };
+            // 3. Xử lý khi click vào nút xác nhận thanh toán tiền mặt
+            $('#confirmCashPaymentBtn').click(function () {
+                // Xử lý thanh toán tiền mặt
+                completeCashPayment();
+            });
 
-                if (customerPoints < discounts[discountId].minPoints) {
-                    return {
-                        eligible: false,
-                        message: `Khách hàng chưa đủ điều kiện áp dụng ưu đãi này. Cần tối thiểu ${discounts[discountId].minPoints} điểm.`
-                    };
+            // 4. Xử lý khi click vào nút xác nhận thanh toán chuyển khoản
+            $('#confirmTransferPaymentBtn').click(function () {
+                // Kiểm tra đã tick xác nhận hoàn tất chuyển khoản chưa
+                if (!$('#transferCompleted').is(':checked')) {
+                    showToast('Vui lòng xác nhận đã hoàn tất chuyển khoản!', 'error');
+                    return;
+                }
+                // Xử lý thanh toán chuyển khoản
+                completeTransferPayment();
+            });
+
+            // 5. Xử lý khi click vào nút xác nhận thanh toán MoMo
+            $('#confirmMomoPaymentBtn').click(function () {
+                // Kiểm tra đã tick xác nhận hoàn tất thanh toán MoMo chưa
+                if (!$('#momoCompleted').is(':checked')) {
+                    showToast('Vui lòng xác nhận đã hoàn tất thanh toán qua MoMo!', 'error');
+                    return;
+                }
+                // Xử lý thanh toán MoMo
+                completeMomoPayment();
+            });
+
+            // 6. Reset form khi đóng modal
+            $('#paymentModal, #cashPaymentModal, #transferPaymentModal, #momoPaymentModal').on('hidden.bs.modal', function () {
+                resetPaymentForms();
+            });
+
+            // 7. Tính tiền thối khi nhập tiền khách đưa
+            $('#cashReceived').on('input', function () {
+                calculateChange();
+            });
+
+            // Format số thẻ tự động
+            $('#cardNumber').on('input', function () {
+                // Lưu vị trí con trỏ
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+
+                // Xóa tất cả các ký tự không phải số
+                let value = $(this).val().replace(/[^\d]/g, '');
+
+                // Format số thẻ với khoảng trắng sau mỗi 4 số
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formattedValue += ' ';
+                    }
+                    formattedValue += value[i];
                 }
 
-                return { eligible: true, description: discounts[discountId].description };
-            }
+                // Cập nhật giá trị
+                $(this).val(formattedValue);
 
-            // Xử lý khi chọn ưu đãi
-            $('#discountSelect').change(function () {
-                const selectedDiscount = $(this).val();
-                if (!selectedDiscount) return;
+                // Điều chỉnh vị trí con trỏ sau khi format
+                // Nếu vừa thêm khoảng trắng, tăng vị trí con trỏ lên 1
+                const newLength = formattedValue.length;
+                const oldLength = this.value.length;
 
-                // Giả sử điểm tích lũy là 125 (lấy từ thẻ hiển thị)
-                const customerPoints = parseInt($('.card-body .text-primary').text());
-
-                const eligibility = checkDiscountEligibility(selectedDiscount, customerPoints);
-
-                if (!eligibility.eligible) {
-                    showToast(eligibility.message, 'error');
-                    $(this).val(''); // Reset về không chọn ưu đãi
-                } else {
-                    // Áp dụng ưu đãi
-                    recalculateTotal();
-                }
+                const diff = newLength - oldLength;
+                this.selectionStart = start + diff;
+                this.selectionEnd = end + diff;
             });
         });
+
+        // Các hàm xử lý thanh toán
+        function processPayment() {
+            showPaymentProcessing();
+
+            // Mô phỏng gọi API thanh toán (trong thực tế)
+            setTimeout(function () {
+                // Giả định  90% thanh toán thành công
+                const isSuccessful = Math.random() < 0.9;
+
+                if (isSuccessful) {
+                    handlePaymentSuccess();
+                } else {
+                    handlePaymentFailure();
+                }
+            }, 2500);
+        }
+
+        function showPaymentProcessing() {
+            // Thay đổi nội dung nút
+            $('#confirmPaymentBtn').prop('disabled', true);
+            $('#confirmPaymentBtn').html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý');
+
+            // Xóa overlay cũ nếu có
+            $('#paymentForm').find('.position-absolute').remove();
+
+            // Thêm overlay loading lên form với z-index cao
+            const loadingOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1050;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-primary mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xử lý thanh toán...</p>' +
+                '</div>' +
+                '</div>');
+
+            // Đảm bảo form có position relative
+            $('#paymentForm').css('position', 'relative').append(loadingOverlay);
+        }
+
+        function handlePaymentSuccess() {
+            // Ẩn overlay loading
+            $('#paymentForm').find('.position-absolute').remove();
+
+            // Hiển thị thông báo thành công
+            const successAlert = $('<div class="alert alert-success mt-3">' +
+                '<div class="d-flex">' +
+                '<div class="me-3">' +
+                '<i class="fas fa-check-circle fs-3"></i>' +
+                '</div>' +
+                '<div>' +
+                '<h6 class="alert-heading mb-1">Thanh toán thành công!</h6>' +
+                '<p class="mb-0">Giao dịch của bạn đã được xử lý thành công.</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+
+            $('#paymentForm').append(successAlert);
+
+            // Đổi nút thành "Hoàn tất"
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Hoàn tất');
+            $('#confirmPaymentBtn').removeClass('btn-primary').addClass('btn-success');
+
+            // Thay đổi hành vi nút để đóng modal và hoàn tất hóa đơn
+            $('#confirmPaymentBtn').off('click').click(function () {
+                resetPaymentForms();
+                $('#paymentModal').modal('hide');
+                completeInvoice('card');
+            });
+
+            // Tự động đóng form sau 5 giây (tùy chọn)
+            setTimeout(function () {
+                resetPaymentForms();
+                $('#paymentModal').modal('hide');
+                completeInvoice('card');
+            }, 5000);
+        }
+
+        function handlePaymentFailure() {
+            // Ẩn overlay loading
+            $('#paymentForm').find('.position-absolute').remove();
+
+            // Hiển thị thông báo lỗi
+            const errorAlert = $('<div class="alert alert-danger mt-3">' +
+                '<div class="d-flex">' +
+                '<div class="me-3">' +
+                '<i class="fas fa-exclamation-circle fs-3"></i>' +
+                '</div>' +
+                '<div>' +
+                '<h6 class="alert-heading mb-1">Thanh toán thất bại!</h6>' +
+                '<p class="mb-0">Vui lòng kiểm tra lại thông tin thẻ hoặc liên hệ với ngân hàng của bạn.</p>' +
+
+                '</div>' +
+                '</div>' +
+                '</div>');
+
+            $('#paymentForm').append(errorAlert);
+
+            // Đổi nút thành "Thử lại"
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').html('<i class="fas fa-redo me-1"></i> Thử lại');
+            $('#confirmPaymentBtn').removeClass('btn-primary').addClass('btn-danger');
+
+            // Thay đổi hành vi nút để thử lại thanh toán
+            $('#confirmPaymentBtn').off('click').click(function () {
+                $(this).prop('disabled', true);
+                $(this).html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...');
+
+                // Gọi lại hàm xử lý thanh toán
+                processPayment();
+            });
+        }
+
+        function resetPaymentForms() {
+            console.log("Đang reset form thanh toán...");
+
+            // Xóa dữ liệu form thanh toán thẻ ngân hàng
+            $('#bankName').val('');
+            $('#cardType').val('');
+            $('#cardNumber').val('');
+            $('#cardHolderName').val('');
+            $('#expiryDate').val('');
+            $('#cvv').val('');
+            $('#phoneNumber').val('');
+            $('#saveCardInfo').prop('checked', false);
+
+            // Xóa tất cả các thông báo và overlay
+            $('#paymentForm .alert, #paymentForm .position-absolute').remove();
+            $('#transferPaymentForm .alert, #transferPaymentForm .position-absolute').remove();
+            $('#momoPaymentForm .alert, #momoPaymentForm .position-absolute').remove();
+            $('#transferPaymentModal .modal-body .position-absolute').remove();
+            $('#momoPaymentModal .modal-body .position-absolute').remove();
+
+            // Reset lại nút về trạng thái ban đầu - Thẻ ngân hàng
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').removeClass('btn-success btn-danger').addClass('btn-primary');
+            $('#confirmPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Reset lại nút về trạng thái ban đầu - Chuyển khoản
+            $('#confirmTransferPaymentBtn').prop('disabled', false);
+            $('#confirmTransferPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Reset lại nút về trạng thái ban đầu - MoMo
+            $('#confirmMomoPaymentBtn').prop('disabled', false);
+            $('#confirmMomoPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Gắn lại sự kiện click ban đầu cho thanh toán thẻ
+            $('#confirmPaymentBtn').off('click').on('click', function () {
+                console.log("Click xác nhận thanh toán sau khi reset");
+                if (!validateCardInfo()) {
+                    return;
+                }
+                processPayment();
+            });
+
+            // Reset form tiền mặt
+            $('#cashReceived').val('');
+            $('#cashChange').val('');
+            $('#printReceipt').prop('checked', true);
+
+            // Reset form chuyển khoản
+            $('#transferReference').val('');
+            $('#transferTime').val('');
+            $('#transferCompleted').prop('checked', false);
+
+            // Reset form MoMo
+            $('#momoCompleted').prop('checked', false);
+        }
+
+        function resetInvoiceForm() {
+            // Reset thông tin khách hàng
+            $('#customerName').val('');
+            $('#customerPhone').val('');
+            $('#customerEmail').val('');
+            $('#customerGender').val('');
+            $('#newCustomer').prop('checked', false);
+            $('#newCustomerInfo').addClass('d-none');
+
+            // Reset danh sách thuốc
+            // $('#medicineList').html(''); // Bỏ comment nếu muốn xóa danh sách thuốc
+
+            // Reset thông tin thanh toán
+            $('#invoiceDate').val(getCurrentDate());
+            $('#paymentMethodSelect').val('cash').trigger('change');
+            $('#discountSelect').val('');
+            $('#autoDiscount').prop('checked', false);
+            $('#invoiceNotes').val('');
+
+            // Reset các tổng tiền
+            // updateTotals(); // Bỏ comment nếu muốn reset tổng tiền
+        }
+
+        function completeInvoice(paymentMethod) {
+            // Lưu thông tin hóa đơn vào cơ sở dữ liệu (trong thực tế)
+
+            // Hiển thị thông báo thành công
+            const methodText = {
+                'cash': 'tiền mặt',
+                'card': 'thẻ ngân hàng',
+                'transfer': 'chuyển khoản',
+                'momo': 'ví MoMo'
+            };
+
+            const methodIcon = {
+                'cash': 'fa-money-bill-wave',
+                'card': 'fa-credit-card',
+                'transfer': 'fa-university',
+                'momo': 'fa-mobile-alt'
+            };
+
+            showToast(`<i class="fas fa-check-circle text-success me-2"></i> Lập hóa đơn thành công! Thanh toán bằng <i class="fas ${methodIcon[paymentMethod]} ms-1 me-1"></i> ${methodText[paymentMethod]}.`);
+
+            // Reset form lập hóa đơn cho lần sử dụng tiếp theo
+            resetInvoiceForm();
+
+            // Đóng modal lập hóa đơn nếu đang mở
+            $('#createInvoiceModal').modal('hide');
+        }
+
+        // Hàm kiểm tra thông tin thẻ
+        function validateCardInfo() {
+            // Lấy các giá trị từ form
+            const bankName = $('#bankName').val();
+            const cardType = $('#cardType').val();
+            const cardNumber = $('#cardNumber').val();
+            const cardHolderName = $('#cardHolderName').val();
+            const expiryDate = $('#expiryDate').val();
+            const cvv = $('#cvv').val();
+            const phoneNumber = $('#phoneNumber').val();
+
+            // Kiểm tra các trường bắt buộc
+            if (!bankName) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn ngân hàng!', 'error');
+                return false;
+            }
+
+            if (!cardType) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn loại thẻ!', 'error');
+                return false;
+            }
+
+            if (!cardNumber) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập số thẻ!', 'error');
+                return false;
+            }
+
+            if (!cardHolderName) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập tên chủ thẻ!', 'error');
+                return false;
+            }
+
+            if (!expiryDate) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn ngày hết hạn!', 'error');
+                return false;
+            }
+
+            if (!cvv) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập mã CVV/CVC!', 'error');
+                return false;
+            }
+
+            if (!phoneNumber) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập số điện thoại!', 'error');
+                return false;
+            }
+
+            // Kiểm tra định dạng số thẻ (chỉ chấp nhận số và khoảng trắng)
+            const cardNumberCleaned = cardNumber.replace(/\s/g, '');
+            if (!/^\d+$/.test(cardNumberCleaned) || cardNumberCleaned.length < 13 || cardNumberCleaned.length > 19) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số thẻ không hợp lệ!', 'error');
+                return false;
+            }
+
+            // Kiểm tra mã CVV (3-4 số)
+            if (!/^\d{3,4}$/.test(cvv)) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Mã CVV không hợp lệ!', 'error');
+                return false;
+            }
+
+            // Kiểm tra số điện thoại
+            if (!/^0\d{9}$/.test(phoneNumber)) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số điện thoại không hợp lệ!', 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Hàm tính tiền thối cho thanh toán tiền mặt
+        function calculateChange() {
+            const totalAmount = parseFloat($('#cashPaymentTotalAmount').text().replace(/[^\d]/g, ''));
+            const received = parseFloat($('#cashReceived').val().replace(/[^\d]/g, '')) || 0;
+
+            const change = received - totalAmount;
+
+            if (change >= 0) {
+                $('#cashChange').val(change.toLocaleString('vi-VN') + ' đ');
+            } else {
+                $('#cashChange').val('0 đ');
+            }
+        }
+
+        // Xử lý thanh toán tiền mặt
+        function completeCashPayment() {
+            const totalAmount = parseFloat($('#cashPaymentTotalAmount').text().replace(/[^\d]/g, ''));
+            const received = parseFloat($('#cashReceived').val().replace(/[^\d]/g, '')) || 0;
+
+            if (received < totalAmount) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số tiền khách đưa chưa đủ!', 'error');
+                return;
+            }
+
+            // Đóng modal thanh toán
+            $('#cashPaymentModal').modal('hide');
+
+            // Hoàn tất hóa đơn
+            completeInvoice('cash');
+        }
+
+        // Xử lý thanh toán chuyển khoản
+        function completeTransferPayment() {
+            // Hiển thị loading
+            showTransferProcessing();
+
+            // Giả lập xử lý thanh toán trong 5 giây
+            setTimeout(function () {
+                // Đóng modal thanh toán
+                $('#transferPaymentModal').modal('hide');
+
+                // Hoàn tất hóa đơn
+                completeInvoice('transfer');
+            }, 5000);
+        }
+
+        // Hiển thị hiệu ứng loading khi xử lý thanh toán chuyển khoản
+        function showTransferProcessing() {
+            // Thay đổi nội dung nút
+            $('#confirmTransferPaymentBtn').prop('disabled', true);
+            $('#confirmTransferPaymentBtn').html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...');
+
+            // Xóa overlay cũ nếu có
+            $('#transferPaymentForm').find('.position-absolute').remove();
+
+            // Thêm overlay loading lên form
+            const loadingOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1050;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-info mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh giao dịch...</p>' +
+                '</div>' +
+                '</div>');
+
+            // Đảm bảo form có position relative
+            $('#transferPaymentForm').css('position', 'relative').append(loadingOverlay);
+
+            // Thêm overlay cho toàn bộ modal body
+            const modalOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1040;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-info mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh giao dịch...</p>' +
+                '</div>' +
+                '</div>');
+
+            $('#transferPaymentModal .modal-body').css('position', 'relative').append(modalOverlay);
+        }
+
+        // Xử lý thanh toán MoMo
+        function completeMomoPayment() {
+            // Hiển thị loading
+            showMomoProcessing();
+
+            // Giả lập xử lý thanh toán trong 5 giây
+            setTimeout(function () {
+                // Đóng modal thanh toán
+                $('#momoPaymentModal').modal('hide');
+
+                // Hoàn tất hóa đơn
+                completeInvoice('momo');
+            }, 5000);
+        }
+
+        // Hiển thị hiệu ứng loading khi xử lý thanh toán MoMo
+        function showMomoProcessing() {
+            // Thay đổi nội dung nút
+            $('#confirmMomoPaymentBtn').prop('disabled', true);
+            $('#confirmMomoPaymentBtn').html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...');
+
+            // Xóa overlay cũ nếu có
+            $('#momoPaymentForm').find('.position-absolute').remove();
+
+            // Thêm overlay loading lên form
+            const loadingOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1050;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-danger mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh thanh toán MoMo...</p>' +
+                '</div>' +
+                '</div>');
+
+            // Đảm bảo form có position relative
+            $('#momoPaymentForm').css('position', 'relative').append(loadingOverlay);
+
+            // Thêm overlay cho toàn bộ modal body
+            const modalOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1040;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-danger mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh thanh toán MoMo...</p>' +
+                '</div>' +
+                '</div>');
+
+            $('#momoPaymentModal .modal-body').css('position', 'relative').append(modalOverlay);
+        }
+    </script>
+
+    <!-- Modal Thanh Toán Cải Tiến -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">
+                        <i class="fas fa-credit-card me-2"></i> Thanh toán đơn hàng
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông tin đơn hàng -->
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                            id="paymentInvoiceId">#HD005</span>
+                                    </p>
+                                    <p class="mb-1"><strong>Phương thức:</strong> Thẻ ngân hàng</p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-1">Tổng thanh toán:</p>
+                                    <h3 class="text-primary mb-0" id="paymentTotalAmount">250.000 đ</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin thẻ -->
+                    <form id="paymentForm">
+                        <h6 class="mb-3 fw-bold">Thông tin thẻ thanh toán</h6>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="bankName" class="form-label">Ngân hàng</label>
+                                <select class="form-select" id="bankName" required>
+                                    <option value="">-- Chọn ngân hàng --</option>
+                                    <option value="mbbank">MB Bank</option>
+                                    <option value="vietcombank">Vietcombank</option>
+                                    <option value="techcombank">Techcombank</option>
+                                    <option value="vpbank">VPBank</option>
+                                    <option value="other">Ngân hàng khác</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cardType" class="form-label">Loại thẻ</label>
+                                <select class="form-select" id="cardType" required>
+                                    <option value="">-- Chọn loại thẻ --</option>
+                                    <option value="visa">Visa</option>
+                                    <option value="mastercard">Mastercard</option>
+                                    <option value="jcb">JCB</option>
+                                    <option value="amex">American Express</option>
+                                    <option value="domestic">Thẻ nội địa</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label for="cardNumber" class="form-label">Số thẻ</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="cardNumber"
+                                        placeholder="1234 5678 9876 5432" required maxlength="19">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-credit-card"></i>
+                                    </span>
+                                </div>
+                                <div class="form-text">Nhập đầy đủ số thẻ không có khoảng trắng</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="cvv" class="form-label">Mã CVV/CVC</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="cvv" placeholder="***" required
+                                        maxlength="4">
+                                    <span class="input-group-text" data-bs-toggle="tooltip"
+                                        title="Mã bảo mật 3-4 số ở mặt sau thẻ">
+                                        <i class="fas fa-question-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label for="cardHolderName" class="form-label">Tên chủ thẻ</label>
+                                <input type="text" class="form-control" id="cardHolderName" placeholder="NGUYEN VAN A"
+                                    required>
+                                <div class="form-text">Nhập chính xác tên in trên thẻ</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                                <input type="month" class="form-control" id="expiryDate" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" id="phoneNumber" placeholder="0123456789"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="saveCardInfo">
+                                <label class="form-check-label" for="saveCardInfo">
+                                    Lưu thông tin thẻ cho lần thanh toán sau
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-shield-alt fs-3"></i>
+                                </div>
+                                <div>
+                                    <h6 class="alert-heading mb-1">Bảo mật thanh toán</h6>
+                                    <p class="mb-0 small">Thông tin thẻ của bạn được mã hóa an toàn. Chúng tôi không lưu
+                                        trữ thông tin thẻ nếu bạn không đồng ý.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="button" class="btn btn-primary" id="confirmPaymentBtn">
+                        <i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thanh Toán Tiền Mặt -->
+    <div class="modal fade" id="cashPaymentModal" tabindex="-1" aria-labelledby="cashPaymentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cashPaymentModalLabel">
+                        <i class="fas fa-money-bill-wave me-2 text-success"></i> Thanh toán tiền mặt
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông tin đơn hàng -->
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                            id="cashPaymentInvoiceId">#HD005</span></p>
+                                    <p class="mb-1"><strong>Phương thức:</strong> Tiền mặt</p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-1">Tổng thanh toán:</p>
+                                    <h3 class="text-success mb-0" id="cashPaymentTotalAmount">250.000 đ</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form thanh toán tiền mặt -->
+                    <form id="cashPaymentForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="cashReceived" class="form-label">Tiền khách đưa</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="cashReceived" placeholder="0" required>
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cashChange" class="form-label">Tiền trả lại</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light" id="cashChange" placeholder="0"
+                                        readonly>
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="printReceipt" checked>
+                                    <label class="form-check-label" for="printReceipt">
+                                        In hóa đơn sau khi thanh toán
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="button" class="btn btn-success" id="confirmCashPaymentBtn">
+                        <i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thanh Toán Chuyển Khoản -->
+    <div class="modal fade" id="transferPaymentModal" tabindex="-1" aria-labelledby="transferPaymentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transferPaymentModalLabel">
+                        <i class="fas fa-university me-2 text-info"></i> Thanh toán chuyển khoản
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông tin đơn hàng -->
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                            id="transferPaymentInvoiceId">#HD005</span></p>
+                                    <p class="mb-1"><strong>Phương thức:</strong> Chuyển khoản</p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-1">Tổng thanh toán:</p>
+                                    <h3 class="text-info mb-0" id="transferPaymentTotalAmount">250.000 đ</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin tài khoản -->
+                    <div class="card border-info mb-4">
+                        <div class="card-header bg-info bg-opacity-10">
+                            <h6 class="mb-0 text-info">Thông tin tài khoản nhận tiền</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Ngân hàng:</strong> MB Bank</p>
+                                    <p class="mb-1"><strong>Số tài khoản:</strong> 1234567890</p>
+                                    <p class="mb-1"><strong>Chủ tài khoản:</strong> CÔNG TY CP PHARMACITY</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <img src="/assets/images/bank-qr-code.jpg" alt="QR Code"
+                                            class="img-fluid border" style="max-width: 120px">
+                                        <p class="mt-2 mb-0 small">Quét mã QR để chuyển khoản</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form xác nhận chuyển khoản -->
+                    <form id="transferPaymentForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="transferReference" class="form-label">Mã giao dịch</label>
+                                <input type="text" class="form-control" id="transferReference"
+                                    placeholder="Nhập mã giao dịch">
+                                <div class="form-text">Nếu có mã giao dịch, vui lòng nhập</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="transferTime" class="form-label">Thời gian chuyển khoản</label>
+                                <input type="datetime-local" class="form-control" id="transferTime">
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="transferCompleted">
+                                    <label class="form-check-label" for="transferCompleted">
+                                        Tôi đã hoàn tất chuyển khoản
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="button" class="btn btn-info text-white" id="confirmTransferPaymentBtn">
+                        <i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thanh Toán Ví MoMo -->
+    <div class="modal fade" id="momoPaymentModal" tabindex="-1" aria-labelledby="momoPaymentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="momoPaymentModalLabel">
+                        <i class="fas fa-mobile-alt me-2 text-danger"></i> Thanh toán qua ví MoMo
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông tin đơn hàng -->
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                            id="momoPaymentInvoiceId">#HD005</span></p>
+                                    <p class="mb-1"><strong>Phương thức:</strong> Ví MoMo</p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-1">Tổng thanh toán:</p>
+                                    <h3 class="text-danger mb-0" id="momoPaymentTotalAmount">250.000 đ</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <img src="/assets/images/momo-qr-code.jpg" alt="MoMo QR Code" style="max-width: 200px;"
+                            class="img-fluid border p-2">
+                        <p class="mt-3 mb-0">Quét mã QR bằng ứng dụng MoMo để thanh toán</p>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-info-circle fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="alert-heading mb-1">Hướng dẫn thanh toán</h6>
+                                <ol class="mb-0 ps-3">
+                                    <li>Mở ứng dụng MoMo trên điện thoại</li>
+                                    <li>Chọn "Quét mã" và quét mã QR phía trên</li>
+                                    <li>Kiểm tra thông tin và xác nhận thanh toán</li>
+                                    <li>Nhấn "Xác nhận thanh toán" ở dưới sau khi hoàn tất</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="momoPaymentForm">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="momoCompleted">
+                            <label class="form-check-label" for="momoCompleted">
+                                Tôi đã hoàn tất thanh toán qua MoMo
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="button" class="btn btn-danger" id="confirmMomoPaymentBtn">
+                        <i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Chỉnh sửa chi tiết hoá đơn -->
+    <div class="modal fade" id="editInvoiceModal" tabindex="-1" aria-labelledby="editInvoiceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editInvoiceModalLabel">
+                        <i class="fas fa-edit me-2"></i> Chỉnh sửa hoá đơn #HD002
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông tin cơ bản của hoá đơn -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Mã hóa đơn:</strong> #HD002</p>
+                                    <p class="mb-1"><strong>Khách hàng:</strong> Trần Thị B</p>
+                                    <p class="mb-1"><strong>Số điện thoại:</strong> 0987654321</p>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <p class="mb-1"><strong>Ngày lập:</strong> 19/05/2025 10:15</p>
+                                    <p class="mb-1"><strong>Trạng thái:</strong> <span class="text-warning">
+                                            <i class="fas fa-clock me-1"></i>Đang xử lý</span></p>
+                                    <p class="mb-1"><strong>Hình thức:</strong> Chuyển khoản</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Danh sách thuốc - Điều chỉnh để giống modal lập hoá đơn -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-light py-2">
+                            <h6 class="mb-0">Danh sách thuốc</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="editMedicineSearch"
+                                        placeholder="Nhập tên hoặc mã thuốc...">
+                                    <button class="btn btn-primary" type="button" id="editAddMedicineBtn">
+                                        <i class="fas fa-plus me-1"></i> Thêm thuốc
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table border">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã thuốc</th>
+                                            <th>Tên thuốc</th>
+                                            <th>Đơn giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="editInvoiceItems">
+                                        <tr id="medicine-MED003">
+                                            <td>MED003</td>
+                                            <td>Vitamin C 1000mg</td>
+                                            <td>50.000 đ</td>
+                                            <td>
+                                                <input type="number"
+                                                    class="form-control form-control-sm edit-quantity-input" value="5"
+                                                    min="1" style="width: 70px">
+                                            </td>
+                                            <td>250.000 đ</td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-danger edit-remove-medicine">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr id="medicine-MED008">
+                                            <td>MED008</td>
+                                            <td>Panadol Extra</td>
+                                            <td>40.000 đ</td>
+                                            <td>
+                                                <input type="number"
+                                                    class="form-control form-control-sm edit-quantity-input" value="5"
+                                                    min="1" style="width: 70px">
+                                            </td>
+                                            <td>200.000 đ</td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-sm btn-danger edit-remove-medicine">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-end">Tổng phụ:</td>
+                                            <td colspan="2" class="fw-bold">450.000đ</td>
+                                        </tr>
+                                        <tr id="discountRow">
+                                            <td colspan="4" class="text-end">Giảm giá:</td>
+                                            <td colspan="2" class="fw-bold text-success">-45.000đ (10%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-end">Tổng thanh toán:</td>
+                                            <td colspan="2" class="fw-bold fs-5 text-primary">405.000đ</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Thông tin khác - Điều chỉnh để giống modal lập hoá đơn -->
+                    <div class="card mb-0">
+                        <div class="card-header bg-light py-2">
+                            <h6 class="mb-0">Thông tin khác</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Ưu đãi áp dụng</label>
+                                    <select class="form-select" id="editDiscountSelect">
+                                        <option value="">Không áp dụng</option>
+                                        <option value="percent10" selected>Giảm 10% tổng hóa đơn</option>
+                                        <option value="amount20k">Giảm 20.000đ</option>
+                                        <option value="freeship">Miễn phí giao hàng</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center h-100" style="padding-top: 2rem;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="autoDiscountEdit"
+                                                checked>
+                                            <label class="form-check-label" for="autoDiscountEdit">
+                                                Áp dụng ưu đãi tốt nhất tự động
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Ghi chú</label>
+                                    <textarea class="form-control" id="invoiceNotesEdit" rows="2"
+                                        placeholder="Thêm ghi chú về đơn hàng...">Khách hàng yêu cầu giao hàng tận nhà. Gọi trước khi giao.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="button" class="btn btn-primary" id="proceedToPaymentBtn">
+                        <i class="fas fa-money-bill-wave me-1"></i> Thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm thuốc vào hoá đơn đang chỉnh sửa -->
+    <div class="modal fade" id="addMedicineModal" tabindex="-1" aria-labelledby="addMedicineModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMedicineModalLabel">
+                        <i class="fas fa-pills me-2"></i> Thêm thuốc vào hoá đơn
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tìm kiếm thuốc</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="medicineSearchInput"
+                                placeholder="Nhập tên hoặc mã thuốc...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchMedicineBtn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Kết quả tìm kiếm</label>
+                        <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                            <table class="table table-hover border">
+                                <thead class="sticky-top bg-white">
+                                    <tr>
+                                        <th>Mã thuốc</th>
+                                        <th>Tên thuốc</th>
+                                        <th>Đơn giá</th>
+                                        <th>Chọn</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="medicineSearchResults">
+                                    <tr>
+                                        <td>MED001</td>
+                                        <td>Paracetamol 500mg</td>
+                                        <td>2.000 đ</td>
+                                        <td>
+                                            <button class="btn-action select-medicine" data-bs-toggle="tooltip"
+                                                title="Chọn thuốc này" data-id="MED001" data-name="Paracetamol 500mg"
+                                                data-price="2000">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>MED010</td>
+                                        <td>Amoxicillin 500mg</td>
+                                        <td>3.000 đ</td>
+                                        <td>
+                                            <button class="btn-action select-medicine" data-bs-toggle="tooltip"
+                                                title="Chọn thuốc này" data-id="MED010" data-name="Amoxicillin 500mg"
+                                                data-price="3000">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Thông tin thuốc đã chọn</label>
+                        <div id="selectedMedicine" class="card bg-light p-3">
+                            <div class="mb-3 d-none" id="noMedicineSelected">
+                                <p class="text-muted mb-0">Chưa chọn thuốc nào</p>
+                            </div>
+                            <div id="medicineDetails" class="">
+                                <div class="mb-2">
+                                    <strong>Mã thuốc:</strong> <span id="selectedMedicineId">MED001</span>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Tên thuốc:</strong> <span id="selectedMedicineName">Paracetamol 500mg</span>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Đơn giá:</strong> <span id="selectedMedicinePrice">2.000 đ</span>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label">Số lượng</label>
+                                    <input type="number" class="form-control" id="selectedMedicineQuantity" value="1"
+                                        min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="button" class="btn btn-primary" id="addSelectedMedicineBtn">
+                        <i class="fas fa-plus me-1"></i> Thêm vào hoá đơn
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xác nhận xoá hoá đơn -->
+    <div class="modal fade" id="deleteInvoiceConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-trash-alt text-danger me-2"></i> Xoá hoá đơn
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xoá hoá đơn này?</p>
+                    <div class="alert alert-warning d-flex align-items-center border-0 bg-warning-subtle">
+                        <i class="fas fa-exclamation-triangle text-warning me-2 fa-lg"></i>
+                        <div>
+                            <p class="mb-0">Thao tác này không thể hoàn tác và ảnh hưởng đến dữ liệu.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Huỷ bỏ</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteInvoiceBtn">
+                        <i class="fas fa-trash-alt me-1"></i> Xác nhận xoá
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function processPayment() {
+            showPaymentProcessing();
+
+            // Mô phỏng gọi API thanh toán (trong thực tế)
+            setTimeout(function () {
+                // Giả định  90% thanh toán thành công
+                const isSuccessful = Math.random() < 0.9;
+
+                if (isSuccessful) {
+                    handlePaymentSuccess();
+                } else {
+                    handlePaymentFailure();
+                }
+            }, 2500);
+        }
+
+        function handlePaymentSuccess() {
+            // Ẩn overlay loading
+            $('#paymentForm').find('.position-absolute').remove();
+
+            // Hiển thị thông báo thành công
+            const successAlert = $('<div class="alert alert-success mt-3">' +
+                '<div class="d-flex">' +
+                '<div class="me-3">' +
+                '<i class="fas fa-check-circle fs-3"></i>' +
+                '</div>' +
+                '<div>' +
+                '<h6 class="alert-heading mb-1">Thanh toán thành công!</h6>' +
+                '<p class="mb-0">Giao dịch của bạn đã được xử lý thành công.</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+
+            $('#paymentForm').append(successAlert);
+
+            // Đổi nút thành "Hoàn tất"
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Hoàn tất');
+            $('#confirmPaymentBtn').removeClass('btn-primary').addClass('btn-success');
+
+            // Thay đổi hành vi nút để đóng modal và hoàn tất hóa đơn
+            $('#confirmPaymentBtn').off('click').click(function () {
+                resetPaymentForms();
+                $('#paymentModal').modal('hide');
+                completeInvoice('card');
+            });
+
+            // Tự động đóng form sau 5 giây (tùy chọn)
+            setTimeout(function () {
+                resetPaymentForms();
+                $('#paymentModal').modal('hide');
+                completeInvoice('card');
+            }, 5000);
+        }
+
+        function handlePaymentFailure() {
+            // Ẩn overlay loading
+            $('#paymentForm').find('.position-absolute').remove();
+
+            // Hiển thị thông báo lỗi
+            const errorAlert = $('<div class="alert alert-danger mt-3">' +
+                '<div class="d-flex">' +
+                '<div class="me-3">' +
+                '<i class="fas fa-exclamation-circle fs-3"></i>' +
+                '</div>' +
+                '<div>' +
+                '<h6 class="alert-heading mb-1">Thanh toán thất bại!</h6>' +
+                '<p class="mb-0">Vui lòng kiểm tra lại thông tin thẻ hoặc liên hệ với ngân hàng của bạn.</p>' +
+
+                '</div>' +
+                '</div>' +
+                '</div>');
+
+            $('#paymentForm').append(errorAlert);
+
+            // Đổi nút thành "Thử lại"
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').html('<i class="fas fa-redo me-1"></i> Thử lại');
+            $('#confirmPaymentBtn').removeClass('btn-primary').addClass('btn-danger');
+
+            // Thay đổi hành vi nút để thử lại thanh toán
+            $('#confirmPaymentBtn').off('click').click(function () {
+                $(this).prop('disabled', true);
+                $(this).html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...');
+
+                // Gọi lại hàm xử lý thanh toán
+                processPayment();
+            });
+        }
+
+        function resetPaymentForms() {
+            console.log("Đang reset form thanh toán...");
+
+            // Xóa dữ liệu form thanh toán thẻ ngân hàng
+            $('#bankName').val('');
+            $('#cardType').val('');
+            $('#cardNumber').val('');
+            $('#cardHolderName').val('');
+            $('#expiryDate').val('');
+            $('#cvv').val('');
+            $('#phoneNumber').val('');
+            $('#saveCardInfo').prop('checked', false);
+
+            // Xóa tất cả các thông báo và overlay
+            $('#paymentForm .alert, #paymentForm .position-absolute').remove();
+            $('#transferPaymentForm .alert, #transferPaymentForm .position-absolute').remove();
+            $('#momoPaymentForm .alert, #momoPaymentForm .position-absolute').remove();
+            $('#transferPaymentModal .modal-body .position-absolute').remove();
+            $('#momoPaymentModal .modal-body .position-absolute').remove();
+
+            // Reset lại nút về trạng thái ban đầu - Thẻ ngân hàng
+            $('#confirmPaymentBtn').prop('disabled', false);
+            $('#confirmPaymentBtn').removeClass('btn-success btn-danger').addClass('btn-primary');
+            $('#confirmPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Reset lại nút về trạng thái ban đầu - Chuyển khoản
+            $('#confirmTransferPaymentBtn').prop('disabled', false);
+            $('#confirmTransferPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Reset lại nút về trạng thái ban đầu - MoMo
+            $('#confirmMomoPaymentBtn').prop('disabled', false);
+            $('#confirmMomoPaymentBtn').html('<i class="fas fa-check-circle me-1"></i> Xác nhận thanh toán');
+
+            // Gắn lại sự kiện click ban đầu cho thanh toán thẻ
+            $('#confirmPaymentBtn').off('click').on('click', function () {
+                console.log("Click xác nhận thanh toán sau khi reset");
+                if (!validateCardInfo()) {
+                    return;
+                }
+                processPayment();
+            });
+
+            // Reset form tiền mặt
+            $('#cashReceived').val('');
+            $('#cashChange').val('');
+            $('#printReceipt').prop('checked', true);
+
+            // Reset form chuyển khoản
+            $('#transferReference').val('');
+            $('#transferTime').val('');
+            $('#transferCompleted').prop('checked', false);
+
+            // Reset form MoMo
+            $('#momoCompleted').prop('checked', false);
+        }
+
+        function resetInvoiceForm() {
+            // Reset thông tin khách hàng
+            $('#customerName').val('');
+            $('#customerPhone').val('');
+            $('#customerEmail').val('');
+            $('#customerGender').val('');
+            $('#newCustomer').prop('checked', false);
+            $('#newCustomerInfo').addClass('d-none');
+
+            // Reset danh sách thuốc
+            // $('#medicineList').html(''); // Bỏ comment nếu muốn xóa danh sách thuốc
+
+            // Reset thông tin thanh toán
+            $('#invoiceDate').val(getCurrentDate());
+            $('input[name="paymentMethod"][value="cash"]').prop('checked', true);
+            $('#discountSelect').val('');
+            $('#autoDiscount').prop('checked', false);
+            $('#invoiceNotes').val('');
+
+            // Reset các tổng tiền
+            // updateTotals(); // Bỏ comment nếu muốn reset tổng tiền
+        }
+
+        function completeInvoice(paymentMethod) {
+            // Lưu thông tin hóa đơn vào cơ sở dữ liệu (trong thực tế)
+
+            // Hiển thị thông báo thành công
+            const methodText = {
+                'cash': 'tiền mặt',
+                'card': 'thẻ ngân hàng',
+                'transfer': 'chuyển khoản',
+                'momo': 'ví MoMo'
+            };
+
+            const methodIcon = {
+                'cash': 'fa-money-bill-wave',
+                'card': 'fa-credit-card',
+                'transfer': 'fa-university',
+                'momo': 'fa-mobile-alt'
+            };
+
+            showToast(`<i class="fas fa-check-circle text-success me-2"></i> Lập hóa đơn thành công! Thanh toán bằng <i class="fas ${methodIcon[paymentMethod]} ms-1 me-1"></i> ${methodText[paymentMethod]}.`);
+
+            // Reset form lập hóa đơn cho lần sử dụng tiếp theo
+            resetInvoiceForm();
+
+            // Đóng modal lập hóa đơn nếu đang mở
+            $('#createInvoiceModal').modal('hide');
+        }
+
+        // Hàm kiểm tra thông tin thẻ
+        function validateCardInfo() {
+            // Lấy các giá trị từ form
+            const bankName = $('#bankName').val();
+            const cardType = $('#cardType').val();
+            const cardNumber = $('#cardNumber').val();
+            const cardHolderName = $('#cardHolderName').val();
+            const expiryDate = $('#expiryDate').val();
+            const cvv = $('#cvv').val();
+            const phoneNumber = $('#phoneNumber').val();
+
+            // Kiểm tra các trường bắt buộc
+            if (!bankName) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn ngân hàng!', 'error');
+                return false;
+            }
+
+            if (!cardType) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn loại thẻ!', 'error');
+                return false;
+            }
+
+            if (!cardNumber) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập số thẻ!', 'error');
+                return false;
+            }
+
+            if (!cardHolderName) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập tên chủ thẻ!', 'error');
+                return false;
+            }
+
+            if (!expiryDate) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng chọn ngày hết hạn!', 'error');
+                return false;
+            }
+
+            if (!cvv) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập mã CVV/CVC!', 'error');
+                return false;
+            }
+
+            if (!phoneNumber) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Vui lòng nhập số điện thoại!', 'error');
+                return false;
+            }
+
+            // Kiểm tra định dạng số thẻ (chỉ chấp nhận số và khoảng trắng)
+            const cardNumberCleaned = cardNumber.replace(/\s/g, '');
+            if (!/^\d+$/.test(cardNumberCleaned) || cardNumberCleaned.length < 13 || cardNumberCleaned.length > 19) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số thẻ không hợp lệ!', 'error');
+                return false;
+            }
+
+            // Kiểm tra mã CVV (3-4 số)
+            if (!/^\d{3,4}$/.test(cvv)) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Mã CVV không hợp lệ!', 'error');
+                return false;
+            }
+
+            // Kiểm tra số điện thoại
+            if (!/^0\d{9}$/.test(phoneNumber)) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số điện thoại không hợp lệ!', 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Hàm tính tiền thối cho thanh toán tiền mặt
+        function calculateChange() {
+            const totalAmount = parseFloat($('#cashPaymentTotalAmount').text().replace(/[^\d]/g, ''));
+            const received = parseFloat($('#cashReceived').val().replace(/[^\d]/g, '')) || 0;
+
+            const change = received - totalAmount;
+
+            if (change >= 0) {
+                $('#cashChange').val(change.toLocaleString('vi-VN') + ' đ');
+            } else {
+                $('#cashChange').val('0 đ');
+            }
+        }
+
+        // Xử lý thanh toán tiền mặt
+        function completeCashPayment() {
+            const totalAmount = parseFloat($('#cashPaymentTotalAmount').text().replace(/[^\d]/g, ''));
+            const received = parseFloat($('#cashReceived').val().replace(/[^\d]/g, '')) || 0;
+
+            if (received < totalAmount) {
+                showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Số tiền khách đưa chưa đủ!', 'error');
+                return;
+            }
+
+            // Đóng modal thanh toán
+            $('#cashPaymentModal').modal('hide');
+
+            // Hoàn tất hóa đơn
+            completeInvoice('cash');
+        }
+
+        // Xử lý thanh toán chuyển khoản
+        function completeTransferPayment() {
+            // Hiển thị loading
+            showTransferProcessing();
+
+            // Giả lập xử lý thanh toán trong 5 giây
+            setTimeout(function () {
+                // Đóng modal thanh toán
+                $('#transferPaymentModal').modal('hide');
+
+                // Hoàn tất hóa đơn
+                completeInvoice('transfer');
+            }, 5000);
+        }
+
+        // Hiển thị hiệu ứng loading khi xử lý thanh toán chuyển khoản
+        function showTransferProcessing() {
+            // Thay đổi nội dung nút
+            $('#confirmTransferPaymentBtn').prop('disabled', true);
+            $('#confirmTransferPaymentBtn').html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý');
+
+            // Xóa overlay cũ nếu có
+            $('#transferPaymentForm').find('.position-absolute').remove();
+
+            // Thêm overlay cho toàn bộ modal body
+            const modalOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1040;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-info mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh giao dịch...</p>' +
+                '</div>' +
+                '</div>');
+
+            $('#transferPaymentModal .modal-body').css('position', 'relative').append(modalOverlay);
+        }
+
+        // Xử lý thanh toán MoMo
+        function completeMomoPayment() {
+            // Hiển thị loading
+            showMomoProcessing();
+
+            // Giả lập xử lý thanh toán trong 5 giây
+            setTimeout(function () {
+                // Đóng modal thanh toán
+                $('#momoPaymentModal').modal('hide');
+
+                // Hoàn tất hóa đơn
+                completeInvoice('momo');
+            }, 5000);
+        }
+
+        // Hiển thị hiệu ứng loading khi xử lý thanh toán MoMo
+        function showMomoProcessing() {
+            // Thay đổi nội dung nút
+            $('#confirmMomoPaymentBtn').prop('disabled', true);
+            $('#confirmMomoPaymentBtn').html('<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý');
+
+            // Xóa overlay cũ nếu có
+            $('#momoPaymentForm').find('.position-absolute').remove();
+
+            // Thêm overlay cho toàn bộ modal body
+            const modalOverlay = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.8); z-index: 1040;">' +
+                '<div class="text-center">' +
+                '<div class="spinner-border text-danger mb-2" role="status"></div>' +
+                '<p class="mb-0 fw-bold">Đang xác minh thanh toán MoMo...</p>' +
+                '</div>' +
+                '</div>');
+
+            $('#momoPaymentModal .modal-body').css('position', 'relative').append(modalOverlay);
+        }
     </script>
 </body>
 
