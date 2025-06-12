@@ -1,0 +1,85 @@
+<!-- Sidebar Component -->
+<nav class="sidebar-wrapper">
+    <div class="sidebar-nav">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/pages/dashboard.html" data-page="dashboard">
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="nav-item has-submenu" data-role="manager,inventory,sales">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <span class="text">Quản lý thuốc</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                            <span class="text">Danh sách thuốc</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="medicine-categories">
+                            <span class="text">Danh mục thuốc</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/pages/manage-order.html" data-page="manage-order">
+                    <span class="text">Quản lý hóa đơn</span>
+                </a>
+            </li>
+
+            <li class="nav-item has-submenu" data-role="manager,sales,customer-service">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <span class="text">Quản lý khách hàng</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
+                            <span class="text">Danh sách khách hàng</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item has-submenu" data-role="manager,inventory">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <span class="text">Quản lý nhà cung cấp</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
+                            <span class="text">Danh sách nhà cung cấp</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item has-submenu" data-role="manager">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <span class="text">Báo cáo thống kê</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/report.html" data-page="report">
+                            <span class="text">Doanh thu</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="sales-report">
+                            <span class="text">Bán hàng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="inventory-report">
+                            <span class="text">Tồn kho</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

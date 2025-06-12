@@ -1,0 +1,68 @@
+<!-- Header Component -->
+<header class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="/index.html">
+            <img src="/assets/images/pharmacity-logo.svg" alt="Pharmacity" height="40" class="me-2">
+            <span class="fw-bold">Hệ thống quản lý Pharmacity</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link dropdown-toggle header-icon-link" href="#" id="notificationsDropdown"
+                        role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell header-icon"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown"
+                        aria-labelledby="notificationsDropdown">
+                        <li>
+                            <h6 class="dropdown-header">Thông báo hệ thống</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">
+                                <div class="small text-muted">Hôm nay</div>
+                                <div>Đơn hàng mới #ORD123 từ Nguyễn Văn A</div>
+                            </a></li>
+                        <li><a class="dropdown-item" href="#">
+                                <div class="small text-muted">Hôm nay</div>
+                                <div>5 sản phẩm sắp hết hàng</div>
+                            </a></li>
+                        <li><a class="dropdown-item" href="#">
+                                <div class="small text-muted">Hôm qua</div>
+                                <div>Báo cáo doanh thu tháng đã sẵn sàng</div>
+                            </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-center" href="#">Xem tất cả thông báo</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center header-icon-link" href="#"
+                        id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle fa-fw header-icon me-2"></i>
+                        <span id="currentUser">Quản lý</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog fa-fw me-2"></i> Thông tin cá
+                                nhân</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-key fa-fw me-2"></i> Đổi mật khẩu</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()"><i
+                                    class="fas fa-sign-out-alt fa-fw me-2"></i> Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
