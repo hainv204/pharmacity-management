@@ -8,21 +8,61 @@
                 </a>
             </li>
 
+            <!-- Quản lý thuốc -->
             <li class="nav-item has-submenu" data-role="manager,inventory,sales">
                 <a class="nav-link submenu-toggle" href="javascript:void(0)">
                     <span class="text">Quản lý thuốc</span>
                 </a>
                 <ul class="submenu nav flex-column collapse">
+                    <!--Danh sách thuốc (CRUD tất cả: thêm/sửa/xóa/xem) -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                        <a class="nav-link" href="/pages/manage-medicine/medicine-lists.html"
+                            data-page="manage-medicine">
+                            <i class="fas fa-list me-2"></i>
                             <span class="text">Danh sách thuốc</span>
                         </a>
                     </li>
+
+
+                    <!--Cảnh báo hàng tồn -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="medicine-categories">
-                            <span class="text">Danh mục thuốc</span>
+                        <a class="nav-link" href="/pages/manage-medicine/medicine-alerts.html"
+                            data-page="medicine-alerts">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span class="text">Cảnh báo hàng tồn</span>
                         </a>
                     </li>
+                </ul>
+            </li>
+
+            <!-- Quản lý kho -->
+            <li class="nav-item has-submenu" data-role="manager,inventory,sales">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <i class="fas fa-warehouse me-2"></i>
+                    <span class="text">Quản lý kho</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <!-- 1. Tổng quan tồn kho (hiển thị trạng thái hiện thời: Còn hàng, Hết hàng, Tồn kho thấp, Sắp hết hạn) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/manage-stock.html" data-page="manage-stock">
+                            <i class="fas fa-list me-2"></i> <span class="text">Tổng quan tồn kho</span>
+                        </a>
+                    </li>
+
+                    <!-- 2. Nhập kho (tăng số lượng tồn, ghi nhận lịch sử nhập) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/stock-in.html" data-page="stock-in">
+                            <i class="fas fa-arrow-down me-2"></i> <span class="text">Nhập kho</span>
+                        </a>
+                    </li>
+
+                    <!-- 3. Xuất kho (giảm số lượng tồn, ghi nhận lịch sử xuất) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/stock-out.html" data-page="stock-out">
+                            <i class="fas fa-arrow-up me-2"></i> <span class="text">Xuất kho</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
 
