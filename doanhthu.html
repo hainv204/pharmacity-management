@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Doanh thu tháng</title>
+  <link rel="stylesheet" href="doanhthu.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo"><strong>LOGO</strong> Pharmacy</div>
+    <p>Hệ thống quản lý Pharmacy</p>
+    <ul class="menu">
+      <li>Dashboard</li>
+      <li>Quản lý thuốc</li>
+      <li>Quản lý hóa đơn</li>
+      <li>Quản lý khách hàng</li>
+      <li>Quản lý nhà cung cấp</li>
+      <li class="active">Báo cáo thống kê
+        <ul class="submenu">
+          <li class="sub-active"> Doanh thu tháng</li>
+          <li>Lợi nhuận</li>
+          <li>Số đơn hàng</li>
+          <li>Khách hàng</li>
+        </ul>
+      </li>
+      <li>Cấu hình hệ thống</li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div></div>
+      <div class="user-area">
+        <span>Quản lý</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>Doanh thu tháng</h2>
+      <div class="controls">
+        <label for="date">Ngày</label>
+        <input type="text" value="01/05/2025 - 31/05/2025" id="date" />
+        <button>Xuất Excel</button>
+        <button>In báo cáo</button>
+      </div>
+
+      <div class="chart-box">
+        <canvas id="revenueChart"></canvas>
+      </div>
+
+      <div class="summary">
+        Tổng doanh thu tháng 5<br>
+        <strong>360.000.000 đ</strong>
+      </div>
+    </div>
+
+    <footer>
+      © 2025 Pharmacy Management System. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('revenueChart');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['1–7 May', '8–15 May', '16–23 May', '23–31 May'],
+        datasets: [{
+          label: 'Doanh thu (triệu đồng)',
+          data: [10, 60, 40, 90, 30, 130],
+          fill: false,
+          borderColor: 'black',
+          backgroundColor: 'black',
+          tension: 0.2,
+          pointStyle: 'circle',
+          pointRadius: 5
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Triệu đồng' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

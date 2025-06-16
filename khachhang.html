@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hệ thống quản lý Pharmacy</title>
+  <link rel="stylesheet" href="khachhang.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="logo">LOGO <span class="blue">Pharmacy</span>ly</div>
+    <div class="title">Hệ thống quản lý Pharmacy</div>
+    <div class="user-info">👤 Quản lý</div>
+  </div>
+
+  <div class="main">
+    <aside class="sidebar">
+      <ul>
+        <li>📊 Dashboard</li>
+        <li>💊 Quản lý thuốc</li>
+        <li>🧾 Quản lý hóa đơn</li>
+        <li>👥 Quản lý khách hàng</li>
+        <li>🚚 Quản lý nhà cung cấp</li>
+        <li class="active">📈 Báo cáo thống kê
+          <ul class="sub">
+            <li>Doanh thu tháng</li>
+            <li>Lợi nhuận</li>
+            <li>Số đơn hàng</li>
+            <li class="active">Khách hàng</li>
+          </ul>
+        </li>
+        <li>⚙️ Cấu hình hệ thống</li>
+      </ul>
+    </aside>
+
+    <section class="content">
+      <h2>Khách hàng mới</h2>
+      <div class="date-range">
+        Ngày <input type="text" value="01/05/2025 - 31/05/2025" readonly />
+        <button>📅</button>
+      </div>
+      <div class="actions">
+        <button>Xuất Excel</button>
+        <button>In báo cáo</button>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart">
+          <div class="pie"></div>
+          <div class="label left">35%</div>
+          <div class="label right">65%</div>
+        </div>
+        <div class="legend">
+          <div><span class="box red"></span> Khách hàng thường</div>
+          <div><span class="box blue"></span> Hội viên</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">© 2025 Pharmacy Management System. All rights reserved.</footer>
+</body>
+</html>

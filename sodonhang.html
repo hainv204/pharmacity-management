@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Số đơn hàng</title>
+  <link rel="stylesheet" href="sodonhang.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo"><strong>LOGO</strong> Pharmacy</div>
+    <p class="subtitle">Hệ thống quản lý Pharmacy</p>
+    <ul class="menu">
+      <li>Dashboard</li>
+      <li>Quản lý thuốc</li>
+      <li>Quản lý hóa đơn</li>
+      <li>Quản lý khách hàng</li>
+      <li>Quản lý nhà cung cấp</li>
+      <li class="active">Báo cáo thống kê
+        <ul class="submenu">
+          <li>Doanh thu tháng</li>
+          <li>Lợi nhuận</li>
+          <li class="sub-active"><span class="icon">📊</span> Số đơn hàng</li>
+          <li>Khách hàng</li>
+        </ul>
+      </li>
+      <li>Cấu hình hệ thống</li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div></div>
+      <div class="user-area">
+        <span>Quản lý</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>Số đơn hàng</h2>
+      <div class="controls">
+        <label for="date">Ngày</label>
+        <input type="text" value="01/05/2025 - 31/05/2025" id="date" />
+        <button>Xuất Excel</button>
+        <button>In báo cáo</button>
+      </div>
+
+      <div class="report-box">
+        <div class="chart-container">
+          <canvas id="orderChart"></canvas>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã đơn hàng</th>
+                <th>Giá</th>
+                <th>Ngày mua hàng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>HD001</td><td>36.000 đ</td><td>31/05/2025</td></tr>
+              <tr><td>HD002</td><td>36.000 đ</td><td>31/05/2025</td></tr>
+              <tr><td>HD003</td><td>36.000 đ</td><td>30/05/2025</td></tr>
+              <tr><td>HD004</td><td>36.000 đ</td><td>30/05/2025</td></tr>
+              <tr><td>HD005</td><td>36.000 đ</td><td>30/05/2025</td></tr>
+              <tr><td>HD006</td><td>36.000 đ</td><td>30/05/2025</td></tr>
+              <tr><td>HD007</td><td>36.000 đ</td><td>30/05/2025</td></tr>
+              <tr><td>HD008</td><td>36.000 đ</td><td>29/05/2025</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      © 2025 Pharmacy Management System. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('orderChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['1–7 May', '8–15 May', '16–23 May', '24–31 May'],
+        datasets: [{
+          label: 'Số đơn hàng',
+          data: [150, 250, 200, 350],
+          backgroundColor: 'black'
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
