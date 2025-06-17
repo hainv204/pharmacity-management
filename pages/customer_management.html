@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý khách hàng - Pharmacity Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/invoice.css">
+    <style>
+        body {
+            min-height: 100vh;
+        }
+        main {
+            min-height: calc(100vh - 60px);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        /* Ẩn hoàn toàn giao diện xác thực mặc định của trình duyệt */
+        input:invalid,
+        select:invalid {
+            box-shadow: none !important;
+            background-image: none !important;
+        }
+
+        input:user-invalid,
+        select:user-invalid {
+            box-shadow: none !important;
+            background-image: none !important;
+        }
+
+        input:-moz-ui-invalid, /* Firefox */
+        select:-moz-ui-invalid { /* Firefox */
+            box-shadow: none !important;
+        }
+
+        /* Loại bỏ dấu tích xanh và viền xanh cho các trường hợp lệ của Bootstrap */
+        /* .form-control.is-valid,
+        .was-validated .form-control:valid {
+            border-color: var(--bs-border-color) !important;
+            background-image: none !important;
+        } */
+
+        .form-select.is-valid,
+        .was-validated .form-select:valid {
+            border-color: var(--bs-border-color) !important;
+            background-image: none !important;
+        }
+
+        .form-check-input.is-valid ~ .form-check-label::before,
+        .was-validated .form-check-input:valid ~ .form-check-label::before {
+            border-color: var(--bs-border-color) !important;
+        }
+
+        .form-check-input.is-valid:checked ~ .form-check-label::after,
+        .was-validated .form-check-input:valid:checked ~ .form-check-label::after {
+            background-image: none !important;
+        }
+
+        /* Đảm bảo rằng chỉ có viền đỏ khi không hợp lệ */
+        .form-control.is-invalid,
+        .was-validated .form-control:invalid {
+            border-color: var(--bs-form-invalid-border-color) !important; /* Bootstrap default red */
+        }
+
+        .form-select.is-invalid,
+        .was-validated .form-select:invalid {
+            border-color: var(--bs-form-invalid-border-color) !important;
+        }
+
+        .form-check-input.is-invalid ~ .form-check-label::before,
+        .was-validated .form-check-input:invalid ~ .form-check-label::before {
+            border-color: var(--bs-form-invalid-border-color) !important;
+        }
+
+        /* Ẩn bong bóng thông báo lỗi cho các trình duyệt cụ thể */
+        form:invalid *:-moz-ui-invalid {
+            box-shadow: none !important;
+        }
+
+        /* Ngăn các trình duyệt hiển thị bong bóng thông báo lỗi */
+        [data-bs-toggle="tooltip"].is-invalid, [data-bs-toggle="popover"].is-invalid {
+            pointer-events: none; /* Ngăn tương tác với bong bóng mặc định */
+        }
+
+        /* Loại bỏ hoàn toàn dấu x màu đỏ mặc định (trên một số trình duyệt) */
+        input[type="text"]::-webkit-validation-bubble,
+        input[type="tel"]::-webkit-validation-bubble,
+        select::-webkit-validation-bubble {
+          display: none;
+        }
+
+        input.form-control.is-invalid {
+    padding-right: 0.75rem !important; /* Xóa khoảng trống bên phải */
+    background-image: none !important; /* Xóa icon cảnh báo */
+    border-color: #dc3545 !important;  /* Màu viền đỏ */
+    box-shadow: none !important;       /* Không cần hiệu ứng glow */
+}
+
+
+select.form-select.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: none !important;
+    background-image: var(--bs-form-select-bg-img) !important; /* Khôi phục nút xổ xuống */
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+        /* CSS bổ sung để điều chỉnh bố cục modal xóa */
+        #deleteCustomerModal .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #deleteCustomerModal .modal-header {
+            padding: 1rem 1.5rem; /* Điều chỉnh padding cho header */
+        }
+
+        #deleteCustomerModal .modal-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Đảm bảo nội dung căn giữa */
+            padding: 1.5rem; /* Điều chỉnh padding cho phù hợp */
+        }
+
+        #deleteCustomerModal .modal-body p {
+            margin-bottom: 0.75rem; /* Điều chỉnh khoảng cách dưới của đoạn văn */
+        }
+
+        #deleteCustomerModal .modal-body .alert {
+            margin-bottom: 1.5rem; /* Tăng khoảng cách dưới của cảnh báo */
+            width: 100%; /* Đảm bảo alert chiếm hết chiều rộng nếu cần */
+        }
+
+        #deleteCustomerModal .modal-body .alert div {
+            padding-left: 3rem; /* Đẩy nội dung văn bản vào để tạo không gian cho icon */
+            text-indent: -3rem; /* Kéo dòng đầu tiên lùi lại để tạo hiệu ứng treo lề */
+        }
+
+        #deleteCustomerModal .modal-footer {
+            padding: 1rem 1.5rem; /* Điều chỉnh padding cho footer */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div id="successToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="addCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="success-icon">
+                            <span>&check;</span>
+                        </div>
+                        <span class="success-message">Bạn đã thêm khách hàng thành công!</span>
+                    </div>
+                </div>
+
+                <div id="updateCustomerSuccessToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="updateCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="success-icon">
+                            <span>&check;</span>
+                        </div>
+                        <span class="success-message">Bạn đã cập nhật khách hàng thành công!</span>
+                    </div>
+                </div>
+
+                <div id="deleteCustomerSuccessToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="deleteCustomerSuccessToast" class="delete-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="delete-icon">
+                            <span>&times;</span>
+                        </div>
+                        <span class="delete-message">Bạn đã xóa khách hàng thành công!</span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="page-title">Quản lý khách hàng</h1>
+                </div>
+                <!-- Thanh công cụ tìm kiếm -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form class="d-flex align-items-center w-200" id="searchForm">
+                            <div class="d-flex align-items-center gap-4 flex-grow-2">
+                                <div class="search-box position-relative" style="width:827px;max-width:100%;">
+                                    <input type="text" class="form-control" id="customerSearch" placeholder="Tìm kiếm nhà khách hàng...">
+                                    <i class="fas fa-search search-icon position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-1"></i> Tìm kiếm
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-primary  ms-5">
+                                <i class="fas fa-plus me-1"></i> Thêm mới
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Bảng danh sách khách hàng -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle" id="customerTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Mã khách hàng</th>
+                                        <th scope="col">Họ và tên</th>
+                                        <th scope="col">Giới tính</th>
+                                        <th scope="col">Loại khách hàng</th>
+                                        <th scope="col">Số điện thoại</th>
+                                        <th scope="col">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-medium">HD001</td>
+                                        <td>Nguyễn Văn A</td>
+                                        <td>Nam</td>
+                                        <td>Hội viên</td>
+                                        <td>0867078917</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD003</td>
+                                        <td>Lê Văn C</td>
+                                        <td>Nam</td>
+                                        <td>Hội viên</td>
+                                        <td>0867078956</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD004</td>
+                                        <td>Nguyễn Văn S</td>
+                                        <td>Nam</td>
+                                        <td>Hội viên</td>
+                                        <td>0867078954</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD005</td>
+                                        <td>Trịnh Thị E</td>
+                                        <td>Nữ</td>
+                                        <td>Hội viên</td>
+                                        <td>0864568917</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD006</td>
+                                        <td>Nguyễn Minh D</td>
+                                        <td>Nam</td>
+                                        <td>Thường</td>
+                                        <td>0867078457</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD007</td>
+                                        <td>Nguyễn Văn K</td>
+                                        <td>Nam</td>
+                                        <td>Thường</td>
+                                        <td>0867563917</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD008</td>
+                                        <td>Vũ Xuân T</td>
+                                        <td>Nữ</td>
+                                        <td>Thường</td>
+                                        <td>0867078457</td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div class="text-muted small">
+                                Hiển thị 8/25 khách hàng
+                            </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div id="footer"></div>
+
+    <!-- Modal Form Thêm Khách Hàng -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 612px; max-width: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCustomerModalLabel">Thêm khách hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCustomerForm" class="needs-validation" novalidate>
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="customerName" class="form-label mb-0" style="width: 150px;">Tên khách hàng:</label>
+                            <div class="flex-grow-1">
+                              <input type="text" class="form-control" id="customerName" placeholder="Nhập tên khách hàng">
+                              <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!</div>
+                              <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số. Vui lòng nhập lại!</div>
+                            </div>
+                          </div>
+                          
+                      <div class="d-flex align-items-center mb-3">
+                        <label class="form-label mb-0" style="width: 150px;">Giới tính:</label>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center">
+                                <div class="form-check me-5">
+                                    <input class="form-check-input" type="radio" name="customerGender" id="genderMale" value="Nam">
+                                    <label class="form-check-label" for="genderMale">
+                                        Nam
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="customerGender" id="genderFemale" value="Nữ">
+                                    <label class="form-check-label" for="genderFemale">
+                                        Nữ
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback">Vui lòng chọn giới tính!</div>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center mb-3">
+                        <label for="customerPhone" class="form-label mb-0" style="width: 150px;">Số điện thoại:</label>
+                        <div class="flex-grow-1">
+                            <input type="tel" class="form-control" id="customerPhone">
+                            <div class="invalid-feedback empty-feedback">Vui lòng nhập số điện thoại!</div>
+                            <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc biệt.Vui lòng nhập lại!</div>
+                            <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui lòng nhập lại!</div>
+                        </div>
+                        
+                      </div>
+                      
+                      <div class="d-flex align-items-center mb-3">
+                        <label for="customerType" class="form-label mb-0" style="width: 150px;">Loại khách hàng:</label>
+                        <div class="flex-grow-1">
+                            <select class="form-select" id="customerType">
+                                <option value=""></option>
+                              
+                                <option value="Hội viên">Hội viên</option>
+                                <option value="Thường">Thường</option>
+                            </select>
+                            <div class="invalid-feedback">Vui lòng chọn loại khách hàng!</div>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" id="addCustomerOkBtn">OK</button>
+                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form Chỉnh Sửa Khách Hàng -->
+    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 612px; max-width: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh sửa khách hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCustomerForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="editCustomerId">
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="editCustomerName" class="form-label mb-0" style="width: 150px;">Tên khách hàng:</label>
+                            <div class="flex-grow-1">
+                              <input type="text" class="form-control" id="editCustomerName" placeholder="Nhập tên khách hàng">
+                              <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!</div>
+                              <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số. Vui lòng nhập lại!</div>
+                            </div>
+                        </div>
+                          
+                        <div class="d-flex align-items-center mb-3">
+                            <label class="form-label mb-0" style="width: 150px;">Giới tính:</label>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check me-5">
+                                        <input class="form-check-input" type="radio" name="editCustomerGender" id="editGenderMale" value="Nam">
+                                        <label class="form-check-label" for="editGenderMale">
+                                            Nam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="editCustomerGender" id="editGenderFemale" value="Nữ">
+                                        <label class="form-check-label" for="editGenderFemale">
+                                            Nữ
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">Vui lòng chọn giới tính!</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="editCustomerPhone" class="form-label mb-0" style="width: 150px;">Số điện thoại:</label>
+                            <div class="flex-grow-1">
+                                <input type="tel" class="form-control" id="editCustomerPhone" disabled>
+                                <div class="invalid-feedback empty-feedback">Vui lòng nhập số điện thoại!</div>
+                                <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc biệt.Vui lòng nhập lại!</div>
+                                <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui lòng nhập lại!</div>
+                            </div>
+                        </div>
+                      
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="editCustomerType" class="form-label mb-0" style="width: 150px;">Loại khách hàng:</label>
+                            <div class="flex-grow-1">
+                                <select class="form-select" id="editCustomerType">
+                                    <option value=""></option>
+                                    <option value="Hội viên">Hội viên</option>
+                                    <option value="Thường">Thường</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn loại khách hàng!</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" id="editCustomerOkBtn">OK</button>
+                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xác nhận Xóa Khách Hàng -->
+    <div class="modal fade" id="deleteCustomerModal" tabindex="-1" aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="width: 450px; max-width: none;">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 1rem 1.5rem;">
+                    <h5 class="modal-title" id="deleteCustomerModalLabel">Xóa khách hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa khách hàng này không?</p>
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <div>
+                            Thao tác này không thể hoàn tác và ảnh hưởng đến dữ liệu.
+                        </div>
+                    </div>
+                    <input type="hidden" id="deleteCustomerId">
+                </div>
+                <div class="modal-footer d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-danger" style="width: 120px; height: 40px;" id="confirmDeleteBtn">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" style="width: 120px; height: 40px; background-color: #f8f9fa; border-color: #dee2e6; color: #343a40;" data-bs-dismiss="modal">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form Xem Chi Tiết Khách Hàng -->
+    <div class="modal fade" id="viewCustomerDetailModal" tabindex="-1" aria-labelledby="viewCustomerDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 700px; max-width: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewCustomerDetailModalLabel">Thông tin cá nhân & Lịch sử mua hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="mb-3 fw-bold">Thông tin khách hàng</h6>
+                    <div class="bg-light p-3 rounded mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="viewCustomerName" class="form-label mb-1">Tên khách hàng</label>
+                                <input type="text" class="form-control" id="viewCustomerName" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="viewCustomerPhone" class="form-label mb-1">Số điện thoại</label>
+                                <input type="text" class="form-control" id="viewCustomerPhone" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="viewCustomerGender" class="form-label mb-1">Giới tính</label>
+                                <input type="text" class="form-control" id="viewCustomerGender" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="viewCustomerType" class="form-label mb-1">Loại khách hàng</label>
+                                <input type="text" class="form-control" id="viewCustomerType" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <label class="form-label mb-0 me-2">Điểm tích lũy:</label>
+                                    <div id="viewCustomerPoints" class="fw-bold">125 điểm</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <label class="form-label mb-0 me-2">Ưu đãi khả dụng:</label>
+                                    <div id="viewCustomerOffers" class="fw-bold">2 ưu đãi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 fw-bold">Lịch sử mua hàng</h6>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Mã hóa đơn</th>
+                                    <th scope="col">Ngày lập</th>
+                                    <th scope="col">Mã thuốc</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="purchaseHistoryTableBody">
+                                <!-- Lịch sử mua hàng sẽ được thêm vào đây bằng JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted small">
+                            Hiển thị 8/25 hóa đơn
+                        </div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Quay lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#header').load('/components/header.html');
+            $('#sidebar').load('/components/sidebar.html');
+            $('#footer').load('/components/footer.html');
+
+            // Khởi tạo modal
+            const addCustomerModal = new bootstrap.Modal(document.getElementById('addCustomerModal'));
+            const editCustomerModal = new bootstrap.Modal(document.getElementById('editCustomerModal'));
+            const deleteCustomerModal = new bootstrap.Modal(document.getElementById('deleteCustomerModal'));
+            const viewCustomerDetailModal = new bootstrap.Modal(document.getElementById('viewCustomerDetailModal'));
+
+            // Xử lý khi click nút Thêm mới
+            $('button[type="button"].btn-primary').on('click', function() {
+                // Reset validation state when opening modal
+                $('#addCustomerForm').removeClass('was-validated');
+                $('#addCustomerForm')[0].reset();
+                // Remove all is-invalid/is-valid classes from inputs and radio buttons
+                $('#addCustomerForm').find('.is-invalid').removeClass('is-invalid');
+                $('#addCustomerForm').find('.is-valid').removeClass('is-valid');
+                // Explicitly hide all invalid feedback messages
+                $('#addCustomerForm').find('.invalid-feedback').hide();
+                addCustomerModal.show();
+            });
+
+            // Xử lý khi click nút Sửa
+            $(document).on('click', '.btn-action.edit', function() {
+                const row = $(this).closest('tr');
+                const customerId = row.find('td:first').text();
+                const customerName = row.find('td:eq(1)').text();
+                const customerGender = row.find('td:eq(2)').text();
+                const customerType = row.find('td:eq(3)').text();
+                const customerPhone = row.find('td:eq(4)').text();
+
+                // Điền dữ liệu vào form
+                $('#editCustomerId').val(customerId);
+                $('#editCustomerName').val(customerName);
+                $(`input[name="editCustomerGender"][value="${customerGender}"]`).prop('checked', true);
+                $('#editCustomerType').val(customerType);
+                $('#editCustomerPhone').val(customerPhone);
+
+                // Reset validation state
+                $('#editCustomerForm').removeClass('was-validated');
+                $('#editCustomerForm').find('.is-invalid').removeClass('is-invalid');
+                $('#editCustomerForm').find('.is-valid').removeClass('is-valid');
+                $('#editCustomerForm').find('.invalid-feedback').hide();
+
+                editCustomerModal.show();
+            });
+
+            // Xử lý khi click nút Xóa
+            $(document).on('click', '.btn-action.trash-can', function() {
+                const customerId = $(this).closest('tr').find('td:first').text();
+                $('#deleteCustomerId').val(customerId);
+                deleteCustomerModal.show();
+            });
+
+            // Xử lý khi xác nhận xóa
+            $('#confirmDeleteBtn').on('click', function() {
+                const customerIdToDelete = $('#deleteCustomerId').val();
+                $(`#customerTable tbody tr td:first-child:contains('${customerIdToDelete}')`).closest('tr').remove();
+                deleteCustomerModal.hide();
+
+                // Hiển thị thông báo xóa thành công thủ công
+                $('#deleteCustomerSuccessToastWrapper').css('display', 'block');
+                setTimeout(() => {
+                    $('#deleteCustomerSuccessToastWrapper').css('display', 'none');
+                }, 3000); // Ẩn sau 3 giây
+            });
+
+            // Xử lý khi submit form chỉnh sửa
+            $('#editCustomerForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                let isValid = true;
+
+                // Validate Customer Name
+                const nameInput = $('#editCustomerName');
+                const name = nameInput.val().trim();
+                const nameRegex = /^[\p{L}\s]+$/u;
+
+                nameInput.removeClass('is-invalid is-valid');
+                nameInput.siblings('.invalid-feedback').hide();
+
+                if (!name) {
+                    nameInput.addClass('is-invalid');
+                    nameInput.siblings('.empty-feedback').show();
+                    isValid = false;
+                } else if (!nameRegex.test(name)) {
+                    nameInput.addClass('is-invalid');
+                    nameInput.siblings('.format-feedback').show();
+                    isValid = false;
+                } else {
+                    nameInput.addClass('is-valid');
+                }
+
+                // Validate Customer Gender
+                const genderInputs = $('input[name="editCustomerGender"]');
+                const genderFeedback = genderInputs.closest('.flex-grow-1').find('.invalid-feedback');
+                if (!genderInputs.filter(':checked').length) {
+                    genderInputs.addClass('is-invalid');
+                    genderFeedback.show();
+                    isValid = false;
+                } else {
+                    genderInputs.removeClass('is-invalid');
+                    genderFeedback.hide();
+                }
+
+                // Validate Customer Type
+                const typeInput = $('#editCustomerType');
+                const type = typeInput.val();
+                const typeFeedback = typeInput.closest('.flex-grow-1').find('.invalid-feedback');
+
+                if (!type) {
+                    typeInput.addClass('is-invalid');
+                    typeFeedback.show();
+                    isValid = false;
+                } else {
+                    typeInput.removeClass('is-invalid').addClass('is-valid');
+                    typeFeedback.hide();
+                }
+
+                if (isValid) {
+                    const customerId = $('#editCustomerId').val();
+                    const row = $(`#customerTable tbody tr td:first-child:contains('${customerId}')`).closest('tr');
+                    
+                    row.find('td:eq(1)').text(name);
+                    row.find('td:eq(2)').text(genderInputs.filter(':checked').val());
+                    row.find('td:eq(3)').text(type);
+
+                    editCustomerModal.hide();
+
+                    // Hiển thị thông báo cập nhật thành công
+                    $('#updateCustomerSuccessToastWrapper').css('display', 'block');
+                    setTimeout(() => {
+                        $('#updateCustomerSuccessToastWrapper').css('display', 'none');
+                    }, 3000); // Ẩn sau 3 giây
+
+                    form.reset();
+                    $(form).removeClass('was-validated');
+                    $(form).find('.is-valid').removeClass('is-valid');
+                    $(form).find('.is-invalid').removeClass('is-invalid');
+                    $(form).find('.invalid-feedback').hide();
+                }
+            });
+
+            // Make the OK button submit the form
+            $('#editCustomerOkBtn').off('click').on('click', function() {
+                $('#editCustomerForm').submit();
+            });
+
+            // Xử lý khi submit form thêm mới
+            $('#addCustomerForm').on('submit', function (e) {
+                e.preventDefault();
+                const form = this;
+                let isValid = true;
+
+                // Validate Customer Name
+                const nameInput = $('#customerName');
+                const name = nameInput.val().trim();
+                const nameRegex = /^[\p{L}\s]+$/u;
+
+                nameInput.removeClass('is-invalid is-valid');
+                nameInput.siblings('.invalid-feedback').hide();
+
+                if (!name) {
+                    nameInput.addClass('is-invalid');
+                    nameInput.siblings('.empty-feedback').show();
+                    isValid = false;
+                } else if (!nameRegex.test(name)) {
+                    nameInput.addClass('is-invalid');
+                    nameInput.siblings('.format-feedback').show();
+                    isValid = false;
+                } else {
+                    nameInput.addClass('is-valid');
+                }
+
+                // Validate Customer Gender
+                const genderInputs = $('input[name="customerGender"]');
+                const genderFeedback = genderInputs.closest('.flex-grow-1').find('.invalid-feedback');
+                if (!genderInputs.filter(':checked').length) {
+                    genderInputs.addClass('is-invalid');
+                    genderFeedback.show();
+                    isValid = false;
+                } else {
+                    genderInputs.removeClass('is-invalid').addClass('is-valid');
+                    genderFeedback.hide();
+                }
+
+                // Validate Customer Phone
+                const phoneInput = $('#customerPhone');
+                const phone = phoneInput.val().trim();
+                const phoneRegex = /^\d+$/;
+
+                phoneInput.removeClass('is-invalid is-valid');
+                phoneInput.siblings('.invalid-feedback').hide();
+
+                if (!phone) {
+                    phoneInput.addClass('is-invalid');
+                    phoneInput.siblings('.empty-feedback').show();
+                    isValid = false;
+                } else if (!phoneRegex.test(phone)) {
+                    phoneInput.addClass('is-invalid');
+                    phoneInput.siblings('.format-feedback').show();
+                    isValid = false;
+                } else {
+                    let phoneExists = false;
+                    $('#customerTable tbody tr').each(function() {
+                        const existingPhone = $(this).find('td:eq(4)').text().trim();
+                        if (existingPhone === phone) {
+                            phoneExists = true;
+                            return false;
+                        }
+                    });
+
+                    if (phoneExists) {
+                        phoneInput.addClass('is-invalid');
+                        phoneInput.siblings('.exists-feedback').show();
+                        isValid = false;
+                    } else {
+                        phoneInput.addClass('is-valid');
+                    }
+                }
+
+                // Validate Customer Type
+                const typeInput = $('#customerType');
+                const type = typeInput.val();
+                const typeFeedback = typeInput.closest('.flex-grow-1').find('.invalid-feedback');
+
+                if (!type) {
+                    typeInput.addClass('is-invalid');
+                    typeFeedback.show();
+                    isValid = false;
+                } else {
+                    typeInput.removeClass('is-invalid').addClass('is-valid');
+                    typeFeedback.hide();
+                }
+
+                if (isValid) {
+                    // Tạo mã khách hàng tự động
+                    let lastCustomerId = 'HD000';
+                    $('#customerTable tbody tr').each(function() {
+                        const currentId = $(this).find('td:first').text().trim();
+                        if (currentId > lastCustomerId) {
+                            lastCustomerId = currentId;
+                        }
+                    });
+                    
+                    // Tăng mã khách hàng
+                    const numericPart = parseInt(lastCustomerId.substring(2)) + 1;
+                    const newCustomerId = 'HD' + numericPart.toString().padStart(3, '0');
+
+                    const customerData = {
+                        id: newCustomerId,
+                        name: name,
+                        gender: genderInputs.filter(':checked').val(),
+                        phone: phone,
+                        type: type
+                    };
+
+                    const newRow = `
+                        <tr>
+                            <td class="fw-medium">${customerData.id}</td>
+                            <td>${customerData.name}</td>
+                            <td>${customerData.gender}</td>
+                            <td>${customerData.type}</td>
+                            <td>${customerData.phone}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    $('#customerTable tbody').prepend(newRow);
+
+                    addCustomerModal.hide();
+                    
+                    // Hiển thị thông báo thành công thủ công
+                    $('#successToastWrapper').css('display', 'block');
+                    setTimeout(() => {
+                        $('#successToastWrapper').css('display', 'none');
+                    }, 3000); // Ẩn sau 3 giây
+
+                    form.reset();
+                    $(form).removeClass('was-validated');
+                }
+            });
+
+            // Make the OK button submit the form
+            $('#addCustomerOkBtn').off('click').on('click', function() {
+                $('#addCustomerForm').submit();
+            });
+
+            // Xử lý tìm kiếm khách hàng
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
+                const searchValue = $('#customerSearch').val().trim();
+                
+                // Nếu ô tìm kiếm trống, hiển thị lại tất cả khách hàng
+                if (!searchValue) {
+                    $('#customerTable tbody tr').show();
+                    $('.no-results').remove();
+                    return;
+                }
+
+                let found = false;
+                // Tìm kiếm theo số điện thoại
+                $('#customerTable tbody tr').each(function() {
+                    const phoneNumber = $(this).find('td:eq(4)').text().trim();
+                    if (phoneNumber.includes(searchValue)) {
+                        $(this).show();
+                        found = true;
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Xử lý hiển thị thông báo không tìm thấy
+                $('.no-results').remove();
+                if (!found) {
+                    const noResultsRow = `
+                        <tr class="no-results">
+                            <td colspan="6" class="text-center py-4">
+                                <i class="fas fa-search mb-2" style="font-size: 2rem; color: #ccc;"></i>
+                                <p class="mb-0">Không tìm thấy khách hàng nào</p>
+                            </td>
+                        </tr>
+                    `;
+                    $('#customerTable tbody').append(noResultsRow);
+                }
+            });
+
+            // Xử lý khi nhấn nút tìm kiếm
+            $('button[type="submit"]').on('click', function() {
+                $('#searchForm').submit();
+            });
+
+            // Xử lý khi click nút Xem
+            $(document).on('click', '.btn-action.view', function() {
+                const row = $(this).closest('tr');
+                const customerId = row.find('td:first').text();
+                const customerName = row.find('td:eq(1)').text();
+                const customerGender = row.find('td:eq(2)').text();
+                const customerType = row.find('td:eq(3)').text();
+                const customerPhone = row.find('td:eq(4)').text();
+
+                // Điền dữ liệu vào modal (sử dụng giá trị mặc định hoặc trống nếu không có từ bảng chính)
+                $('#viewCustomerName').val(customerName);
+                $('#viewCustomerPhone').val(customerPhone);
+                $('#viewCustomerGender').val(customerGender);
+                $('#viewCustomerType').val(customerType);
+                $('#viewCustomerPoints').text('125 điểm');
+                $('#viewCustomerOffers').text('2 ưu đãi');
+                $('#purchaseHistoryTableBody').empty();
+
+                // Example purchase history (replace with actual data retrieval)
+                const purchaseHistory = [
+                    { invoiceId: 'HD001', date: '20/05/2025 14:30', medicineId: 'MT01', quantity: 4, total: '24.000đ' },
+                    { invoiceId: 'HD002', date: '19/05/2025 10:15', medicineId: 'MT02', quantity: 6, total: '456.000đ' },
+                    { invoiceId: 'HD004', date: '22/05/2025 16:10', medicineId: 'MT03', quantity: 7, total: '56.000đ' },
+                    { invoiceId: 'HD005', date: '27/05/2025 10:20', medicineId: 'MT04', quantity: 8, total: '67.000đ' },
+                    { invoiceId: 'HD006', date: '29/05/2025 12:48', medicineId: 'MT05', quantity: 2, total: '8.000đ' },
+                    { invoiceId: 'HD007', date: '15/05/2025 17:00', medicineId: 'MT06', quantity: 3, total: '9.000đ' }
+                ];
+
+                purchaseHistory.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td class="fw-medium">${item.invoiceId}</td>
+                            <td>${item.date}</td>
+                            <td>${item.medicineId}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.total}</td>
+                        </tr>
+                    `;
+                    $('#purchaseHistoryTableBody').append(row);
+                });
+
+                viewCustomerDetailModal.show();
+            });
+        });
+    </script>
+</body>
+</html> 
