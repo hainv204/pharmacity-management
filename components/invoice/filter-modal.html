@@ -1,0 +1,100 @@
+<!-- Modal lọc nâng cao -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-filter me-2"></i> Lọc nâng cao
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="advancedFilterForm">
+                    <div class="mb-3">
+                        <label class="form-label">Khoảng thời gian</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Từ</span>
+                            <input type="date" class="form-control" id="startDate">
+                            <span class="input-group-text">đến</span>
+                            <input type="date" class="form-control" id="endDate">
+                        </div>
+                        <!-- Trường hiển thị lỗi nếu có -->
+                        <div class="invalid-feedback" id="dateRangeError"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Khách hàng</label>
+                        <select class="form-select" id="customerFilter">
+                            <option value="">Tất cả khách hàng</option>
+                            <option value="1">Nguyễn Văn A</option>
+                            <option value="2">Trần Thị B</option>
+                            <option value="3">Lê Văn C</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusPaid" checked>
+                                <label class="form-check-label" for="statusPaid">
+                                    Đã thanh toán
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusProcessing" checked>
+                                <label class="form-check-label" for="statusProcessing">
+                                    Đang xử lý
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusCancelled" checked>
+                                <label class="form-check-label" for="statusCancelled">
+                                    Đã huỷ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tổng tiền</label>
+                        <div class="row g-2">
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">Từ</span>
+                                    <input type="number" class="form-control" id="minAmount" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-text">đến</span>
+                                    <input type="number" class="form-control" id="maxAmount" placeholder="1.000.000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hình thức thanh toán</label>
+                        <select class="form-select" id="paymentFilter">
+                            <option value="">Tất cả hình thức</option>
+                            <option value="cash">Tiền mặt</option>
+                            <option value="card">Thẻ ngân hàng</option>
+                            <option value="transfer">Chuyển khoản</option>
+                            <option value="momo">Ví điện tử (MoMo)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" id="resetFilter">
+                    <i class="fas fa-sync-alt me-1"></i> Đặt lại
+                </button>
+                <button type="button" class="btn btn-primary" id="applyFilter">
+                    <i class="fas fa-filter me-1"></i> Áp dụng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

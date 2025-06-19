@@ -1,0 +1,216 @@
+<!-- 4. Modal Chi tiết hóa đơn -->
+<div class="modal fade" id="invoiceDetailModal" tabindex="-1" aria-labelledby="invoiceDetailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceDetailModalLabel">Chi tiết hóa đơn HD001</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thông tin hóa đơn -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="section-content">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="fw-bold me-2">Mã hóa đơn:</span>
+                                        <span id="editInvoiceId">HD002</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="fw-bold me-2">Khách hàng:</span>
+                                        <span id="editCustomer">Trần Thị B</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="fw-bold me-2">Số điện thoại:</span>
+                                        <span id="editPhone">0987654321</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <div class="d-flex justify-content-md-end align-items-center mb-1">
+                                        <span class="fw-bold me-2">Ngày lập:</span>
+                                        <span id="editDate">19/05/2025 10:15</span>
+                                    </div>
+                                    <div class="d-flex justify-content-md-end align-items-center mb-1">
+                                        <span class="fw-bold me-2">Trạng thái:</span>
+                                        <span style="padding-right: 32px;" class="text-warning">Đang xử lý</span>
+                                    </div>
+                                    <div class=" d-flex justify-content-md-end align-items-center mb-1">
+                                        <span class="fw-bold me-2">Thanh toán:</span>
+                                        <span id="editPayment">Chuyển khoản</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-3" id="invoiceDetailTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
+                            type="button" role="tab" aria-controls="details" aria-selected="true">Chi tiết hóa
+                            đơn</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history"
+                            type="button" role="tab" aria-controls="history" aria-selected="false">Lịch sử giao
+                            dịch</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="invoiceDetailTabsContent">
+                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <!-- Nội dung chi tiết hóa đơn hiện tại -->
+                        <!-- Chi tiết sản phẩm -->
+                        <h6 class="fw-bold mb-3">Danh sách thuốc</h6>
+                        <div class="table-responsive mb-3">
+                            <table class="table border">
+                                <thead>
+                                    <tr>
+                                        <th>Mã thuốc</th>
+                                        <th>Tên thuốc</th>
+                                        <th class="text-end">Đơn giá</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-end">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>MED001</td>
+                                        <td>Paracetamol 500mg</td>
+                                        <td class="text-end">2.000đ</td>
+                                        <td class="text-center">50</td>
+                                        <td class="text-end">100.000đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MED010</td>
+                                        <td>Amoxicillin 500mg</td>
+                                        <td class="text-end">3.000đ</td>
+                                        <td class="text-center">30</td>
+                                        <td class="text-end">90.000đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MED022</td>
+                                        <td>Vitamin C 1000mg</td>
+                                        <td class="text-end">15.000đ</td>
+                                        <td class="text-center">4</td>
+                                        <td class="text-end">60.000đ</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold">Tổng phụ:</td>
+                                        <td class="text-end fw-bold">250.000đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold">Giảm giá:</td>
+                                        <td class="text-end fw-bold">0 đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end fw-bold">Tổng thanh toán:</td>
+                                        <td class="text-end fw-bold fs-5 text-primary">250.000 đ</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Ghi chú -->
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="fw-bold mb-2">Ghi chú:</h6>
+                                <p class="mb-0 text-muted">Khách hàng cần đơn thuốc gấp. Đã tư vấn cách sử dụng
+                                    Amoxicillin.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0">Lịch sử giao dịch của khách hàng</h6>
+                        </div>
+
+                        <!-- Lịch sử giao dịch -->
+                        <div class="table-responsive">
+                            <table class="table border">
+                                <thead>
+                                    <tr>
+                                        <th>Mã hóa đơn</th>
+                                        <th>Ngày giao dịch</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-medium">HD001</td>
+                                        <td>20/05/2025 14:30</td>
+                                        <td>
+                                            <span class="d-block">Paracetamol 500mg (x50)</span>
+                                            <span class="text-muted small">Amoxicillin 500mg (x30), Vitamin C
+                                                (x4)</span>
+                                        </td>
+                                        <td class="fw-medium">250.000 đ</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
+                                        <td>
+                                            <button class="btn-action view" onclick="viewInvoiceDetails('HD001')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD123</td>
+                                        <td>15/05/2025 10:15</td>
+                                        <td>
+                                            <span class="d-block">Vitamin B Complex (x2)</span>
+                                            <span class="text-muted small">Panadol Extra (x10)</span>
+                                        </td>
+                                        <td class="fw-medium">180.000 đ</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
+                                        <td>
+                                            <button class="btn-action view" onclick="viewInvoiceDetails('HD123')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium">HD098</td>
+                                        <td>10/05/2025 17:45</td>
+                                        <td>
+                                            <span class="d-block">Efferalgan 500mg (x20)</span>
+                                        </td>
+                                        <td class="fw-medium">120.000 đ</td>
+                                        <td><span class="text-success">Đã thanh toán</span></td>
+                                        <td>
+                                            <button class="btn-action view" onclick="viewInvoiceDetails('HD098')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Phân trang và tổng kết -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="text-muted small">
+                                Tổng cộng: <span class="fw-medium">3</span> giao dịch
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="fw-bold mb-1">Tổng chi tiêu: <span class="text-primary">550.000
+                                        đ</span></span>
+                                <span class="small text-muted">Điểm tích luỹ: <span class="text-success">+55</span>
+                                    điểm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="printInvoiceBtn">In hóa đơn</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

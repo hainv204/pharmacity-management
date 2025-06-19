@@ -51,7 +51,8 @@
 }
 
 .table {
-    vertical-align: middle;
+    vertical-align  : middle;
+    background-color: #ffff;
 }
 
 .table> :not(caption)>*>* {
@@ -125,10 +126,10 @@
     border-color    : #bfdbfe;
 }
 
-.btn-action.edit:hover {
-    background-color: #e0f2fe;
-    color           : #0ea5e9;
-    border-color    : #bae6fd;
+.btn-action.edit:hover:not(:disabled) {
+    background-color: #fffbe6;
+    color           : #ffce3a;
+    border-color    : #ffe58f;
 }
 
 .btn-action.cancel:hover {
@@ -141,6 +142,12 @@
     background-color: #f8fafc;
     color           : #475569;
     border-color    : #cbd5e1;
+}
+
+.btn-action.trash-can:hover:not(:disabled) {
+    background-color: #ffeaea;
+    color           : #ff4d4d;
+    border-color    : #ffb3b3;
 }
 
 .search-box {
@@ -176,8 +183,9 @@
 }
 
 .modal-footer {
-    border-top-color: #f1f5f9;
-    padding         : 1.5rem;
+    padding-left   : 1.5rem;
+    padding-right  : 2.5rem;
+    justify-content: flex-end;
 }
 
 .modal-body {
@@ -187,6 +195,7 @@
 .modal-title {
     font-weight: 600;
     color      : #1e293b;
+    font-size  : 18px;
 }
 
 .flatpickr-input {
@@ -356,8 +365,9 @@
 }
 
 /* Styles cho modal thanh toán tiền mặt */
-#cashPaymentModal .modal-content {
-    border-left: 5px solid #198754;
+#cashPaymentModal .btn-success {
+    background-color: #0d6efd;
+    border-color    : #0d6efd;
 }
 
 #cashReceived,
@@ -365,16 +375,6 @@
     font-size  : 1.25rem;
     height     : calc(1.5em + 1rem + 2px);
     font-weight: 500;
-}
-
-/* Styles cho modal thanh toán chuyển khoản */
-#transferPaymentModal .modal-content {
-    border-left: 5px solid #0dcaf0;
-}
-
-/* Styles cho modal thanh toán MoMo */
-#momoPaymentModal .modal-content {
-    border-left: 5px solid #dc3545;
 }
 
 /* Hiệu ứng hover cho mã QR */
@@ -403,22 +403,6 @@
     align-items    : center;
 }
 
-/* Nút thanh toán theo màu sắc tương ứng với phương thức */
-#cashPaymentModal .btn-success {
-    background-color: #198754;
-    border-color    : #198754;
-}
-
-#transferPaymentModal .btn-info {
-    background-color: #0dcaf0;
-    border-color    : #0dcaf0;
-}
-
-#momoPaymentModal .btn-danger {
-    background-color: #dc3545;
-    border-color    : #dc3545;
-}
-
 /* Tooltip thông tin */
 .info-tooltip {
     color : #6c757d;
@@ -427,4 +411,236 @@
 
 .info-tooltip:hover {
     color: #212529;
+}
+
+.section-box {
+    border       : 1px solid #f4f4f4;
+    position     : relative;
+    margin-bottom: 25px;
+    margin-top   : 20px;
+    border-radius: 12px;
+    overflow     : visible;
+}
+
+.section-header {
+    position           : absolute;
+    top                : -10px;
+    left               : 20px;
+    background-color   : white;
+    padding            : 0 10px;
+    font-weight        : bold;
+    font-size          : 18px;
+    /* text-transform  : uppercase; */
+    z-index            : 1;
+}
+
+.section-content {
+    background-color: #f4f4f4;
+    padding         : 20px;
+    border-radius   : 11px;
+}
+
+/* Styles cho phản hồi không hợp lệ */
+.invalid-feedback {
+    display   : block;
+    position  : relative;
+    width     : 100%;
+    margin-top: 0.25rem;
+    font-size : 0.875em;
+    color     : #dc3545;
+}
+
+/* Đảm bảo viền đỏ cho các trường không hợp lệ */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color       : #dc3545;
+    padding-right      : calc(1.5em + 0.75rem);
+    background-image   : url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat  : no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size    : calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Xử lý cho checkbox và radio không hợp lệ */
+.form-check-input.is-invalid~.form-check-label,
+.form-check-input.is-invalid {
+    color: #dc3545;
+}
+
+.form-check-input.is-invalid {
+    border-color: #dc3545;
+}
+
+.input-group .invalid-feedback {
+    position: absolute;
+    top     : 100%;
+    left    : 0;
+    width   : 100%;
+    z-index : 2;
+    display : block;
+}
+
+/* Điều chỉnh vị trí nút và độ rộng trong modal thanh toán */
+.modal-footer {
+    display        : flex;
+    justify-content: flex-end;
+    /* Đặt nút sang bên phải */
+    gap            : 10px;
+    padding        : 1rem 1.5rem;
+}
+
+.modal-footer .btn {
+    width     : auto;
+    min-width : 120px;
+    text-align: center;
+    flex      : none;
+}
+
+#createInvoiceModal .modal-footer {
+    padding-left   : 1.5rem;
+    padding-right  : 2.5rem;
+    justify-content: flex-end;
+    /* Đảm bảo nút nằm bên phải */
+}
+
+/* Đảm bảo nút cùng kích thước trong tất cả các modal thanh toán */
+#cashPaymentModal .modal-footer .btn,
+#momoPaymentModal .modal-footer .btn,
+#transferPaymentModal .modal-footer .btn,
+#cardPaymentModal .modal-footer .btn {
+    width: 165px;
+    /* Đảm bảo giá trị này giống với giá trị width ở trên */
+    flex : none;
+}
+
+/* Tùy chỉnh màu của các nút xác nhận theo hình mẫu */
+#cashPaymentModal .btn-success,
+#momoPaymentModal .btn-danger,
+#transferPaymentModal .btn-info,
+#cardPaymentModal .btn-primary {
+    background-color: #0d6efd;
+    border-color    : #0d6efd;
+}
+
+/* Tùy chỉnh nút Quay lại */
+.modal-footer .btn-light {
+    background-color: #f8f9fa;
+    border-color    : #dee2e6;
+    color           : #212529;
+}
+
+/* Styles for card payment form */
+#paymentForm .form-label {
+    font-weight: 500;
+}
+
+#paymentForm .text-danger {
+    color: #dc3545;
+}
+
+#paymentForm .form-control,
+#paymentForm .form-select {
+    height       : 45px;
+    border-radius: 5px;
+    border       : 1px solid #ced4da;
+}
+
+/* Format the expiry date input to match mockup */
+#expiryDate {
+    font-family: inherit;
+}
+
+/* Adjust modal width to match mockup */
+@media (min-width: 768px) {
+    #paymentModal .modal-dialog {
+        max-width: 600px;
+    }
+}
+
+/* Make sure all inputs are properly aligned */
+#paymentForm .row {
+    margin-bottom: 0;
+}
+
+/* Style for total amount to match design */
+#paymentTotalAmount {
+    color      : #0d6efd;
+    font-weight: 700;
+    font-size  : 1.5rem;
+}
+
+/* Standard styling for all payment modals */
+.modal-title {
+    font-weight: 600;
+    color      : #1e293b;
+    font-size  : 18px;
+}
+
+/* Adjust modal width to match mockup */
+@media (min-width: 768px) {
+
+    #momoPaymentModal .modal-dialog,
+    #transferPaymentModal .modal-dialog {
+        max-width: 600px;
+    }
+}
+
+/* Consistent styling for payment total */
+#momoPaymentTotalAmount,
+#transferPaymentTotalAmount {
+    color      : #0d6efd;
+    font-weight: 700;
+    font-size  : 1.5rem;
+}
+
+/* Consistent button styling */
+.modal-footer .btn-primary {
+    width     : 165px;
+    text-align: center;
+}
+
+.modal-footer .btn-light {
+    width       : 165px;
+    border-color: #dee2e6;
+}
+
+/* Form styling */
+#transferPaymentForm .form-label,
+#momoPaymentForm .form-label {
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link {
+    color: #495057;
+}
+
+.nav-tabs .nav-link.active {
+    color      : #2563EB;
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link:not(.active):hover {
+    background: #e0e7ff;
+    color     : #2563EB;
+}
+
+#deleteInvoiceConfirmModal .modal-footer .btn {
+    min-width : 165px;
+    width     : 165px;
+    text-align: center;
+    padding   : 0.5rem 1.5rem;
+}
+
+#editInvoiceModal .modal-footer .btn,
+#invoiceDetailModal .modal-footer .btn {
+    min-width : 165px;
+    width     : 165px;
+    text-align: center;
+    padding   : 0.5rem 1.5rem;
+}
+
+#invoiceDetailModal .modal-footer .btn-secondary {
+    background-color: #f8f9fa;
+    border-color    : #dee2e6;
+    color           : #212529;
 }
