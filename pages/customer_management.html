@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,12 +13,15 @@
         body {
             min-height: 100vh;
         }
+
         main {
             min-height: calc(100vh - 60px);
         }
+
         .table-responsive {
             overflow-x: auto;
         }
+
         /* Ẩn hoàn toàn giao diện xác thực mặc định của trình duyệt */
         input:invalid,
         select:invalid {
@@ -31,8 +35,10 @@
             background-image: none !important;
         }
 
-        input:-moz-ui-invalid, /* Firefox */
-        select:-moz-ui-invalid { /* Firefox */
+        input:-moz-ui-invalid,
+        /* Firefox */
+        select:-moz-ui-invalid {
+            /* Firefox */
             box-shadow: none !important;
         }
 
@@ -49,20 +55,21 @@
             background-image: none !important;
         }
 
-        .form-check-input.is-valid ~ .form-check-label::before,
-        .was-validated .form-check-input:valid ~ .form-check-label::before {
+        .form-check-input.is-valid~.form-check-label::before,
+        .was-validated .form-check-input:valid~.form-check-label::before {
             border-color: var(--bs-border-color) !important;
         }
 
-        .form-check-input.is-valid:checked ~ .form-check-label::after,
-        .was-validated .form-check-input:valid:checked ~ .form-check-label::after {
+        .form-check-input.is-valid:checked~.form-check-label::after,
+        .was-validated .form-check-input:valid:checked~.form-check-label::after {
             background-image: none !important;
         }
 
         /* Đảm bảo rằng chỉ có viền đỏ khi không hợp lệ */
         .form-control.is-invalid,
         .was-validated .form-control:invalid {
-            border-color: var(--bs-form-invalid-border-color) !important; /* Bootstrap default red */
+            border-color: var(--bs-form-invalid-border-color) !important;
+            /* Bootstrap default red */
         }
 
         .form-select.is-invalid,
@@ -70,8 +77,8 @@
             border-color: var(--bs-form-invalid-border-color) !important;
         }
 
-        .form-check-input.is-invalid ~ .form-check-label::before,
-        .was-validated .form-check-input:invalid ~ .form-check-label::before {
+        .form-check-input.is-invalid~.form-check-label::before,
+        .was-validated .form-check-input:invalid~.form-check-label::before {
             border-color: var(--bs-form-invalid-border-color) !important;
         }
 
@@ -81,33 +88,40 @@
         }
 
         /* Ngăn các trình duyệt hiển thị bong bóng thông báo lỗi */
-        [data-bs-toggle="tooltip"].is-invalid, [data-bs-toggle="popover"].is-invalid {
-            pointer-events: none; /* Ngăn tương tác với bong bóng mặc định */
+        [data-bs-toggle="tooltip"].is-invalid,
+        [data-bs-toggle="popover"].is-invalid {
+            pointer-events: none;
+            /* Ngăn tương tác với bong bóng mặc định */
         }
 
         /* Loại bỏ hoàn toàn dấu x màu đỏ mặc định (trên một số trình duyệt) */
         input[type="text"]::-webkit-validation-bubble,
         input[type="tel"]::-webkit-validation-bubble,
         select::-webkit-validation-bubble {
-          display: none;
+            display: none;
         }
 
         input.form-control.is-invalid {
-    padding-right: 0.75rem !important; /* Xóa khoảng trống bên phải */
-    background-image: none !important; /* Xóa icon cảnh báo */
-    border-color: #dc3545 !important;  /* Màu viền đỏ */
-    box-shadow: none !important;       /* Không cần hiệu ứng glow */
-}
+            padding-right: 0.75rem !important;
+            /* Xóa khoảng trống bên phải */
+            background-image: none !important;
+            /* Xóa icon cảnh báo */
+            border-color: #dc3545 !important;
+            /* Màu viền đỏ */
+            box-shadow: none !important;
+            /* Không cần hiệu ứng glow */
+        }
 
 
-select.form-select.is-invalid {
-    border-color: #dc3545 !important;
-    box-shadow: none !important;
-    background-image: var(--bs-form-select-bg-img) !important; /* Khôi phục nút xổ xuống */
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
-}
+        select.form-select.is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: none !important;
+            background-image: var(--bs-form-select-bg-img) !important;
+            /* Khôi phục nút xổ xuống */
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
 
         /* CSS bổ sung để điều chỉnh bố cục modal xóa */
         #deleteCustomerModal .modal-content {
@@ -117,7 +131,8 @@ select.form-select.is-invalid {
         }
 
         #deleteCustomerModal .modal-header {
-            padding: 1rem 1.5rem; /* Điều chỉnh padding cho header */
+            padding: 1rem 1.5rem;
+            /* Điều chỉnh padding cho header */
         }
 
         #deleteCustomerModal .modal-body {
@@ -126,30 +141,38 @@ select.form-select.is-invalid {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center; /* Đảm bảo nội dung căn giữa */
-            padding: 1.5rem; /* Điều chỉnh padding cho phù hợp */
+            text-align: center;
+            /* Đảm bảo nội dung căn giữa */
+            padding: 1.5rem;
+            /* Điều chỉnh padding cho phù hợp */
         }
 
         #deleteCustomerModal .modal-body p {
-            margin-bottom: 0.75rem; /* Điều chỉnh khoảng cách dưới của đoạn văn */
+            margin-bottom: 0.75rem;
+            /* Điều chỉnh khoảng cách dưới của đoạn văn */
         }
 
         #deleteCustomerModal .modal-body .alert {
-            margin-bottom: 1.5rem; /* Tăng khoảng cách dưới của cảnh báo */
-            width: 100%; /* Đảm bảo alert chiếm hết chiều rộng nếu cần */
+            margin-bottom: 1.5rem;
+            /* Tăng khoảng cách dưới của cảnh báo */
+            width: 100%;
+            /* Đảm bảo alert chiếm hết chiều rộng nếu cần */
         }
 
         #deleteCustomerModal .modal-body .alert div {
-            padding-left: 3rem; /* Đẩy nội dung văn bản vào để tạo không gian cho icon */
-            text-indent: -3rem; /* Kéo dòng đầu tiên lùi lại để tạo hiệu ứng treo lề */
+            padding-left: 3rem;
+            /* Đẩy nội dung văn bản vào để tạo không gian cho icon */
+            text-indent: -3rem;
+            /* Kéo dòng đầu tiên lùi lại để tạo hiệu ứng treo lề */
         }
 
         #deleteCustomerModal .modal-footer {
-            padding: 1rem 1.5rem; /* Điều chỉnh padding cho footer */
+            padding: 1rem 1.5rem;
+            /* Điều chỉnh padding cho footer */
         }
-
     </style>
 </head>
+
 <body>
     <div id="header"></div>
     <div class="container-fluid">
@@ -158,8 +181,10 @@ select.form-select.is-invalid {
             <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <div id="successToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
-                    <div id="addCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="successToastWrapper"
+                    style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="addCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive"
+                        aria-atomic="true">
                         <div class="success-icon">
                             <span>&check;</span>
                         </div>
@@ -167,8 +192,10 @@ select.form-select.is-invalid {
                     </div>
                 </div>
 
-                <div id="updateCustomerSuccessToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
-                    <div id="updateCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="updateCustomerSuccessToastWrapper"
+                    style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="updateCustomerSuccessToast" class="success-alert" role="alert" aria-live="assertive"
+                        aria-atomic="true">
                         <div class="success-icon">
                             <span>&check;</span>
                         </div>
@@ -176,8 +203,10 @@ select.form-select.is-invalid {
                     </div>
                 </div>
 
-                <div id="deleteCustomerSuccessToastWrapper" style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
-                    <div id="deleteCustomerSuccessToast" class="delete-alert" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="deleteCustomerSuccessToastWrapper"
+                    style="position: fixed; top: 70px; right: 16px; z-index: 1100; display: none;">
+                    <div id="deleteCustomerSuccessToast" class="delete-alert" role="alert" aria-live="assertive"
+                        aria-atomic="true">
                         <div class="delete-icon">
                             <span>&times;</span>
                         </div>
@@ -193,8 +222,10 @@ select.form-select.is-invalid {
                         <form class="d-flex align-items-center w-200" id="searchForm">
                             <div class="d-flex align-items-center gap-4 flex-grow-2">
                                 <div class="search-box position-relative" style="width:827px;max-width:100%;">
-                                    <input type="text" class="form-control" id="customerSearch" placeholder="Tìm kiếm nhà khách hàng...">
-                                    <i class="fas fa-search search-icon position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                                    <input type="text" class="form-control" id="customerSearch"
+                                        placeholder="Tìm kiếm nhà khách hàng...">
+                                    <i
+                                        class="fas fa-search search-icon position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
                                 </div>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-search me-1"></i> Tìm kiếm
@@ -230,9 +261,12 @@ select.form-select.is-invalid {
                                         <td>0867078917</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -244,9 +278,12 @@ select.form-select.is-invalid {
                                         <td>0867078956</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -258,9 +295,12 @@ select.form-select.is-invalid {
                                         <td>0867078954</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -272,9 +312,12 @@ select.form-select.is-invalid {
                                         <td>0864568917</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -286,9 +329,12 @@ select.form-select.is-invalid {
                                         <td>0867078457</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -300,9 +346,12 @@ select.form-select.is-invalid {
                                         <td>0867563917</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -314,9 +363,12 @@ select.form-select.is-invalid {
                                         <td>0867078457</td>
                                         <td>
                                             <div class="table-actions">
-                                                <button class="btn-action view" title="Xem"><i class="fas fa-eye"></i></button>
-                                                <button class="btn-action edit" title="Sửa"><i class="fas fa-edit"></i></button>
-                                                <button class="btn-action trash-can" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                                <button class="btn-action view" title="Xem"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn-action edit" title="Sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn-action trash-can" title="Xóa"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -354,7 +406,8 @@ select.form-select.is-invalid {
     <div id="footer"></div>
 
     <!-- Modal Form Thêm Khách Hàng -->
-    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" style="width: 612px; max-width: none;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -364,69 +417,82 @@ select.form-select.is-invalid {
                 <div class="modal-body">
                     <form id="addCustomerForm" class="needs-validation" novalidate>
                         <div class="d-flex align-items-center mb-3">
-                            <label for="customerName" class="form-label mb-0" style="width: 150px;">Tên khách hàng:</label>
+                            <label for="customerName" class="form-label mb-0" style="width: 150px;">Tên khách
+                                hàng:</label>
                             <div class="flex-grow-1">
-                              <input type="text" class="form-control" id="customerName" placeholder="Nhập tên khách hàng">
-                              <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!</div>
-                              <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số. Vui lòng nhập lại!</div>
-                            </div>
-                          </div>
-                          
-                      <div class="d-flex align-items-center mb-3">
-                        <label class="form-label mb-0" style="width: 150px;">Giới tính:</label>
-                        <div class="flex-grow-1">
-                            <div class="d-flex align-items-center">
-                                <div class="form-check me-5">
-                                    <input class="form-check-input" type="radio" name="customerGender" id="genderMale" value="Nam">
-                                    <label class="form-check-label" for="genderMale">
-                                        Nam
-                                    </label>
+                                <input type="text" class="form-control" id="customerName"
+                                    placeholder="Nhập tên khách hàng">
+                                <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="customerGender" id="genderFemale" value="Nữ">
-                                    <label class="form-check-label" for="genderFemale">
-                                        Nữ
-                                    </label>
-                                </div>
+                                <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số.
+                                    Vui lòng nhập lại!</div>
                             </div>
-                            <div class="invalid-feedback">Vui lòng chọn giới tính!</div>
                         </div>
-                      </div>
-                      <div class="d-flex align-items-center mb-3">
-                        <label for="customerPhone" class="form-label mb-0" style="width: 150px;">Số điện thoại:</label>
-                        <div class="flex-grow-1">
-                            <input type="tel" class="form-control" id="customerPhone">
-                            <div class="invalid-feedback empty-feedback">Vui lòng nhập số điện thoại!</div>
-                            <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc biệt.Vui lòng nhập lại!</div>
-                            <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui lòng nhập lại!</div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <label class="form-label mb-0" style="width: 150px;">Giới tính:</label>
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check me-5">
+                                        <input class="form-check-input" type="radio" name="customerGender"
+                                            id="genderMale" value="Nam">
+                                        <label class="form-check-label" for="genderMale">
+                                            Nam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="customerGender"
+                                            id="genderFemale" value="Nữ">
+                                        <label class="form-check-label" for="genderFemale">
+                                            Nữ
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">Vui lòng chọn giới tính!</div>
+                            </div>
                         </div>
-                        
-                      </div>
-                      
-                      <div class="d-flex align-items-center mb-3">
-                        <label for="customerType" class="form-label mb-0" style="width: 150px;">Loại khách hàng:</label>
-                        <div class="flex-grow-1">
-                            <select class="form-select" id="customerType">
-                                <option value=""></option>
-                              
-                                <option value="Hội viên">Hội viên</option>
-                                <option value="Thường">Thường</option>
-                            </select>
-                            <div class="invalid-feedback">Vui lòng chọn loại khách hàng!</div>
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="customerPhone" class="form-label mb-0" style="width: 150px;">Số điện
+                                thoại:</label>
+                            <div class="flex-grow-1">
+                                <input type="tel" class="form-control" id="customerPhone">
+                                <div class="invalid-feedback empty-feedback">Vui lòng nhập số điện thoại!</div>
+                                <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc
+                                    biệt.Vui lòng nhập lại!</div>
+                                <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui
+                                    lòng nhập lại!</div>
+                            </div>
+
                         </div>
-                      </div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="customerType" class="form-label mb-0" style="width: 150px;">Loại khách
+                                hàng:</label>
+                            <div class="flex-grow-1">
+                                <select class="form-select" id="customerType">
+                                    <option value=""></option>
+
+                                    <option value="Hội viên">Hội viên</option>
+                                    <option value="Thường">Thường</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn loại khách hàng!</div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" id="addCustomerOkBtn">OK</button>
-                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;"
+                        id="addCustomerOkBtn">OK</button>
+                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;"
+                        data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Form Chỉnh Sửa Khách Hàng -->
-    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" style="width: 612px; max-width: none;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -437,26 +503,32 @@ select.form-select.is-invalid {
                     <form id="editCustomerForm" class="needs-validation" novalidate>
                         <input type="hidden" id="editCustomerId">
                         <div class="d-flex align-items-center mb-3">
-                            <label for="editCustomerName" class="form-label mb-0" style="width: 150px;">Tên khách hàng:</label>
+                            <label for="editCustomerName" class="form-label mb-0" style="width: 150px;">Tên khách
+                                hàng:</label>
                             <div class="flex-grow-1">
-                              <input type="text" class="form-control" id="editCustomerName" placeholder="Nhập tên khách hàng">
-                              <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!</div>
-                              <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số. Vui lòng nhập lại!</div>
+                                <input type="text" class="form-control" id="editCustomerName"
+                                    placeholder="Nhập tên khách hàng">
+                                <div class="invalid-feedback empty-feedback">Vui lòng không được để trống họ và tên!
+                                </div>
+                                <div class="invalid-feedback format-feedback">Họ tên không chứa ký tự đặc biệt và số.
+                                    Vui lòng nhập lại!</div>
                             </div>
                         </div>
-                          
+
                         <div class="d-flex align-items-center mb-3">
                             <label class="form-label mb-0" style="width: 150px;">Giới tính:</label>
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center">
                                     <div class="form-check me-5">
-                                        <input class="form-check-input" type="radio" name="editCustomerGender" id="editGenderMale" value="Nam">
+                                        <input class="form-check-input" type="radio" name="editCustomerGender"
+                                            id="editGenderMale" value="Nam">
                                         <label class="form-check-label" for="editGenderMale">
                                             Nam
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="editCustomerGender" id="editGenderFemale" value="Nữ">
+                                        <input class="form-check-input" type="radio" name="editCustomerGender"
+                                            id="editGenderFemale" value="Nữ">
                                         <label class="form-check-label" for="editGenderFemale">
                                             Nữ
                                         </label>
@@ -467,17 +539,21 @@ select.form-select.is-invalid {
                         </div>
 
                         <div class="d-flex align-items-center mb-3">
-                            <label for="editCustomerPhone" class="form-label mb-0" style="width: 150px;">Số điện thoại:</label>
+                            <label for="editCustomerPhone" class="form-label mb-0" style="width: 150px;">Số điện
+                                thoại:</label>
                             <div class="flex-grow-1">
                                 <input type="tel" class="form-control" id="editCustomerPhone" disabled>
                                 <div class="invalid-feedback empty-feedback">Vui lòng nhập số điện thoại!</div>
-                                <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc biệt.Vui lòng nhập lại!</div>
-                                <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui lòng nhập lại!</div>
+                                <div class="invalid-feedback format-feedback">Số điện thoại không chứa chữ và ký tự đặc
+                                    biệt.Vui lòng nhập lại!</div>
+                                <div class="invalid-feedback exists-feedback">Số điện thoại đã có trong hệ thống.Vui
+                                    lòng nhập lại!</div>
                             </div>
                         </div>
-                      
+
                         <div class="d-flex align-items-center mb-3">
-                            <label for="editCustomerType" class="form-label mb-0" style="width: 150px;">Loại khách hàng:</label>
+                            <label for="editCustomerType" class="form-label mb-0" style="width: 150px;">Loại khách
+                                hàng:</label>
                             <div class="flex-grow-1">
                                 <select class="form-select" id="editCustomerType">
                                     <option value=""></option>
@@ -490,15 +566,18 @@ select.form-select.is-invalid {
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" id="editCustomerOkBtn">OK</button>
-                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;"
+                        id="editCustomerOkBtn">OK</button>
+                    <button type="button" class="btn btn-secondary" style="width: 130px; height: 48px;"
+                        data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Xác nhận Xóa Khách Hàng -->
-    <div class="modal fade" id="deleteCustomerModal" tabindex="-1" aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteCustomerModal" tabindex="-1" aria-labelledby="deleteCustomerModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="width: 450px; max-width: none;">
             <div class="modal-content">
                 <div class="modal-header" style="padding: 1rem 1.5rem;">
@@ -516,15 +595,19 @@ select.form-select.is-invalid {
                     <input type="hidden" id="deleteCustomerId">
                 </div>
                 <div class="modal-footer d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-danger" style="width: 120px; height: 40px;" id="confirmDeleteBtn">Xác nhận</button>
-                    <button type="button" class="btn btn-secondary" style="width: 120px; height: 40px; background-color: #f8f9fa; border-color: #dee2e6; color: #343a40;" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="button" class="btn btn-danger" style="width: 120px; height: 40px;"
+                        id="confirmDeleteBtn">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary"
+                        style="width: 120px; height: 40px; background-color: #f8f9fa; border-color: #dee2e6; color: #343a40;"
+                        data-bs-dismiss="modal">Hủy bỏ</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Form Xem Chi Tiết Khách Hàng -->
-    <div class="modal fade" id="viewCustomerDetailModal" tabindex="-1" aria-labelledby="viewCustomerDetailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewCustomerDetailModal" tabindex="-1" aria-labelledby="viewCustomerDetailModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" style="width: 700px; max-width: none;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -607,7 +690,8 @@ select.form-select.is-invalid {
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;" data-bs-dismiss="modal">Quay lại</button>
+                    <button type="button" class="btn btn-primary" style="width: 130px; height: 48px;"
+                        data-bs-dismiss="modal">Quay lại</button>
                 </div>
             </div>
         </div>
@@ -615,10 +699,13 @@ select.form-select.is-invalid {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/utils/auth.js"></script>
     <script>
         $(document).ready(function () {
             $('#header').load('/components/header.html');
-            $('#sidebar').load('/components/sidebar.html');
+            $('#sidebar').load('/components/sidebar.html', function () {
+                setTimeout(setupNavigation, 200); // Gọi setupNavigation sau khi sidebar load xong
+            });
             $('#footer').load('/components/footer.html');
 
             // Khởi tạo modal
@@ -628,7 +715,7 @@ select.form-select.is-invalid {
             const viewCustomerDetailModal = new bootstrap.Modal(document.getElementById('viewCustomerDetailModal'));
 
             // Xử lý khi click nút Thêm mới
-            $('button[type="button"].btn-primary').on('click', function() {
+            $('button[type="button"].btn-primary').on('click', function () {
                 // Reset validation state when opening modal
                 $('#addCustomerForm').removeClass('was-validated');
                 $('#addCustomerForm')[0].reset();
@@ -641,7 +728,7 @@ select.form-select.is-invalid {
             });
 
             // Xử lý khi click nút Sửa
-            $(document).on('click', '.btn-action.edit', function() {
+            $(document).on('click', '.btn-action.edit', function () {
                 const row = $(this).closest('tr');
                 const customerId = row.find('td:first').text();
                 const customerName = row.find('td:eq(1)').text();
@@ -666,14 +753,14 @@ select.form-select.is-invalid {
             });
 
             // Xử lý khi click nút Xóa
-            $(document).on('click', '.btn-action.trash-can', function() {
+            $(document).on('click', '.btn-action.trash-can', function () {
                 const customerId = $(this).closest('tr').find('td:first').text();
                 $('#deleteCustomerId').val(customerId);
                 deleteCustomerModal.show();
             });
 
             // Xử lý khi xác nhận xóa
-            $('#confirmDeleteBtn').on('click', function() {
+            $('#confirmDeleteBtn').on('click', function () {
                 const customerIdToDelete = $('#deleteCustomerId').val();
                 $(`#customerTable tbody tr td:first-child:contains('${customerIdToDelete}')`).closest('tr').remove();
                 deleteCustomerModal.hide();
@@ -686,7 +773,7 @@ select.form-select.is-invalid {
             });
 
             // Xử lý khi submit form chỉnh sửa
-            $('#editCustomerForm').on('submit', function(e) {
+            $('#editCustomerForm').on('submit', function (e) {
                 e.preventDefault();
                 const form = this;
                 let isValid = true;
@@ -740,7 +827,7 @@ select.form-select.is-invalid {
                 if (isValid) {
                     const customerId = $('#editCustomerId').val();
                     const row = $(`#customerTable tbody tr td:first-child:contains('${customerId}')`).closest('tr');
-                    
+
                     row.find('td:eq(1)').text(name);
                     row.find('td:eq(2)').text(genderInputs.filter(':checked').val());
                     row.find('td:eq(3)').text(type);
@@ -762,7 +849,7 @@ select.form-select.is-invalid {
             });
 
             // Make the OK button submit the form
-            $('#editCustomerOkBtn').off('click').on('click', function() {
+            $('#editCustomerOkBtn').off('click').on('click', function () {
                 $('#editCustomerForm').submit();
             });
 
@@ -822,7 +909,7 @@ select.form-select.is-invalid {
                     isValid = false;
                 } else {
                     let phoneExists = false;
-                    $('#customerTable tbody tr').each(function() {
+                    $('#customerTable tbody tr').each(function () {
                         const existingPhone = $(this).find('td:eq(4)').text().trim();
                         if (existingPhone === phone) {
                             phoneExists = true;
@@ -856,13 +943,13 @@ select.form-select.is-invalid {
                 if (isValid) {
                     // Tạo mã khách hàng tự động
                     let lastCustomerId = 'HD000';
-                    $('#customerTable tbody tr').each(function() {
+                    $('#customerTable tbody tr').each(function () {
                         const currentId = $(this).find('td:first').text().trim();
                         if (currentId > lastCustomerId) {
                             lastCustomerId = currentId;
                         }
                     });
-                    
+
                     // Tăng mã khách hàng
                     const numericPart = parseInt(lastCustomerId.substring(2)) + 1;
                     const newCustomerId = 'HD' + numericPart.toString().padStart(3, '0');
@@ -894,7 +981,7 @@ select.form-select.is-invalid {
                     $('#customerTable tbody').prepend(newRow);
 
                     addCustomerModal.hide();
-                    
+
                     // Hiển thị thông báo thành công thủ công
                     $('#successToastWrapper').css('display', 'block');
                     setTimeout(() => {
@@ -907,15 +994,15 @@ select.form-select.is-invalid {
             });
 
             // Make the OK button submit the form
-            $('#addCustomerOkBtn').off('click').on('click', function() {
+            $('#addCustomerOkBtn').off('click').on('click', function () {
                 $('#addCustomerForm').submit();
             });
 
             // Xử lý tìm kiếm khách hàng
-            $('#searchForm').on('submit', function(e) {
+            $('#searchForm').on('submit', function (e) {
                 e.preventDefault();
                 const searchValue = $('#customerSearch').val().trim();
-                
+
                 // Nếu ô tìm kiếm trống, hiển thị lại tất cả khách hàng
                 if (!searchValue) {
                     $('#customerTable tbody tr').show();
@@ -925,7 +1012,7 @@ select.form-select.is-invalid {
 
                 let found = false;
                 // Tìm kiếm theo số điện thoại
-                $('#customerTable tbody tr').each(function() {
+                $('#customerTable tbody tr').each(function () {
                     const phoneNumber = $(this).find('td:eq(4)').text().trim();
                     if (phoneNumber.includes(searchValue)) {
                         $(this).show();
@@ -951,12 +1038,12 @@ select.form-select.is-invalid {
             });
 
             // Xử lý khi nhấn nút tìm kiếm
-            $('button[type="submit"]').on('click', function() {
+            $('button[type="submit"]').on('click', function () {
                 $('#searchForm').submit();
             });
 
             // Xử lý khi click nút Xem
-            $(document).on('click', '.btn-action.view', function() {
+            $(document).on('click', '.btn-action.view', function () {
                 const row = $(this).closest('tr');
                 const customerId = row.find('td:first').text();
                 const customerName = row.find('td:eq(1)').text();
@@ -1001,4 +1088,5 @@ select.form-select.is-invalid {
         });
     </script>
 </body>
-</html> 
+
+</html>

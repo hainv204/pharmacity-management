@@ -38,13 +38,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/utils/auth.js"></script>
+    <!-- <script src="/utils/auth.js"></script> -->
     <script>
         $(document).ready(function () {
             $('#header').load('/components/header.html');
             $('#sidebar').load('/components/sidebar.html', setupNavigation);
             $('#footer').load('/components/footer.html');
         });
+
+        // Nếu người dùng vào index.html, tự động chuyển sang dashboard
+        window.location.replace('/pages/dashboard.html');
     </script>
 </body>
 

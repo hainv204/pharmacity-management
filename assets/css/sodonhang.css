@@ -1,0 +1,27 @@
+    .chart-container {
+      position: relative;
+      height  : 350px;
+      width   : 100%;
+    }
+
+    .table-container {
+      height: 350px;
+    }
+
+    .table-container table {
+      height: 100%;
+    }
+
+    .table-container tbody tr {
+      height: calc((350px - 38px) / 8);
+    }
+
+    .chart-card,
+    .table-card {
+      height: 100%;
+    }
+
+    .card-body {
+      display       : flex;
+      flex-direction: column;
+    }
