@@ -1,0 +1,64 @@
+<!-- Modal Thanh Toán Tiền Mặt -->
+<div class="modal fade" id="cashPaymentModal" tabindex="-1" aria-labelledby="cashPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cashPaymentModalLabel">Thanh toán tiền mặt
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thông tin đơn hàng -->
+                <div class="card mb-4 bg-light">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                        id="cashPaymentInvoiceId">HD005</span></p>
+                                <p class="mb-1"><strong>Phương thức:</strong> Tiền mặt</p>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-1">Tổng thanh toán:</p>
+                                <h3 class="text-success mb-0" id="cashPaymentTotalAmount">250.000đ</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form thanh toán tiền mặt -->
+                <form id="cashPaymentForm">
+                    <div class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="cashReceived" class="form-label">Tiền khách đưa <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group position-relative">
+                                    <input type="text" class="form-control currency-input" id="cashReceived"
+                                        placeholder="0" required>
+                                    <span class="input-group-text">đ</span>
+                                    <div class="invalid-feedback position-absolute"
+                                        style="top: 100%; left: 0; width: 100%;">Số tiền nhập vào phải lớn hơn hoặc bằng
+                                        tổng thanh
+                                        toán</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cashChange" class="form-label">Tiền trả lại</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control currency-input" id="cashChange"
+                                        placeholder="0" readonly>
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="confirmCashPaymentBtn">Xác nhận thanh toán
+                </button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>

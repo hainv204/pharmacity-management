@@ -1,0 +1,85 @@
+<!-- Modal Thanh Toán Chuyển Khoản -->
+<div class="modal fade" id="transferPaymentModal" tabindex="-1" aria-labelledby="transferPaymentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transferPaymentModalLabel">Thanh toán chuyển khoản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thông tin thanh toán -->
+                <div class="card mb-4 bg-light">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-1"><strong>Mã hóa đơn:</strong> <span
+                                        id="transferPaymentInvoiceId">#HD005</span></p>
+                                <p class="mb-1"><strong>Hình thức thanh toán:</strong> Chuyển khoản</p>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-1">Tổng thanh toán:</p>
+                                <h3 class="text-primary mb-0" id="transferPaymentTotalAmount">250.000đ</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin tài khoản -->
+                <h6 class="mb-3 fw-bold">Thông tin tài khoản nhận tiền</h6>
+
+                <div class="card border mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Ngân hàng:</strong> MB Bank</p>
+                                <p class="mb-1"><strong>Số tài khoản:</strong> 1234567890</p>
+                                <p class="mb-1"><strong>Chủ tài khoản:</strong> CÔNG TY CP PHARMACITY</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="/assets/images/bank-qr-code.jpg" alt="QR Code" class="img-fluid border"
+                                        style="max-width: 120px">
+                                    <p class="mt-2 mb-0 small">Quét mã QR để chuyển khoản</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form xác nhận chuyển khoản -->
+                <h6 class="mb-3 fw-bold">Xác nhận giao dịch</h6>
+
+                <form id="transferPaymentForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="transferReference" class="form-label">Mã giao dịch <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="transferReference"
+                                placeholder="Nhập mã giao dịch">
+                            <div class="form-text">Nếu có mã giao dịch, vui lòng nhập</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="transferTime" class="form-label">Thời gian chuyển khoản <span
+                                    class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-control" id="transferTime">
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="transferCompleted">
+                                <label class="form-check-label" for="transferCompleted">
+                                    Tôi đã hoàn tất chuyển khoản
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmTransferPaymentBtn">Xác nhận thanh
+                    toán</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>

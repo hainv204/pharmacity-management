@@ -1,0 +1,136 @@
+<!-- 2. Main Content - Danh sách hoá đơn -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle" id="invoiceTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã hóa đơn</th>
+                        <th scope="col">Ngày lập</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Ưu đãi áp dụng</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HD001</td>
+                        <td>20/05/2025 14:30</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>250.000đ</td>
+                        <td>Không có</td>
+                        <td><span class="text-success">Đã thanh toán</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-action view" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" data-bs-toggle="tooltip" title="Chỉnh sửa" disabled>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action trash-can" data-bs-toggle="tooltip" title="Xoá đơn" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">HD002</td>
+                        <td>19/05/2025 10:15</td>
+                        <td>Trần Thị B</td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-medium">450.000đ</span>
+                            </div>
+                        </td>
+                        <td>Giảm 10%</td>
+                        <td>
+                            <span class="text-warning">Đang xử lý</span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-action view" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action trash-can" data-bs-toggle="tooltip" title="Xoá đơn" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HD003</td>
+                        <td>18/05/2025 16:45</td>
+                        <td>Lê Văn C</td>
+                        <td>180.000đ</td>
+                        <td>Không có</td>
+                        <td><span class="text-danger">Đã hủy</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-action view" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action trash-can delInvoice" data-bs-toggle="tooltip"
+                                    title="Xoá đơn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HD004</td>
+                        <td>22/05/2025 16:10</td>
+                        <td>Nguyễn Văn S</td>
+                        <td>220.000đ</td>
+                        <td>Không có</td>
+                        <td><span class="text-success">Đã thanh toán</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-action view" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" data-bs-toggle="tooltip" title="Chỉnh sửa" disabled>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action trash-can" data-bs-toggle="tooltip" title="Xoá đơn" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>HD005</td>
+                        <td>27/05/2025 10:20</td>
+                        <td>Trịnh Thị E</td>
+                        <td>150.000đ</td>
+                        <td>Không có</td>
+                        <td><span class="text-success">Đã thanh toán</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-action view" data-bs-toggle="tooltip" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" data-bs-toggle="tooltip" title="Chỉnh sửa" disabled>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action trash-can" data-bs-toggle="tooltip" title="Xoá đơn" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="no-data-row" style="display: none;">
+                        <td colspan="7" class="text-center text-muted">Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
