@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng quan tồn kho - Pharmacity Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <!-- Custom CSS (nếu có) -->
+    <link href="/assets/css/style.css" rel="stylesheet" />
+    <style>
+        /* =====================================================
+       1. BỎ CƯỠNG CHẾ OVERFLOW-Y TRÊN html, body
+       ===================================================== */
+        html,
+        body {
+            /* Không ép buộc overflow-y ở đây nữa */
+            height: auto;
+            overflow-x: hidden;
+            /* Chỉ ẩn overflow-x, để tránh cuộn ngang nếu có phần tử quá rộng */
+        }
+
+        /* =====================================================
+       2. PHONG CÁCH CHO CÁC CARD “TỔNG QUAN”
+       ===================================================== */
+        .overview-card {
+            border-left-width: 4px;
+            border-left-style: solid;
+            border-radius: 0.25rem;
+            background-color: #ffffff;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            height: 100%;
+        }
+
+        .overview-card-success {
+            border-left-color: #198754;
+        }
+
+        .overview-card-warning {
+            border-left-color: #ffc107;
+        }
+
+        .overview-card-danger {
+            border-left-color: #dc3545;
+        }
+
+        .overview-card-secondary {
+            border-left-color: #6c757d;
+        }
+
+        .overview-card .card-body {
+            padding: 1rem;
+        }
+
+        .overview-card .card-body h5 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .overview-card .card-body p {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+
+        .overview-card .card-footer {
+            background-color: transparent;
+            border-top: none;
+            padding: 0 1rem 1rem;
+        }
+
+        .overview-card .card-footer a {
+            font-size: 0.85rem;
+        }
+
+        /* =====================================================
+       3. FILTER‐BAR MỚI (bo tròn, flex)
+       ===================================================== */
+        .filter-bar {
+            background-color: #ffffff;
+            border-radius: 50px;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            padding: 0.25rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar .form-control,
+        .filter-bar .form-select,
+        .filter-bar .btn {
+            height: 2.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-bar .form-control,
+        .filter-bar .form-select {
+            border-radius: 50px;
+        }
+
+        .filter-bar .btn {
+            border-radius: 50px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+
+        .filter-bar .btn:hover {
+            background-color: #343a40;
+            border-color: #343a40;
+            color: #fff;
+        }
+
+        .filter-bar .form-control:focus,
+        .filter-bar .form-select:focus {
+            box-shadow: none;
+            border-color: #ced4da;
+        }
+
+        .filter-bar .input-search {
+            flex: 3 1 0;
+            min-width: 200px;
+        }
+
+        .filter-bar .select-alert-type {
+            flex: 2 1 0;
+            min-width: 150px;
+        }
+
+        .filter-bar .btn-filter {
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+
+        @media (max-width: 576px) {
+            .filter-bar {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .filter-bar .input-search,
+            .filter-bar .select-alert-type,
+            .filter-bar .btn-filter {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+        }
+
+        /* =====================================================
+       4. GIỚI HẠN CHIỀU CAO BẢNG VÀ BẬT SCROLL
+       ===================================================== */
+        .table-responsive {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* =====================================================
+       5. ĐỊNH DẠNG CỘT “TRẠNG THÁI” (chỉ màu chữ)
+       ===================================================== */
+        .status-text {
+            font-weight: 600;
+        }
+
+        .status-instock {
+            color: #198754;
+        }
+
+        .status-expiring {
+            color: #ffc107;
+        }
+
+        .status-lowstock {
+            color: #dc3545;
+        }
+
+        .status-outofstock {
+            color: #6c757d;
+        }
+
+        /* =====================================================
+       6. NÚT HÀNH ĐỘNG (Action Button)
+       =====================================================
+       - Kích thước vuông: 36×36px
+       - Bo góc nhẹ (border-radius 0.375rem)
+       - Nền xám nhạt, icon canh giữa
+       - Hover chuyển nền sang #e2e2e2, icon thành #343a40
+       ===================================================== */
+        .btn-action {
+            background-color: #f1f1f1;
+            border: none;
+            color: #495057;
+            margin: 0 4px;
+            /* Khoảng cách giữa các nút */
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            /* Bo góc nhẹ */
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover {
+            background-color: #e2e2e2;
+            color: #343a40;
+        }
+
+        /* Căn giữa nội dung cột "Hành động" */
+        th.text-center,
+        td.text-center {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Ẩn overflow khi modal quá dài */
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+                <!-- 1. Tiêu đề + 4 Card “Tổng quan” -->
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom pb-2 mb-4">
+                    <h1 class="h2">Tổng quan tồn kho</h1>
+                </div>
+
+                <div class="row gx-3 mb-4">
+                    <!-- Card Còn hàng -->
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card overview-card overview-card-success h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="me-3"><i class="fas fa-check-circle fa-2x text-success"></i></div>
+                                <div>
+                                    <h5 id="countInStock">00</h5>
+                                    <p class="mb-0">Còn hàng</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-end">
+                                <a href="#" class="text-decoration-none">Xem chi tiết &raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Sắp hết hạn -->
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card overview-card overview-card-warning h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="me-3"><i class="fas fa-hourglass-half fa-2x text-warning"></i></div>
+                                <div>
+                                    <h5 id="countExpiring">00</h5>
+                                    <p class="mb-0">Sắp hết hạn</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-end">
+                                <a href="#" class="text-decoration-none">Xem chi tiết &raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Tồn kho thấp -->
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card overview-card overview-card-danger h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="me-3"><i class="fas fa-exclamation-triangle fa-2x text-danger"></i></div>
+                                <div>
+                                    <h5 id="countLowstock">00</h5>
+                                    <p class="mb-0">Tồn kho thấp</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-end">
+                                <a href="#" class="text-decoration-none">Xem chi tiết &raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Hết hàng -->
+                    <div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="card overview-card overview-card-secondary h-100">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="me-3"><i class="fas fa-times-circle fa-2x text-secondary"></i></div>
+                                <div>
+                                    <h5 id="countOutOfStock">00</h5>
+                                    <p class="mb-0">Hết hàng</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-end">
+                                <a href="#" class="text-decoration-none">Xem chi tiết &raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thanh tìm kiếm & lọc -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <form id="formFilter" class="row g-3">
+                            <div class="col-md-4">
+                                <input id="filterKeyword" type="text" class="form-control"
+                                    placeholder="Tìm kiếm thuốc theo tên..." />
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filterCategory" class="form-select">
+                                    <option value="">Tất cả danh mục</option>
+                                    <option value="Thuốc kê đơn">Thuốc kê đơn</option>
+                                    <option value="Thuốc không kê đơn">Thuốc không kê đơn</option>
+                                    <option value="Thực phẩm chức năng">Thực phẩm chức năng</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filterStatus" class="form-select">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="instock">Còn hàng</option>
+                                    <option value="expiring">Sắp hết hạn</option>
+                                    <option value="lowstock">Tồn kho thấp</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-grid">
+                                <button id="btnFilter" type="button" class="btn btn-secondary">
+                                    <i class="fas fa-filter"></i> Lọc
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 3. Bảng tồn kho -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="stockTable" class="table table-bordered table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-start" style="width: 10%;">Mã thuốc</th>
+                                        <th class="text-start" style="width: 15%;">Tên thuốc</th>
+                                        <th class="text-start" style="width: 15%;">Danh mục</th>
+                                        <th class="text-end" style="width: 10%;">Tồn kho</th>
+                                        <th class="text-end" style="width: 10%;">Mức tối thiểu</th>
+                                        <th class="text-center" style="width: 10%;">Hạn sử dụng</th>
+                                        <th class="text-end" style="width: 10%;">Còn (ngày)</th>
+                                        <th class="text-start" style="width: 10%;">Trạng thái</th>
+                                        <th class="text-center" style="width: 10%;">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- JavaScript sẽ render dữ liệu ở đây -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Footer bảng: hiển thị số liệu + phân trang (tĩnh) -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                Hiển thị <span id="displayCount">0</span>/<span id="totalCount">0</span> thuốc
+                            </div>
+                            <nav>
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">&lt;</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">&gt;</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <div id="footer" style="background: #f8f9fa; text-align: center; padding: 20px;">
+        Đây là footer test
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery 3.6 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Script auth.js (nếu dùng) -->
+    <script src="/utils/auth.js"></script>
+
+    <script>
+        // Dữ liệu tạm lưu (giữ nguyên như bạn đã cung cấp)
+        let medicines = [
+            {
+                id: 1,
+                code: "MED001",
+                name: "Paracetamol 500mg",
+                category: "Thuốc không kê đơn",
+                quantity: 1000,
+                minQuantity: 100,
+                expiryDate: "2025-08-15",
+                origin: "Việt Nam",
+                unit: "Viên",
+                purchasePrice: 1500,
+                salePrice: 2000,
+                description: "Giảm đau, hạ sốt",
+                imageUrl: ""
+            },
+            {
+                id: 2,
+                code: "MED002",
+                name: "Amoxicillin 250mg",
+                category: "Thuốc kê đơn",
+                quantity: 0,
+                minQuantity: 50,
+                expiryDate: "2025-06-10",
+                origin: "Hoa Kỳ",
+                unit: "Viên",
+                purchasePrice: 2500,
+                salePrice: 3000,
+                description: "Kháng sinh",
+                imageUrl: ""
+            },
+            {
+                id: 3,
+                code: "MED003",
+                name: "Vitamin C 1000mg",
+                category: "Thực phẩm chức năng",
+                quantity: 30,
+                minQuantity: 50,
+                expiryDate: "2025-03-01",
+                origin: "Hàn Quốc",
+                unit: "Viên",
+                purchasePrice: 5000,
+                salePrice: 7000,
+                description: "Tăng sức đề kháng",
+                imageUrl: ""
+            },
+            {
+                id: 4,
+                code: "MED004",
+                name: "Thuốc Giảm Cảm Sốt",
+                category: "Thuốc kê đơn",
+                quantity: 20,
+                minQuantity: 100,
+                expiryDate: "2025-02-25",
+                origin: "Nhật Bản",
+                unit: "Viên",
+                purchasePrice: 4000,
+                salePrice: 5000,
+                description: "Thuốc kháng viêm",
+                imageUrl: ""
+            }
+            // … có thể bổ sung thêm
+        ];
+
+        let alertItems = [];    // Danh sách có thêm trường status, daysLeft
+        let editingId = null;   // ID thuốc đang chỉnh
+
+        $(document).ready(function () {
+            // Load header, sidebar, footer giống trước
+            $("#header").load("/components/header.html");
+            $("#sidebar").load("/components/sidebar.html", function () {
+                setTimeout(setupNavigation, 100);
+            });
+            $("#footer").load("/components/footer.html");
+
+            // Tính toán status + render bảng + cập nhật card
+            computeStatuses();
+            renderStockTable(alertItems);
+            updateSummary();
+
+            // Bắt sự kiện filter
+            $("#btnFilter").click(() => applyStockFilter());
+            $("#filterKeyword").keypress(function (e) {
+                if (e.which === 13) applyStockFilter();
+            });
+
+            // Lưu chỉnh sửa trong modal
+            $("#btnSaveAdjust").click(() => saveAdjustment());
+        });
+
+        // Tạo mảng alertItems từ medicines, thêm trường status, daysLeft
+        function computeStatuses() {
+            const today = new Date();
+            alertItems = [];
+
+            medicines.forEach(item => {
+                const expiryDate = new Date(item.expiryDate);
+                const diffDays = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                let status = "instock";
+
+                if (item.quantity === 0) {
+                    status = "outofstock";
+                } else if (diffDays <= 30) {
+                    status = "expiring";
+                } else if (item.quantity < item.minQuantity) {
+                    status = "lowstock";
+                }
+
+                alertItems.push({ ...item, daysLeft: diffDays, status });
+            });
+        }
+
+        // Cập nhật 4 card “Tổng quan”
+        function updateSummary() {
+            const countInStock = alertItems.filter(i => i.status === "instock").length;
+            const countExpiring = alertItems.filter(i => i.status === "expiring").length;
+            const countLowstock = alertItems.filter(i => i.status === "lowstock").length;
+            const countOutOfStock = alertItems.filter(i => i.status === "outofstock").length;
+
+            $("#countInStock").text(`${countInStock}`);
+            $("#countExpiring").text(`${countExpiring}`);
+            $("#countLowstock").text(`${countLowstock}`);
+            $("#countOutOfStock").text(`${countOutOfStock}`);
+        }
+
+        // Render lại bảng dữ liệu (mỗi dòng để nền trắng, chỉ tô màu chữ cột “Trạng thái”)
+        function renderStockTable(data) {
+            const tbody = $("#stockTable tbody");
+            tbody.empty();
+
+            data.forEach(item => {
+                let statusText = "Còn hàng";
+                let statusClass = "status-instock";
+
+                switch (item.status) {
+                    case "expiring":
+                        statusText = "Sắp hết hạn";
+                        statusClass = "status-expiring";
+                        break;
+                    case "lowstock":
+                        statusText = "Tồn kho thấp";
+                        statusClass = "status-lowstock";
+                        break;
+                    case "outofstock":
+                        statusText = "Hết hàng";
+                        statusClass = "status-outofstock";
+                        break;
+                }
+
+                const tr = $(`
+        <tr>
+    <td class="text-start">${item.code}</td>
+    <td class="text-start">${item.name}</td>
+    <td class="text-start">${item.category}</td>
+    <td class="text-end">${item.quantity}</td>
+    <td class="text-end">${item.minQuantity}</td>
+    <td class="text-center">${item.expiryDate}</td>
+    <td class="text-end">${item.daysLeft > 0 ? item.daysLeft : 0}</td>
+    <td class="text-start">
+      <span class="status-text ${statusClass}">${statusText}</span>
+    </td>
+  </tr>
+      `);
+
+                // Gắn sự kiện điều chỉnh nhanh
+                tr.find(".btn-adjust").click(() => openAdjustModal(item.id));
+
+                tbody.append(tr);
+            });
+
+            // Cập nhật footer hiển thị số liệu
+            $("#displayCount").text(data.length);
+            $("#totalCount").text(alertItems.length);
+        }
+
+        // Áp dụng filter/tìm kiếm rồi render lại table
+        function applyStockFilter() {
+            const keyword = $("#filterKeyword").val().trim().toLowerCase();
+            const statusFilter = $("#filterStatus").val(); // "", instock, expiring, lowstock
+
+            let filtered = alertItems;
+
+            if (statusFilter) {
+                filtered = filtered.filter(i => i.status === statusFilter);
+            }
+
+            if (keyword) {
+                filtered = filtered.filter(i =>
+                    i.name.toLowerCase().includes(keyword) ||
+                    i.code.toLowerCase().includes(keyword)
+                );
+            }
+
+            renderStockTable(filtered);
+        }
+
+        // Mở modal “Điều chỉnh nhanh” (hiển thị thông tin thuốc, cho sửa MinQuantity + ExpiryDate)
+        function openAdjustModal(id) {
+            const item = alertItems.find(i => i.id === id);
+            if (!item) return;
+
+            editingId = id;
+            $("#adjustMedicineId").val(id);
+            $("#adjustCode").text(item.code);
+            $("#adjustName").text(item.name);
+            $("#adjustQuantity").val(item.quantity);
+            $("#adjustMinQuantity").val(item.minQuantity);
+            $("#adjustExpiryDate").val(item.expiryDate);
+
+            $("#quickAdjustModal").modal("show");
+        }
+
+        // Lưu điều chỉnh nhanh
+        function saveAdjustment() {
+            const id = parseInt($("#adjustMedicineId").val());
+            const newMin = parseInt($("#adjustMinQuantity").val());
+            const newExpiry = $("#adjustExpiryDate").val();
+            const today = new Date().toISOString().split("T")[0];
+
+            if (isNaN(newMin) || newMin < 0) {
+                alert("Mức tồn tối thiểu phải ≥ 0.");
+                return;
+            }
+            if (!newExpiry || newExpiry < today) {
+                alert("Hạn sử dụng phải sau ngày hiện tại.");
+                return;
+            }
+
+            const idx = medicines.findIndex(m => m.id === id);
+            if (idx !== -1) {
+                medicines[idx].minQuantity = newMin;
+                medicines[idx].expiryDate = newExpiry;
+            }
+
+            // Cập nhật lại toàn bộ trạng thái, table và summary
+            computeStatuses();
+            renderStockTable(alertItems);
+            updateSummary();
+
+            $("#quickAdjustModal").modal("hide");
+        }
+    </script>
+</body>
+
+</html>
