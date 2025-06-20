@@ -1,0 +1,147 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #f9f9f9;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+}
+
+.logo {
+  color: #007bff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.subtitle {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #333;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin-top: 25px;
+}
+
+.menu li {
+  padding: 10px 0;
+  color: #000;
+}
+
+.menu li.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.menu li ul.submenu {
+  list-style: none;
+  margin-top: 5px;
+  padding-left: 15px;
+}
+
+.menu li ul.submenu li {
+  padding: 6px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.menu li ul.submenu li.sub-active {
+  background-color: #e6e6e6;
+  border-radius: 4px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.menu li ul.submenu li span.icon {
+  margin-right: 6px;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: #007bff;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  padding: 30px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0 25px;
+}
+
+.controls input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.controls button {
+  background: #eaeaea;
+  border: 1px solid #ccc;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.report-box {
+  display: flex;
+  gap: 20px;
+}
+
+.chart-container {
+  background: #64c9f5;
+  padding: 20px;
+  border-radius: 8px;
+  flex: 2;
+}
+
+.table-container {
+  background: #d0f0c0;
+  border-radius: 8px;
+  flex: 1;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+th {
+  background-color: #5cd65c;
+  color: #000;
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+  background: #fafafa;
+}
