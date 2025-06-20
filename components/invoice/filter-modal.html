@@ -1,0 +1,86 @@
+<div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Lọc nâng cao</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-0">
+                <form id="advancedFilterForm">
+                    <!-- Khoảng thời gian -->
+                    <div class="row mb-3">
+                        <div class="d-flex flex-row gap-3">
+                            <div class="border rounded p-2 d-flex align-items-center flex-grow-1"
+                                style="height:38px; min-width:150px;">
+                                <span class="form-label mb-0 me-2" style="color:#888; min-width:40px;">Từ</span>
+                                <input type="date" class="form-control border-0 shadow-none px-0" id="startDate"
+                                    style="flex:1; min-width:80px;">
+                            </div>
+                            <div class="border rounded p-2 d-flex align-items-center flex-grow-1"
+                                style="height:38px; min-width:150px;">
+                                <span class="form-label mb-0 me-2" style="color:#888; min-width:40px;">đến</span>
+                                <input type="date" class="form-control border-0 shadow-none px-0" id="endDate"
+                                    style="flex:1; min-width:80px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Khách hàng -->
+                    <div class="mb-3">
+                        <label class="form-label">Khách hàng</label>
+                        <input type="text" class="form-control" id="customerFilter" placeholder="Nhập tên khách hàng">
+                    </div>
+                    <!-- Trạng thái -->
+                    <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusPaid">
+                                <label class="form-check-label text-success" for="statusPaid">Đã thanh toán</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusProcessing">
+                                <label class="form-check-label text-warning" for="statusProcessing">Đang xử lý</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="statusCancelled">
+                                <label class="form-check-label text-danger" for="statusCancelled">Đã huỷ</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tổng tiền -->
+                    <div class="row mb-3">
+                        <div class="d-flex flex-row gap-3">
+                            <div class="border rounded p-2 d-flex align-items-center flex-grow-1"
+                                style="height:38px; min-width:150px;">
+                                <span class="form-label mb-0 me-2" style="color:#888; min-width:40px;">Từ</span>
+                                <input type="number" class="form-control border-0 shadow-none px-0" id="minAmount"
+                                    placeholder="50.000" style="flex:1; min-width:80px;">
+                            </div>
+                            <div class="border rounded p-2 d-flex align-items-center flex-grow-1"
+                                style="height:38px; min-width:150px;">
+                                <span class="form-label mb-0 me-2" style="color:#888; min-width:40px;">đến</span>
+                                <input type="number" class="form-control border-0 shadow-none px-0" id="maxAmount"
+                                    placeholder="500.000" style="flex:1; min-width:80px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hình thức thanh toán -->
+                    <div class="mb-3">
+                        <label class="form-label">Hình thức thanh toán</label>
+                        <select class="form-select" id="paymentFilter">
+                            <option value="">Tất cả hình thức</option>
+                            <option value="cash">Tiền mặt</option>
+                            <option value="card">Thẻ ngân hàng</option>
+                            <option value="transfer">Chuyển khoản</option>
+                            <option value="momo">Ví MoMo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-primary" id="applyFilter"> Lọc</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

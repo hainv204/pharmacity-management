@@ -8,54 +8,80 @@
                 </a>
             </li>
 
+            <!-- Quản lý thuốc -->
             <li class="nav-item has-submenu" data-role="manager,inventory,sales">
                 <a class="nav-link submenu-toggle" href="javascript:void(0)">
                     <span class="text">Quản lý thuốc</span>
                 </a>
                 <ul class="submenu nav flex-column collapse">
+                    <!--Danh sách thuốc (CRUD tất cả: thêm/sửa/xóa/xem) -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/manage-medicine.html" data-page="manage-medicine">
+                        <a class="nav-link" href="/pages/manage-medicine/medicine-lists.html"
+                            data-page="medicine-lists">
                             <span class="text">Danh sách thuốc</span>
                         </a>
                     </li>
+
+
+                    <!--Cảnh báo hàng tồn -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="medicine-categories">
-                            <span class="text">Danh mục thuốc</span>
+                        <a class="nav-link" href="/pages/manage-medicine/medicine-alerts.html"
+                            data-page="medicine-alerts">
+                            <span class="text">Cảnh báo hàng tồn</span>
                         </a>
                     </li>
                 </ul>
             </li>
 
+            <!-- Quản lý kho -->
+            <li class="nav-item has-submenu" data-role="manager,inventory,sales">
+                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+                    <span class="text">Quản lý kho</span>
+                </a>
+                <ul class="submenu nav flex-column collapse">
+                    <!-- 1. Tổng quan tồn kho (hiển thị trạng thái hiện thời: Còn hàng, Hết hàng, Tồn kho thấp, Sắp hết hạn) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/manage-stock.html" data-page="manage-stock">
+                            <span class="text">Tổng quan tồn kho</span>
+                        </a>
+                    </li>
+
+                    <!-- 2. Nhập kho (tăng số lượng tồn, ghi nhận lịch sử nhập) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/stock-in.html" data-page="stock-in">
+                            <span class="text">Nhập kho</span>
+                        </a>
+                    </li>
+
+                    <!-- 3. Xuất kho (giảm số lượng tồn, ghi nhận lịch sử xuất) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/manage-warehouse/stock-out.html" data-page="stock-out">
+                            <span class="text">Xuất kho</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Quản lý hóa đơn -->
             <li class="nav-item">
-                <a class="nav-link" href="/pages/manage-order.html" data-page="manage-order">
+                <a class="nav-link" href="/pages/invoice-management.html" data-page="invoice-management">
                     <span class="text">Quản lý hóa đơn</span>
                 </a>
             </li>
 
-            <li class="nav-item has-submenu" data-role="manager,sales,customer-service">
-                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+            <!-- Quản lý khách hàng -->
+            <li class="nav-item">
+                <a class="nav-link" href="/pages/customer_management.html" data-page="customer_management">
                     <span class="text">Quản lý khách hàng</span>
                 </a>
-                <ul class="submenu nav flex-column collapse">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pages/manage-customer.html" data-page="manage-customer">
-                            <span class="text">Danh sách khách hàng</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
-            <li class="nav-item has-submenu" data-role="manager,inventory">
-                <a class="nav-link submenu-toggle" href="javascript:void(0)">
+            <!-- Phần quản lý nhà cung cấp -->
+            <li class="nav-item" data-role="manager,inventory">
+                <a class="nav-link" href="/pages/supplier-management.html" data-page="supplier-management">
                     <span class="text">Quản lý nhà cung cấp</span>
                 </a>
-                <ul class="submenu nav flex-column collapse">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pages/manage-supplier.html" data-page="manage-supplier">
-                            <span class="text">Danh sách nhà cung cấp</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="nav-item has-submenu" data-role="manager">
@@ -64,18 +90,28 @@
                 </a>
                 <ul class="submenu nav flex-column collapse">
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/report.html" data-page="report">
+                        <a class="nav-link" href="/pages/statistical-report.html" data-page="statistical-report">
+                            <span class="text">Tổng quan thống kê</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/report/doanhthu.html" data-page="doanhthu">
                             <span class="text">Doanh thu</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="sales-report">
-                            <span class="text">Bán hàng</span>
+                        <a class="nav-link" href="/pages/report/loinhuan.html" data-page="loinhuan">
+                            <span class="text">Lợi nhuận</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="inventory-report">
-                            <span class="text">Tồn kho</span>
+                        <a class="nav-link" href="/pages/report/sodonhang.html" data-page="sodonhang">
+                            <span class="text">Số đơn hàng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/report/khachhang.html" data-page="khachhang">
+                            <span class="text">Khách hàng</span>
                         </a>
                     </li>
                 </ul>

@@ -19,174 +19,473 @@
             <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Quản lý nhà cung cấp</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#addSupplierModal">
-                            <i class="fas fa-plus"></i> Thêm nhà cung cấp
-                        </button>
+                <div class="pt-3 pb-2 mb-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h1 class="h4 fw-bold mb-0">Quản lý nhà cung cấp</h1>
+                     <!-- Thông báo trơn -->
+                    <div id="supplier-not-found-alert" class="supplier-alert" style="background-color: #BDD8FF;">
+                        <span style="color:#1976d2; font-size:18px; margin-right:8px;">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        <span>Nhà cung cấp không tồn tại!</span>
+                    </div>
+
+                    <div id="supplier-added-alert" class="supplier-alert" style="background-color: #D9FCD9;">
+                        <span style="color:rgb(98, 214, 98); font-size:18px; margin-right:8px;">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span>Nhà cung cấp đã được thêm thành công!</span>
+                    </div>
+                    
+                    <div id="supplier-edited-alert" class="supplier-alert" style="background-color: #D9FCD9;">
+                        <span style="color:rgb(95, 254, 98); font-size:18px; margin-right:8px;">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span>Thông tin nhà cung cấp vừa được cập nhật</span>
+                    </div>
+
+                    <div id="supplier-deleted-alert" class="supplier-alert" style="background-color: #FFDDD9;">
+                        <span style="color:crimson; font-size:18px; margin-right:8px;">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                        <span>Nhà cung cấp đã bị xóa!</span>
+                    </div>
+                    
+                    <div id="receipt-added-alert" class="supplier-alert" style="background-color: #D9FCD9;">
+                        <span style="color:rgb(98, 214, 98); font-size:18px; margin-right:8px;">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span>Đã tạo phiếu nhập thành công!</span>
+                    </div>
+                    
+                    <div id="receipt-edited-alert" class="supplier-alert"  style="background-color: #D9FCD9;">
+                        <span style="color:rgb(95, 254, 98); font-size:18px; margin-right:8px;">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <span>Thông tin phiếu nhập vừa được cập nhật</span>
+                    </div>
+
+                    <div id="receipt-deleted-alert" class="supplier-alert" style="background-color: #FFDDD9;">
+                        <span style="color:crimson; font-size:18px; margin-right:8px;">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                        <span>Phiếu nhập đã bị xóa!</span>
                     </div>
                 </div>
-
-                <!-- Search and Filter -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <input type="text" class="form-control" placeholder="Tìm kiếm nhà cung cấp...">
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <select class="form-select">
-                                    <option value="">Loại sản phẩm</option>
-                                    <option>Thuốc kê đơn</option>
-                                    <option>Thuốc không kê đơn</option>
-                                    <option>Thực phẩm chức năng</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <select class="form-select">
-                                    <option value="">Trạng thái</option>
-                                    <option>Đang hợp tác</option>
-                                    <option>Tạm ngưng</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <button type="button" class="btn btn-secondary w-100">
-                                    <i class="fas fa-filter"></i> Lọc
-                                </button>
-                            </div>
-                        </div>
+                <div class="bg-white rounded-3 p-3 mb-3 d-flex align-items-center gap-2">
+                    <div class="flex-grow-1">
+                        <input type="text" id="searchSupplier" class="form-control" placeholder="Tìm kiếm nhà cung cấp...">
                     </div>
+                    <button class="btn btn-primary" id="searchSupplierBtn"><i class="fas fa-search me-2"></i>Tìm kiếm</button>
+                    <button class="btn btn-primary ms-2" id="addSupplierBtn" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                        <i class="fas fa-plus me-2"></i>Thêm mới</button>
                 </div>
-
-                <!-- Suppliers List -->
-                <div class="card shadow mb-4">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Mã NCC</th>
-                                        <th>Tên công ty</th>
-                                        <th>Người đại diện</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Email</th>
-                                        <th>Loại sản phẩm</th>
-                                        <th>Trạng thái</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>NCC001</td>
-                                        <td>Công ty Dược phẩm ABC</td>
-                                        <td>Nguyễn Văn X</td>
-                                        <td>0123456789</td>
-                                        <td>info@abc.com</td>
-                                        <td>Thuốc kê đơn</td>
-                                        <td><span class="badge bg-success">Đang hợp tác</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-info me-1" title="Chi tiết">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-primary me-1" title="Sửa">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-warning" title="Lịch sử giao dịch">
-                                                <i class="fas fa-history"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="table-responsive bg-white rounded-3">
+                    <table class="table align-middle mb-0" id="suppliersTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" >Mã nhà cung cấp</th>
+                                <th scope="col">Họ và tên</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Địa chỉ</th>
+                                <th scope="col">Phiếu nhập</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--dữ liệu mẫu -->
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between align-items-center p-3">
+                        <span class="text-muted">Hiển thị 3/25 nhà cung cấp</span>
+                        <nav>
+                            <ul class="pagination mb-0">
+                                <li class="page-item disabled"><a class="page-link">&lt;</a></li>
+                                <li class="page-item active"><a class="page-link">1</a></li>
+                                <li class="page-item"><a class="page-link">2</a></li>
+                                <li class="page-item"><a class="page-link">3</a></li>
+                                <li class="page-item"><a class="page-link">&gt;</a></li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Add Supplier Modal -->
+    <!--  Modal thêm nhà cung cấp -->
     <div class="modal fade" id="addSupplierModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Thêm nhà cung cấp mới</h5>
+                    <h5 class="modal-title fw-bold">Thêm/Sửa nhà cung cấp</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="addSupplierForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Tên công ty</label>
-                                <input type="text" class="form-control" required>
+                <div class="modal-body pt-4">
+                    <form id="addSupplierForm" class="position-relative">
+                        <div class="fw-bold supplier-section-title">Thông tin nhà cung cấp</div>
+                        <div class="p-4 mb-4 bg-light rounded">
+                            <div class="mb-5 row align-items-center">
+                                <label class="col-sm-3 col-form-label fw-normal">Họ và tên:</label>
+                                <div class="col-sm-9">
+                                    <input id="name" type="text" class="form-control is-invalid" >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập tên nhà cung cấp, không có chữ số và ký tự đặc biệt
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Mã số thuế</label>
-                                <input type="text" class="form-control" required>
+                            <div class="mb-5 row align-items-center">
+                                <label for="phone" class="col-sm-3 col-form-label fw-normal" style="white-space: nowrap;">Số điện thoại:</label>
+                                <div class="col-sm-9">
+                                    <input id="phone" type="text" class="form-control is-invalid" >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập số điện thoại, chỉ được nhập số và lớn hơn 10 chữ số
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Người đại diện</label>
-                                <input type="text" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Chức vụ</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" required>
+                            <div class="mb-2 row align-items-center">
+                                <label class="col-sm-3 col-form-label fw-normal">Địa chỉ:</label>
+                                <div class="col-sm-9">
+                                    <input id="address" type="text" class="form-control is-invalid" >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập địa chỉ
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Địa chỉ</label>
-                            <textarea class="form-control" rows="2" required></textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Loại sản phẩm cung cấp</label>
-                                <select class="form-select" multiple required>
-                                    <option>Thuốc kê đơn</option>
-                                    <option>Thuốc không kê đơn</option>
-                                    <option>Thực phẩm chức năng</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Phương thức thanh toán</label>
-                                <select class="form-select" multiple>
-                                    <option>Chuyển khoản</option>
-                                    <option>Tiền mặt</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Ghi chú</label>
-                            <textarea class="form-control" rows="2"></textarea>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button id="submitBtn" type="submit" class="btn btn-primary">Thêm mới</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--  Modal sửa nhà cung cấp -->
+    <div class="modal fade" id="editSupplierModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Thêm/Sửa nhà cung cấp</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-4">
+                    
+                    <form id="editSupplierForm" class="position-relative">
+                        <div class="fw-bold supplier-section-title">Thông tin nhà cung cấp</div>
+                        <div class="p-4 mb-4 bg-light rounded">
+                            <div class="mb-5 row align-items-center">
+                                <label class="col-sm-3 col-form-label fw-normal">Họ và tên:</label>
+                                <div class="col-sm-9">
+                                    <input id="name1" type="text" class="form-control is-invalid"  >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập tên nhà cung cấp, không có chữ số và ký tự đặc biệt
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-5 row align-items-center">
+                                <label for="phone" class="col-sm-3 col-form-label fw-normal" style="white-space: nowrap;">Số điện thoại:</label>
+                                <div class="col-sm-9">
+                                    <input id="phone1" type="text" class="form-control is-invalid"  >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập số điện thoại, chỉ được nhập số và lớn hơn 10 chữ số
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2 row align-items-center">
+                                <label class="col-sm-3 col-form-label fw-normal">Địa chỉ:</label>
+                                <div class="col-sm-9">
+                                    <input id="address1" type="text" class="form-control is-invalid"  >
+                                    <div class="invalid-feedback">
+                                        Vui lòng nhập địa chỉ
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button id="submitBtn1" type="submit" class="btn btn-primary">Cập nhật</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Xem Phiếu Nhập Thuốc Modal -->
+    <div class="modal fade" id="medicineReceiptModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">Phiếu nhập thuốc</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-bordered align-middle" id="medicineReceiptModal">
+              <thead>
+                <tr>
+                  <th class="text-center">Mã phiếu</th>
+                  <th class="text-center">Ngày nhập</th>
+                  <th class="text-end">Tổng tiền</th>
+                  <th class="text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dữ liệu mẫu -->
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMedicineReceiptModal">Tạo phiếu</button>
+              <div>
+                <button class="btn btn-primary me-2" data-bs-dismiss = "modal">OK</button>
+                <button class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Modal Thêm phiếu nhập thuốc -->
+    <div class="modal fade modal-drug-detail" id="addMedicineReceiptModal" tabindex="-1">
+        <div class="modal-dialog" style="max-width: 725px;">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết phiếu nhập thuốc</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <!-- Thông tin thuốc -->
+            <div class="info-box">
+                <div class="section-title">Thông tin thuốc</div>
+                <form id="addMedicineReceiptForm">
+                    <div class="info-form-row" style="margin-bottom: 24px;">
+                        <label for="ten-thuoc-add">Tên thuốc:</label>
+                        <div class="input-wrap">
+                            <input id="ten-thuoc-add" type="text" class="name-medicine form-control"  >
+                            <div class="invalid-feedback">
+                                Tên thuốc không được để trống
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-form-row">
+                        <label for="so-luong-add">Số lượng:</label>
+                        <div class="input-wrap" style="width: 112px;">
+                            <input id="so-luong-add" type="number" class="short-input form-control"  >
+                            <div class="invalid-feedback">
+                                Phải là chữ số và lớn hơn 0
+                            </div>
+                        </div>
+                        <label for="don-gia-add" style="margin-left: 12px;">Đơn giá:</label>
+                        <div class="input-wrap" style="width: 112px;">
+                            <input id="don-gia-add" type="number" class="price-input form-control"  >
+                            <div class="invalid-feedback">
+                                Phải là chữ số và lớn hơn 0
+                            </div>
+                        </div>
+                        <span class="unit">VNĐ</span>
+                    </div>
+                </form>
+                <div class="side-buttons">
+                <button class="btn btn-primary" type="button" id="addChiTietBtn">Thêm</button>
+                <button class="btn btn-primary" type="button" id="editChiTietBtn">Sửa</button>
+                </div>
+            </div>
+            <!-- Thông tin phiếu nhập thuốc -->
+            <div class="table-section">
+                <div class="section-title">Thông tin phiếu nhập thuốc</div>
+                <table class="custom-table">
+                <thead>
+                    <tr>
+                    <th class="text-center" style="width: 86px;">Mã thuốc</th>
+                    <th class="text-center" style="width: 86px;">Tên thuốc</th>
+                    <th class="text-center" style="width: 105px;">Ngày nhập</th>
+                    <th class="text-center" style="width: 58px;">Đơn giá</th>
+                    <th class="text-center" style="width: 67px;">Số lượng</th>
+                    <th class="text-center" style="width: 120px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu mẫu -->
+                </tbody>
+                </table>
+                <div class="total-row">
+                <label for="tong-tien">Tổng tiền:</label>
+                <input id="tong-tien" type="text" readonly />
+                <span class="unit">VNĐ</span>
+                </div>
+            </div>
+            <div class="footer-btns">
+                <button class="btn btn-primary" type="button">Thêm mới</button>
+                <button class="btn btn-light" data-bs-dismiss="modal" type="button">Hủy</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal Xem chi tiết phiếu nhập thuốc -->
+    <div class="modal fade modal-drug-detail" id="viewMedicineReceiptModal" tabindex="-1">
+        <div class="modal-dialog" style="max-width: 725px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết phiếu nhập thuốc</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <!-- Thông tin phiếu nhập thuốc -->
+                <div class="table-section">
+                    <div class="section-title">Thông tin phiếu nhập thuốc</div>
+                    <table class="custom-table">
+                    <thead>
+                        <tr>
+                        <th class="text-center" style="width: 86px;">Mã thuốc</th>
+                        <th class="text-center" style="width: 86px;">Tên thuốc</th>
+                        <th class="text-center" style="width: 105px;">Ngày nhập</th>
+                        <th class="text-center" style="width: 58px;">Đơn giá</th>
+                        <th class="text-center" style="width: 67px;">Số lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <!-- Dữ liệu mẫu -->
+                    </tbody>
+                    </table>
+                    <div class="total-row">
+                    <label for="tong-tienView">Tổng tiền:</label>
+                    <input id="tong-tienView" type="text" readonly />
+                    <span class="unit">VNĐ</span>
+                    </div>
+                </div>
+                <div class="footer-btns">
+                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">OK</button>
+                    <button class="btn btn-light" data-bs-dismiss="modal" type="button">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sửa phiếu nhập thuốc -->
+    <div class="modal fade modal-drug-detail" id="editMedicineReceiptModal" tabindex="-1">
+        <div class="modal-dialog" style="max-width: 725px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết phiếu nhập thuốc</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <!-- Thông tin thuốc -->
+                <div class="info-box">
+                    <div class="section-title">Thông tin thuốc</div>
+                    <form id="editMedicineReceiptForm">
+                        <div class="info-form-row" style="margin-bottom: 24px;">
+                                <label for="ten-thuoc-edit">Tên thuốc:</label>
+                                <div class="input-wrap">
+                                    <input id="ten-thuoc-edit" type="text" class="name-medicine form-control"  >
+                                    <div class="invalid-feedback">
+                                        Tên thuốc không được để trống
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-form-row">
+                                <label for="so-luong-edit">Số lượng:</label>
+                                <div class="input-wrap" style="width: 112px;">
+                                    <input id="so-luong-edit" type="number" class="short-input form-control"  >
+                                    <div class="invalid-feedback">
+                                        Phải là chữ số và lớn hơn 0
+                                    </div>
+                                </div>
+                                <label for="don-gia-edit" style="margin-left: 12px;">Đơn giá:</label>
+                                <div class="input-wrap" style="width: 112px;">
+                                    <input id="don-gia-edit" type="number" class="price-input form-control"  >
+                                    <div class="invalid-feedback">
+                                        Phải là chữ số và lớn hơn 0
+                                    </div>
+                                </div>
+                                <span class="unit">VNĐ</span>
+                            </div>
+                    </form>
+                    <div class="side-buttons">
+                        <button class="btn btn-primary" type="button" id="addChiTietBtn2">Thêm</button>
+                        <button class="btn btn-primary" type="button" id="editChiTietBtn2">Sửa</button>
+                    </div>
+                </div>
+                <!-- Thông tin phiếu nhập thuốc -->
+                <div class="table-section">
+                    <div class="section-title">Thông tin phiếu nhập thuốc</div>
+                    <table class="custom-table" >
+                    <thead>
+                        <tr>
+                        <th class="text-center" style="width: 86px;">Mã thuốc</th>
+                        <th class="text-center" style="width: 86px;">Tên thuốc</th>
+                        <th class="text-center" style="width: 105px;">Ngày nhập</th>
+                        <th class="text-center" style="width: 58px;">Đơn giá</th>
+                        <th class="text-center" style="width: 67px;">Số lượng</th>
+                        <th class="text-center" style="width: 120px;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu mẫu -->
+                    </tbody>
+                    </table>
+                    <div class="total-row">
+                    <label for="tong-tienEdit">Tổng tiền:</label>
+                    <input id="tong-tienEdit" type="text" readonly />
+                    <span class="unit">VNĐ</span>
+                    </div>
+                </div>
+                <div class="footer-btns">
+                    <button class="btn btn-primary" type="button">Cập nhật</button>
+                    <button class="btn btn-light" data-bs-dismiss="modal" type="button">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal xác nhận xóa nhà cung cấp -->
+    <div class="modal fade" id="deleteSupplierModal" tabindex="-1" aria-labelledby="deleteSupplierLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header pb-2">
+                <h5 class="modal-title fw-bold" id="confirmDeleteSupplierLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <div>Bạn có chắc chắn muốn xóa nhà cung cấp này?</div>
+                <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2" role="alert" style="font-size: 0.95em;">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Thao tác này không thể hoàn tác và ảnh hưởng đến dữ liệu.
+                </div>
+            </div>
+            <div class="modal-footer pt-3">
+                <button type="button" class="btn btn-danger" id="confirmDeleteSupplierBtn" data-bs-dismiss="modal">Xác nhận xóa</button>
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận xóa phiếu nhập thuốc -->
+    <div class="modal fade" id="deleteMedicineReceiptModal" tabindex="-1" aria-labelledby="deleteMedicineReceiptLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header pb-2">
+                <h5 class="modal-title fw-bold" id="confirmDeleteMedicineReceiptLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <div>Bạn có chắc chắn muốn xóa phiếu này?</div>
+                <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2" role="alert" style="font-size: 0.95em;">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Thao tác này không thể hoàn tác và ảnh hưởng đến dữ liệu.
+                </div>
+            </div>
+            <div class="modal-footer pt-3">
+                <button type="button" class="btn btn-danger" id="confirmDeleteMedicineReceiptBtn">Xác nhận xóa</button>
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+   
 
     <div id="footer"></div>
 
@@ -204,6 +503,7 @@
             $('#footer').load('/components/footer.html');
         });
     </script>
+    <script src="/assets/js/supplier-management.js"></script>
 </body>
 
 </html>

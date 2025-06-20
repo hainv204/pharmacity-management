@@ -70,25 +70,8 @@ function getCurrentUser() {
 }
 
 function checkAuth() {
-    const user = getCurrentUser();
-    if (!user) {
-        window.location.href = '/login.html';
-        return null;
-    }
-
-    // Kiểm tra quyền truy cập trang hiện tại
-    const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
-    // Các trang không cần kiểm tra quyền
-    const publicPages = ['login', '', 'index'];
-
-    if (!publicPages.includes(currentPage)) {
-        if (!hasAccessToPage(user.role, currentPage)) {
-            alert('Bạn không có quyền truy cập trang này.');
-            window.location.href = '/pages/dashboard.html';
-            return null;
-        }
-    }
-    return user;
+    // Luôn trả về user có quyền cao nhất để toàn quyền sử dụng hệ thống trên GitHub Pages
+    return { username: 'admin', role: 'manager', name: 'Quản lý' };
 }
 
 function hasAccessToPage(role, page) {
@@ -146,11 +129,15 @@ function setupDropdowns() {
         // Xóa các event handler cũ để tránh gọi nhiều lần
         $('.has-submenu > .nav-link').off('click');
 
+        // XÓA HẾT ACTIVE TRƯỚC KHI SET MỚI
+        document.querySelectorAll('.nav-link.active').forEach(link => link.classList.remove('active'));
+
         // Thêm event handler mới - xử lý click vào item menu có submenu
         $('.has-submenu > .nav-link').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-
+            // XÓA HẾT ACTIVE TRƯỚC KHI SET MỚI (khi click menu cha)
+            $('.nav-link.active').removeClass('active');
             // Lấy submenu kế tiếp của nav-link này
             const submenu = $(this).next('.submenu');
 

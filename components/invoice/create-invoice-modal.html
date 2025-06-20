@@ -1,0 +1,222 @@
+<!-- 3. Modal Lập Hóa Đơn -->
+<div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-labelledby="createInvoiceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createInvoiceModalLabel">Lập hóa đơn
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createInvoiceForm">
+                    <!-- 1. Thông tin khách hàng -->
+                    <div class="section-box mb-4">
+                        <div class="section-header">
+                            Thông tin khách hàng
+                        </div>
+                        <div class="section-content">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Tên khách hàng</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="customerName" list="customerList"
+                                            placeholder="Nhập tên khách hàng...">
+                                    </div>
+                                    <datalist id="customerList">
+                                        <option value="Nguyễn Văn A">
+                                        <option value="Trần Thị B">
+                                        <option value="Lê Văn C">
+                                    </datalist>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="customerPhone">
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="newCustomer">
+                                        <label class="form-check-label" for="newCustomer">
+                                            Khách hàng mới
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="newCustomerInfo" class="col-12 d-none">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Giới tính</label>
+                                            <select class="form-select" id="customerGender">
+                                                <option value="">-- Chọn --</option>
+                                                <option value="male">Nam</option>
+                                                <option value="female">Nữ</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="customerEmail"
+                                                placeholder="Email (không bắt buộc)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2">Điểm tích lũy:</span>
+                                        <span class="fw-bold">10 điểm</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2">Ưu đãi khả dụng:</span>
+                                        <span class="fw-bold">1 ưu đãi</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Danh sách thuốc -->
+                    <div class="section-box mb-4">
+                        <div class="section-header">
+                            Danh sách thuốc
+                        </div>
+                        <div class="section-content">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="medicineSearch"
+                                        placeholder="Nhập tên hoặc mã thuốc...">
+                                    <button class="btn btn-primary" type="button" id="addMedicineBtn">Thêm
+                                        thuốc</button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table border">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã thuốc</th>
+                                            <th>Tên thuốc</th>
+                                            <th>Đơn giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medicineList">
+                                        <tr>
+                                            <td>MED001</td>
+                                            <td>Paracetamol 500mg</td>
+                                            <td>2.000đ</td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm quantity-input"
+                                                    value="5" min="1" style="width: 70px">
+                                            </td>
+                                            <td>10.000đ</td>
+                                            <td>
+                                                <button type="button" class="btn-action trash-can delMedicine"
+                                                    data-bs-toggle="tooltip" title="Xoá thuốc">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>MED015</td>
+                                            <td>Vitamin C 500mg</td>
+                                            <td>15.000đ</td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm quantity-input"
+                                                    value="2" min="1" style="width: 70px">
+                                            </td>
+                                            <td>30.000đ</td>
+                                            <td>
+                                                <button type="button" class="btn-action trash-can delMedicine"
+                                                    data-bs-toggle="tooltip" title="Xoá thuốc">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-end">Tổng phụ:</td>
+                                            <td colspan="2" class="fw-bold">40.000đ</td>
+                                        </tr>
+                                        <tr id="discountRow">
+                                            <td colspan="4" class="text-end">Giảm giá:</td>
+                                            <td colspan="2" class="fw-bold text-success">-4.000đ (10%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-end">Tổng thanh toán:</td>
+                                            <td colspan="2" class="fw-bold fs-5 text-primary">36.000đ</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Thông tin khác -->
+                    <div class="section-box mb-3">
+                        <div class="section-header">
+                            Thông tin khác
+                        </div>
+                        <div class="section-content">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Ngày lập</label>
+                                    <input type="datetime-local" class="form-control" id="invoiceDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Hình thức thanh toán</label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="paymentMethodSelect">
+                                            <option value="cash" selected data-icon="fa-money-bill-wave"
+                                                data-color="text-success">Tiền mặt</option>
+                                            <option value="card" data-icon="fa-credit-card" data-color="text-primary">
+                                                Thẻ ngân hàng</option>
+                                            <option value="transfer" data-icon="fa-university" data-color="text-info">
+                                                Chuyển khoản</option>
+                                            <option value="momo" data-icon="fa-mobile-alt" data-color="text-danger">
+                                                Ví MoMo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Ưu đãi áp dụng</label>
+                                    <select class="form-select" id="discountSelect">
+                                        <option value="">Không áp dụng</option>
+                                        <option value="percent10" selected>Giảm 10% tổng hóa đơn</option>
+                                        <option value="amount20k">Giảm 20.000đ</option>
+                                        <option value="freeship">Miễn phí giao hàng</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center h-100" style="padding-top: 2rem;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="autoDiscount" checked>
+                                            <label class="form-check-label" for="autoDiscount">
+                                                Áp dụng ưu đãi tốt nhất tự động
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Ghi chú</label>
+                                    <textarea class="form-control" id="invoiceNotes" rows="2"
+                                        placeholder="Thêm ghi chú về đơn hàng..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary me-2" id="saveInvoiceBtn">Lưu hóa đơn
+                </button>
+                <button type="button" class="btn btn-light" id="cancelInvoiceBtn">Hủy hoá đơn</button>
+            </div>
+        </div>
+    </div>
+</div>

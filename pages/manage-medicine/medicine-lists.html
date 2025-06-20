@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý thuốc – Pharmacity Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <!-- Custom CSS (nếu có) -->
+    <link href="/assets/css/style.css" rel="stylesheet" />
+
+    <style>
+        .btn-modal-action {
+            width: 150px;
+            height: 38px;
+        }
+
+        /* ================================
+       1. NỀN TRẮNG CHO TOÀN BỘ DÒNG BẢNG
+    ================================ */
+        .table tbody tr {
+            background-color: #ffffff !important;
+        }
+
+        /* ================================
+       2. MÀU CHO CHỮ TRẠNG THÁI
+    ================================ */
+        .status-expiring {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .status-lowstock {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .status-instock {
+            color: #198754;
+            font-weight: 600;
+        }
+
+        /* ================================
+       3. KHUNG BẢNG CUỘN (nếu quá dài)
+    ================================ */
+        .table-responsive {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* ================================
+       4. NÚT HÀNH ĐỘNG (Action Buttons)
+    ================================
+       - Kích thước vuông: 36×36px
+       - Bo góc nhẹ (border-radius 0.375rem)
+       - Nền xám nhạt, icon canh giữa
+    ================================ */
+        .btn-action {
+            background-color: #f1f1f1;
+            border: none;
+            color: #495057;
+            margin: 0 4px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #e2e2e2;
+            color: #343a40;
+        }
+
+        /* ================================
+       5. Căn giữa cột Hành động
+    ================================ */
+        th.text-center,
+        td.text-center {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Không cần nếu bạn đã dùng Bootstrap 5 utility classes */
+        .toast-container {
+            z-index: 1100;
+            /* cao hơn modal */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header (load từ file ngoài) -->
+    <div id="header"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar (load từ file ngoài) -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+                <!-- Tiêu đề và nút Thêm mới -->
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center border-bottom pb-2 mb-4">
+                    <h1 class="h2">Quản lý thuốc</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button id="btnAddMedicine" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#medicineModal">
+                            <i class="fas fa-plus"></i> Thêm thuốc mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Thanh tìm kiếm & lọc -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <form id="formFilter" class="row g-3">
+                            <div class="col-md-4">
+                                <input id="filterKeyword" type="text" class="form-control"
+                                    placeholder="Tìm kiếm thuốc theo tên..." />
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filterCategory" class="form-select">
+                                    <option value="">Tất cả danh mục</option>
+                                    <option value="Thuốc kê đơn">Thuốc kê đơn</option>
+                                    <option value="Thuốc không kê đơn">Thuốc không kê đơn</option>
+                                    <option value="Thực phẩm chức năng">Thực phẩm chức năng</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filterStatus" class="form-select">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="instock">Còn hàng</option>
+                                    <option value="expiring">Sắp hết hàng</option>
+                                    <option value="lowstock">Tồn kho thấp</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-grid">
+                                <button id="btnFilter" type="button" class="btn btn-secondary">
+                                    <i class="fas fa-filter"></i> Lọc
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danh sách thuốc -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="medicineTable" class="table table-bordered table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-start">Mã thuốc</th>
+                                        <th class="text-start">Tên thuốc</th>
+                                        <th class="text-start">Danh mục</th>
+                                        <th class="text-start">Đơn vị</th>
+                                        <th class="text-end">Tồn kho</th>
+                                        <th class="text-center">Hạn sử dụng</th>
+                                        <th class="text-end">Giá bán</th>
+                                        <th class="text-start">Trạng thái</th>
+                                        <th class="text-center">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dữ liệu sẽ được render bằng JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                          
+
+                        <!-- Phần footer: Hiển thị số lượng + phân trang -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                Hiển thị <span id="displayCount">0</span>/<span id="totalCount">0</span> thuốc
+                            </div>
+                            <nav>
+                                <ul class="pagination mb-0" id="paginationControls">
+                                    <!-- phân trang sẽ được render JS -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Thêm / Sửa thuốc -->
+    <div class="modal fade" id="medicineModal" tabindex="-1" aria-labelledby="medicineModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="medicineModalLabel" class="modal-title">Thêm thuốc mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formMedicine" class="row g-3 needs-validation" novalidate>
+                        <input type="hidden" id="medicineId" />
+                        <div class="col-md-4">
+                            <label for="medicineCode" class="form-label">Mã thuốc <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="medicineCode" placeholder="Nhập mã (MDxxxx)"
+                                required />
+                            <div class="invalid-feedback">Mã thuốc là duy nhất và không được để trống.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineName" class="form-label">Tên thuốc <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="medicineName" placeholder="Nhập tên thuốc"
+                                required />
+                            <div class="invalid-feedback">Tên thuốc không được để trống.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineImage" class="form-label">Hình ảnh (URL)</label>
+                            <input type="url" class="form-control" id="medicineImage" placeholder="https://..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineCategory" class="form-label">Danh mục <span
+                                    class="text-danger">*</span></label>
+                            <select id="medicineCategory" class="form-select" required>
+                                <option value="">Chọn danh mục</option>
+                                <option value="Thuốc kê đơn">Thuốc kê đơn</option>
+                                <option value="Thuốc không kê đơn">Thuốc không kê đơn</option>
+                                <option value="Thực phẩm chức năng">Thực phẩm chức năng</option>
+                            </select>
+                            <div class="invalid-feedback">Vui lòng chọn danh mục.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineUnit" class="form-label">Đơn vị <span
+                                    class="text-danger">*</span></label>
+                            <select id="medicineUnit" class="form-select" required>
+                                <option value="">Chọn đơn vị</option>
+                                <option value="Viên">Viên</option>
+                                <option value="Hộp">Hộp</option>
+                                <option value="Chai">Chai</option>
+                                <option value="Gói">Gói</option>
+                            </select>
+                            <div class="invalid-feedback">Vui lòng chọn đơn vị tính.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineOrigin" class="form-label">Xuất xứ <span
+                                    class="text-danger">*</span></label>
+                            <select id="medicineOrigin" class="form-select" required>
+                                <option value="">Chọn xuất xứ</option>
+                                <option value="Việt Nam">Việt Nam</option>
+                                <option value="Hoa Kỳ">Hoa Kỳ</option>
+                                <option value="Nhật Bản">Nhật Bản</option>
+                                <option value="Hàn Quốc">Hàn Quốc</option>
+                            </select>
+                            <div class="invalid-feedback">Vui lòng chọn xuất xứ.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineQuantity" class="form-label">Số lượng tồn <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="medicineQuantity" min="0"
+                                placeholder="Nhập số lượng tồn" required />
+                            <div class="invalid-feedback">Số lượng tồn phải ≥ 0.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineMinQuantity" class="form-label">Mức tồn tối thiểu <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="medicineMinQuantity" min="0"
+                                placeholder="Nhập mức tối thiểu" required />
+                            <div class="invalid-feedback">Mức tồn tối thiểu phải ≥ 0.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicinePurchasePrice" class="form-label">Giá nhập (₫) <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="medicinePurchasePrice" min="0" step="1000"
+                                placeholder="Ví dụ: 10000" required />
+                            <div class="invalid-feedback">Giá nhập phải > 0.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineSalePrice" class="form-label">Giá bán (₫) <span
+                                    class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="medicineSalePrice" min="0" step="1000"
+                                placeholder="Ví dụ: 15000" required />
+                            <div class="invalid-feedback">Giá bán phải ≥ Giá nhập.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="medicineExpiryDate" class="form-label">Hạn sử dụng <span
+                                    class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="medicineExpiryDate" required />
+                            <div class="invalid-feedback">Hạn sử dụng phải sau ngày hiện tại.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="medicineDescription" class="form-label">Mô tả</label>
+                            <textarea id="medicineDescription" class="form-control" rows="3"
+                                placeholder="Nhập mô tả (không bắt buộc)"></textarea>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- Lưu thông tin -->
+                    <button id="btnSaveMedicine" type="button" class="btn btn-primary btn-modal-action">
+                        Lưu thông tin
+                    </button>
+                    <!-- Thoát -->
+                    <button id="btnCancelModal" type="button" class="btn btn-secondary btn-modal-action"
+                        data-bs-dismiss="modal">
+                        Thoát
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xác nhận xoá -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="confirmDeleteLabel" class="modal-title text-danger">Xác nhận xoá</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa thuốc <strong id="deleteMedicineName"></strong> không?</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button id="btnConfirmDelete" type="button" class="btn btn-danger flex-fill btn-modal-action"
+                        style="max-width:120px;">Xác nhận</button>
+                    <button id="btnCancelDelete" type="button" class="btn btn-secondary flex-fill me-2 btn-modal-action"
+                        style="max-width:120px;" data-bs-dismiss="modal">Huỷ bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thông báo thêm thành công -->
+    <div class="modal fade" id="addSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center p-4">
+                    <i class="fas fa-check-circle fa-2x text-success me-3"></i>
+                    <span>Thêm thuốc thành công!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thông báo cập nhật thành công -->
+    <div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center p-4">
+                    <i class="fas fa-check-circle fa-2x text-success me-3"></i>
+                    <span>Cập nhật thông tin thành công!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thông báo xoá thành công -->
+    <div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center p-4">
+                    <i class="fas fa-check-circle fa-2x text-success me-3"></i>
+                    <span>Xóa thành công!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer (load từ file ngoài) -->
+    <div id="footer"></div>
+
+    <!-- Toast container ở góc trên bên phải -->
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+
+    <!-- Bootstrap 5 JS Bundle + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery 3.6 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Script auth.js (nếu dùng) -->
+    <script src="/utils/auth.js"></script>
+
+    <script>
+        // Dữ liệu mẫu (30 thuốc)
+        let medicines = [
+            { id: 1, code: "MED001", name: "Paracetamol 500mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Việt Nam", quantity: 1000, minQuantity: 100, purchasePrice: 1500, salePrice: 2000, expiryDate: "2025-08-15", description: "Giảm đau, hạ sốt", imageUrl: "" },
+            { id: 2, code: "MED002", name: "Amoxicillin 250mg", category: "Thuốc kê đơn", unit: "Viên", origin: "Hoa Kỳ", quantity: 50, minQuantity: 100, purchasePrice: 2500, salePrice: 3000, expiryDate: "2025-06-10", description: "Kháng sinh phổ rộng", imageUrl: "" },
+            { id: 3, code: "MED003", name: "Vitamin C 1000mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Hàn Quốc", quantity: 500, minQuantity: 50, purchasePrice: 5000, salePrice: 7000, expiryDate: "2025-03-01", description: "Tăng sức đề kháng", imageUrl: "" },
+            { id: 4, code: "MED004", name: "Thuốc Giảm Cảm Sốt", category: "Thuốc kê đơn", unit: "Viên", origin: "Nhật Bản", quantity: 20, minQuantity: 50, purchasePrice: 4000, salePrice: 5000, expiryDate: "2025-02-25", description: "Thuốc kháng viêm", imageUrl: "" },
+            { id: 5, code: "MED005", name: "Ibuprofen 200mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Đức", quantity: 200, minQuantity: 50, purchasePrice: 1800, salePrice: 2300, expiryDate: "2025-07-20", description: "Giảm đau, chống viêm", imageUrl: "" },
+            { id: 6, code: "MED006", name: "Cetirizine 10mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Pháp", quantity: 80, minQuantity: 100, purchasePrice: 1200, salePrice: 1500, expiryDate: "2025-05-30", description: "Chống dị ứng", imageUrl: "" },
+            { id: 7, code: "MED007", name: "Metformin 500mg", category: "Thuốc kê đơn", unit: "Viên", origin: "Ấn Độ", quantity: 300, minQuantity: 200, purchasePrice: 2000, salePrice: 2500, expiryDate: "2025-09-10", description: "Điều trị tiểu đường tuýp 2", imageUrl: "" },
+            { id: 8, code: "MED008", name: "Omeprazole 20mg", category: "Thuốc kê đơn", unit: "Viên", origin: "Hoa Kỳ", quantity: 120, minQuantity: 100, purchasePrice: 2200, salePrice: 2700, expiryDate: "2025-12-01", description: "Giảm tiết axit dạ dày", imageUrl: "" },
+            { id: 9, code: "MED009", name: "Captopril 25mg", category: "Thuốc kê đơn", unit: "Viên", origin: "Anh", quantity: 60, minQuantity: 100, purchasePrice: 3000, salePrice: 3600, expiryDate: "2025-04-15", description: "Hạ huyết áp", imageUrl: "" },
+            { id: 10, code: "MED010", name: "Insulin Basal", category: "Thuốc kê đơn", unit: "Ống", origin: "Đức", quantity: 30, minQuantity: 20, purchasePrice: 20000, salePrice: 24000, expiryDate: "2025-11-30", description: "Kiểm soát đường huyết", imageUrl: "" },
+            { id: 11, code: "MED011", name: "Calcium 600mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Việt Nam", quantity: 400, minQuantity: 100, purchasePrice: 3500, salePrice: 4500, expiryDate: "2025-10-05", description: "Bổ sung canxi", imageUrl: "" },
+            { id: 12, code: "MED012", name: "Zinc 50mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Hàn Quốc", quantity: 90, minQuantity: 50, purchasePrice: 2500, salePrice: 3200, expiryDate: "2025-08-01", description: "Tăng cường miễn dịch", imageUrl: "" },
+            { id: 13, code: "MED013", name: "Fish Oil 1000mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Na Uy", quantity: 150, minQuantity: 100, purchasePrice: 4000, salePrice: 5500, expiryDate: "2025-09-15", description: "Bổ sung Omega-3", imageUrl: "" },
+            { id: 14, code: "MED014", name: "Multivitamin Adult", category: "Thực phẩm chức năng", unit: "Viên", origin: "Mỹ", quantity: 250, minQuantity: 150, purchasePrice: 5000, salePrice: 6500, expiryDate: "2025-07-01", description: "Bổ sung vitamin tổng hợp", imageUrl: "" },
+            { id: 15, code: "MED015", name: "Aspirin 81mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Pháp", quantity: 500, minQuantity: 200, purchasePrice: 1000, salePrice: 1300, expiryDate: "2026-01-10", description: "Ngăn ngừa huyết khối", imageUrl: "" },
+            { id: 16, code: "MED016", name: "Loratadine 10mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Hoa Kỳ", quantity: 40, minQuantity: 100, purchasePrice: 1500, salePrice: 1800, expiryDate: "2025-06-20", description: "Chống dị ứng", imageUrl: "" },
+            { id: 17, code: "MED017", name: "Diclofenac Gel 1%", category: "Thuốc không kê đơn", unit: "Tuýp", origin: "Ấn Độ", quantity: 70, minQuantity: 50, purchasePrice: 3000, salePrice: 3800, expiryDate: "2025-05-25", description: "Giảm đau, chống viêm ngoài da", imageUrl: "" },
+            { id: 18, code: "MED018", name: "Salbutamol Inhaler", category: "Thuốc kê đơn", unit: "Bình", origin: "Anh", quantity: 15, minQuantity: 20, purchasePrice: 80000, salePrice: 95000, expiryDate: "2025-09-05", description: "Giãn phế quản", imageUrl: "" },
+            { id: 19, code: "MED019", name: "Flu Vaccine", category: "Vắc-xin", unit: "Ống", origin: "Mỹ", quantity: 100, minQuantity: 50, purchasePrice: 150000, salePrice: 180000, expiryDate: "2025-10-20", description: "Phòng cúm mùa", imageUrl: "" },
+            { id: 20, code: "MED020", name: "COVID-19 Vaccine", category: "Vắc-xin", unit: "Ống", origin: "Anh", quantity: 60, minQuantity: 50, purchasePrice: 200000, salePrice: 240000, expiryDate: "2025-12-31", description: "Phòng COVID-19", imageUrl: "" },
+            { id: 21, code: "MED021", name: "Probiotic 10B CFU", category: "Thực phẩm chức năng", unit: "Viên", origin: "Đức", quantity: 120, minQuantity: 100, purchasePrice: 6000, salePrice: 7500, expiryDate: "2025-11-10", description: "Hỗ trợ tiêu hóa", imageUrl: "" },
+            { id: 22, code: "MED022", name: "Coenzyme Q10 100mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Nhật Bản", quantity: 80, minQuantity: 80, purchasePrice: 10000, salePrice: 13000, expiryDate: "2025-08-30", description: "Chống oxy hóa", imageUrl: "" },
+            { id: 23, code: "MED023", name: "Melatonin 3mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Mỹ", quantity: 25, minQuantity: 50, purchasePrice: 800, salePrice: 1200, expiryDate: "2025-04-10", description: "Hỗ trợ giấc ngủ", imageUrl: "" },
+            { id: 24, code: "MED024", name: "Ginkgo Biloba 120mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Pháp", quantity: 110, minQuantity: 100, purchasePrice: 7000, salePrice: 9000, expiryDate: "2025-09-25", description: "Hỗ trợ tuần hoàn não", imageUrl: "" },
+            { id: 25, code: "MED025", name: "Magnesium 250mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Ấn Độ", quantity: 45, minQuantity: 50, purchasePrice: 3000, salePrice: 4000, expiryDate: "2025-06-05", description: "Giảm căng cơ, hỗ trợ tim mạch", imageUrl: "" },
+            { id: 26, code: "MED026", name: "Iron Sulfate 60mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Việt Nam", quantity: 90, minQuantity: 100, purchasePrice: 2500, salePrice: 3200, expiryDate: "2025-07-15", description: "Bổ sung sắt", imageUrl: "" },
+            { id: 27, code: "MED027", name: "Vitamin D3 1000 IU", category: "Thực phẩm chức năng", unit: "Viên", origin: "Mỹ", quantity: 200, minQuantity: 150, purchasePrice: 3500, salePrice: 4500, expiryDate: "2025-10-01", description: "Hỗ trợ hấp thu canxi", imageUrl: "" },
+            { id: 28, code: "MED028", name: "Biotin 5mg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Hàn Quốc", quantity: 55, minQuantity: 50, purchasePrice: 5000, salePrice: 6200, expiryDate: "2025-08-05", description: "Tốt cho da tóc móng", imageUrl: "" },
+            { id: 29, code: "MED029", name: "Folic Acid 400mcg", category: "Thực phẩm chức năng", unit: "Viên", origin: "Pháp", quantity: 40, minQuantity: 100, purchasePrice: 2000, salePrice: 2600, expiryDate: "2025-05-01", description: "Phòng thiếu máu, hỗ trợ thai kỳ", imageUrl: "" },
+            { id: 30, code: "MED030", name: "Loperamide 2mg", category: "Thuốc không kê đơn", unit: "Viên", origin: "Ấn Độ", quantity: 150, minQuantity: 100, purchasePrice: 1200, salePrice: 1500, expiryDate: "2025-11-20", description: "Điều trị tiêu chảy", imageUrl: "" }
+        ];
+
+        let currentItems = [];
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let deleteId = null;
+        let editingId = null;
+
+        $(document).ready(function () {
+            // Load layout
+            $("#header").load("/components/header.html");
+            $("#sidebar").load("/components/sidebar.html", () => setTimeout(setupNavigation, 100));
+            $("#footer").load("/components/footer.html");
+
+            // Khởi tạo
+            applyFilter();
+
+            // Event handlers
+            $("#btnFilter").click(applyFilter);
+            $("#btnAddMedicine").click(() => {
+                resetModal();
+                $("#medicineModalLabel").text("Thêm thuốc mới");
+                editingId = null;
+            });
+            $("#btnSaveMedicine").click(saveMedicine);
+            $("#btnConfirmDelete").click(confirmDelete);
+
+            // Reset form khi modal đóng
+            $("#medicineModal").on("hidden.bs.modal", () => {
+                $("#formMedicine")[0].reset();
+                $("#formMedicine").removeClass("was-validated");
+                $("#medicineCode").attr("disabled", false);
+            });
+        });
+
+        // Hiển thị toast tại góc trên–bên phải, rồi callback
+        function showUpdateToast(callback) {
+            const toastHtml = $(`
+                <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="d-flex">
+                    <div class="toast-body">
+                      <i class="fas fa-sync-alt me-2"></i>Cập nhật bảng dữ liệu thuốc.
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                  </div>
+                </div>
+              `);
+            $("#toastContainer").append(toastHtml);
+            const bsToast = new bootstrap.Toast(toastHtml[0], { delay: 1500 });
+            bsToast.show();
+            toastHtml.on("hidden.bs.toast", () => {
+                toastHtml.remove();
+                if (typeof callback === "function") callback();
+            });
+        }
+
+        // Áp dụng filter và show toast rồi render trang đầu
+        function applyFilter() {
+            const kw = $("#filterKeyword").val().trim().toLowerCase();
+            const cat = $("#filterCategory").val();
+            const stat = $("#filterStatus").val();
+
+            currentItems = medicines.filter(item => {
+                if (kw && !item.name.toLowerCase().includes(kw) && !item.code.toLowerCase().includes(kw)) return false;
+                if (cat && item.category !== cat) return false;
+                const diff = Math.ceil((new Date(item.expiryDate) - new Date()) / (1000 * 60 * 60 * 24));
+                let s = "instock";
+                if (diff <= 30) s = "expiring";
+                else if (item.quantity < item.minQuantity) s = "lowstock";
+                if (stat && s !== stat) return false;
+                return true;
+            });
+
+            currentPage = 1;
+            showUpdateToast(renderCurrentPage);
+        }
+
+        // Render dữ liệu cho trang hiện tại
+        function renderCurrentPage() {
+            const start = (currentPage - 1) * rowsPerPage;
+            const pageItems = currentItems.slice(start, start + rowsPerPage);
+            renderTable(pageItems);
+            updateFooter(pageItems.length, currentItems.length);
+            renderPagination();
+        }
+
+        // Vẽ bảng
+        function renderTable(data) {
+            const tbody = $("#medicineTable tbody").empty();
+            if (!data.length) {
+                tbody.append(`
+      <tr>
+        <td colspan="9" class="text-center text-muted">Không có dữ liệu.</td>
+      </tr>
+    `);
+                return;
+            }
+
+            data.forEach(item => {
+                const diff = Math.ceil((new Date(item.expiryDate) - new Date()) / (1000 * 60 * 60 * 24));
+                let cls = "status-instock", txt = "Còn hàng";
+                if (diff <= 30) {
+                    cls = "status-expiring"; txt = "Sắp hết hàng";
+                } else if (item.quantity < item.minQuantity) {
+                    cls = "status-lowstock"; txt = "Tồn kho thấp";
+                }
+
+                const tr = $(`
+      <tr>
+        <td class="text-start">${item.code}</td>
+        <td class="text-start">${item.name}</td>
+        <td class="text-start">${item.category}</td>
+        <td class="text-start">${item.unit}</td>
+        <td class="text-end">${item.quantity}</td>
+        <td class="text-center">${item.expiryDate}</td>
+        <td class="text-end">${item.salePrice.toLocaleString("vi-VN")} ₫</td>
+        <td class="text-start"><span class="${cls}">${txt}</span></td>
+        <td class="text-center">
+          <button class="btn-action btn-detail" title="Xem chi tiết"><i class="fas fa-eye"></i></button>
+          <button class="btn-action btn-edit"   title="Sửa"><i class="fas fa-edit"></i></button>
+          <button class="btn-action btn-delete" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>
+    `);
+
+                tr.find(".btn-detail").click(() => openDetailModal(item.id));
+                tr.find(".btn-edit").click(() => openEditModal(item.id));
+                tr.find(".btn-delete").click(() => openDeleteModal(item.id));
+
+                tbody.append(tr);
+            });
+        }
+
+
+        // Cập nhật footer hiển thị
+        function updateFooter(display, total) {
+            $("#displayCount").text(display);
+            $("#totalCount").text(total);
+        }
+
+        // Vẽ phân trang
+        function renderPagination() {
+            const totalPages = Math.ceil(currentItems.length / rowsPerPage) || 1;
+            const ul = $("#paginationControls").empty();
+
+            // Prev
+            $('<li class="page-item"><a class="page-link" href="#">‹</a></li>')
+                .toggleClass("disabled", currentPage === 1)
+                .appendTo(ul)
+                .click(e => {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        currentPage--;
+                        showUpdateToast(renderCurrentPage);
+                    }
+                });
+
+            // Pages
+            for (let i = 1; i <= totalPages; i++) {
+                $(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`)
+                    .toggleClass("active", i === currentPage)
+                    .appendTo(ul)
+                    .click(e => {
+                        e.preventDefault();
+                        currentPage = i;
+                        showUpdateToast(renderCurrentPage);
+                    });
+            }
+
+            // Next
+            $('<li class="page-item"><a class="page-link" href="#">›</a></li>')
+                .toggleClass("disabled", currentPage === totalPages)
+                .appendTo(ul)
+                .click(e => {
+                    e.preventDefault();
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        showUpdateToast(renderCurrentPage);
+                    }
+                });
+        }
+
+        // Reset form Thêm/Sửa
+        function resetModal() {
+            $("#formMedicine")[0].reset();
+            $("#formMedicine").removeClass("was-validated");
+            $("#medicineId").val("");
+            $("#medicineCode").attr("disabled", false);
+        }
+
+        // Mở modal Sửa
+        function openEditModal(id) {
+            const item = medicines.find(m => m.id === id);
+            if (!item) return;
+            editingId = id;
+            $("#medicineModalLabel").text("Cập nhật thông tin thuốc");
+            $("#medicineId").val(item.id);
+            // … điền các trường tương tự trước đây …
+            $("#medicineModal").modal("show");
+        }
+
+        // Mở modal Chi tiết
+        function openDetailModal(id) {
+            const item = medicines.find(m => m.id === id);
+            if (!item) return;
+            $("#detailModal").remove();
+            const modalHtml = `
+            <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 id="detailModalLabel" class="modal-title">Chi tiết thuốc: ${item.name}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row gy-3">
+                      <div class="col-md-4"><strong>Mã thuốc:</strong> ${item.code}</div>
+                      <div class="col-md-4"><strong>Tên thuốc:</strong> ${item.name}</div>
+                      <div class="col-md-4"><strong>Danh mục:</strong> ${item.category}</div>
+                      <div class="col-md-4"><strong>Đơn vị:</strong> ${item.unit}</div>
+                      <div class="col-md-4"><strong>Xuất xứ:</strong> ${item.origin}</div>
+                      <div class="col-md-4"><strong>Số lượng tồn:</strong> ${item.quantity}</div>
+                      <div class="col-md-4"><strong>Mức tối thiểu:</strong> ${item.minQuantity}</div>
+                      <div class="col-md-4"><strong>Giá nhập:</strong> ${item.purchasePrice.toLocaleString('vi-VN')} ₫</div>
+                      <div class="col-md-4"><strong>Giá bán:</strong> ${item.salePrice.toLocaleString('vi-VN')} ₫</div>
+                      <div class="col-md-4"><strong>Hạn sử dụng:</strong> ${item.expiryDate}</div>
+                      <div class="col-12"><strong>Mô tả:</strong> ${item.description || "<i>Không có</i>"}</div>
+                      <div class="col-12">
+                        <strong>Hình ảnh:</strong><br />
+                        ${item.imageUrl
+                    ? `<img src="${item.imageUrl}" alt="Hình ${item.name}" class="img-fluid rounded" style="max-height:150px;">`
+                    : "<i>Không có</i>"
+                }
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+            $("body").append(modalHtml);
+            new bootstrap.Modal(document.getElementById("detailModal")).show();
+            $("#detailModal").on("hidden.bs.modal", function () {
+                $(this).remove();
+            });
+        }
+
+        // Mở modal Xóa
+        function openDeleteModal(id) {
+            deleteId = id;
+            const it = medicines.find(m => m.id === id);
+            $("#deleteMedicineName").text(it ? it.name : "");
+            $("#confirmDeleteModal").modal("show");
+        }
+
+        // Xác nhận Xóa
+        function confirmDelete() {
+            if (deleteId != null) {
+                medicines = medicines.filter(m => m.id !== deleteId);
+            }
+            $("#confirmDeleteModal").modal("hide");
+            applyFilter();
+            const m = new bootstrap.Modal(document.getElementById("deleteSuccessModal"));
+            m.show(); setTimeout(() => m.hide(), 1500);
+        }
+
+        // Thêm / Cập nhật
+        function saveMedicine() {
+            const f = $("#formMedicine")[0];
+            if (!f.checkValidity()) {
+                $("#formMedicine").addClass("was-validated");
+                return;
+            }
+            const id = $("#medicineId").val();
+            const data = {
+                code: $("#medicineCode").val().trim(),
+                name: $("#medicineName").val().trim(),
+                category: $("#medicineCategory").val(),
+                unit: $("#medicineUnit").val(),
+                origin: $("#medicineOrigin").val(),
+                quantity: +$("#medicineQuantity").val(),
+                minQuantity: +$("#medicineMinQuantity").val(),
+                purchasePrice: +$("#medicinePurchasePrice").val(),
+                salePrice: +$("#medicineSalePrice").val(),
+                expiryDate: $("#medicineExpiryDate").val(),
+                description: $("#medicineDescription").val().trim(),
+                imageUrl: $("#medicineImage").val().trim()
+            };
+            if (data.salePrice < data.purchasePrice) { alert("Giá bán phải ≥ giá nhập."); return; }
+            if (data.expiryDate <= new Date().toISOString().split("T")[0]) { alert("Hạn sử dụng phải sau ngày hiện tại."); return; }
+
+            if (!id) {
+                if (medicines.some(m => m.code === data.code)) { alert("Mã thuốc đã tồn tại."); return; }
+                const nid = medicines.length ? Math.max(...medicines.map(m => m.id)) + 1 : 1;
+                medicines.push({ id: nid, ...data });
+                $("#medicineModal").modal("hide");
+                applyFilter();
+                const m = new bootstrap.Modal(document.getElementById("addSuccessModal"));
+                m.show(); setTimeout(() => m.hide(), 1500);
+            } else {
+                medicines = medicines.map(m => m.id == id ? { id: +id, ...data } : m);
+                $("#medicineModal").modal("hide");
+                applyFilter();
+                const m = new bootstrap.Modal(document.getElementById("updateSuccessModal"));
+                m.show(); setTimeout(() => m.hide(), 1500);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

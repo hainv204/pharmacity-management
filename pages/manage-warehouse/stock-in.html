@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nhập kho - Pharmacity Management</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <!-- Custom CSS (nếu có) -->
+  <link href="/assets/css/style.css" rel="stylesheet" />
+
+  <style>
+    /* Ẩn overflow khi modal dài */
+    .modal-body {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    /* Giới hạn chiều cao cho bảng lịch sử nhập kho */
+    #historyInTableContainer {
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+
+    /* Style cho dòng bảng */
+    .table tbody tr {
+      background-color: #ffffff !important;
+    }
+
+    /* Style cho phản hồi validation custom */
+    .needs-validation .form-control:invalid,
+    .needs-validation .form-select:invalid {
+      border-color: #dc3545;
+    }
+
+    /* Toast container */
+    #toastContainer {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1100;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="header"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-lg-2 d-md-block sidebar-wrapper collapse" id="sidebar"></div>
+
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+        <!-- Tiêu đề -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+          <h1 class="h2">Nhập kho</h1>
+          <small class="text-secondary">Nhập số lượng hàng vào kho và theo dõi lịch sử</small>
+        </div>
+
+        <!-- Form Nhập kho -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <form id="formStockIn" class="row g-3 needs-validation" novalidate>
+              <!-- Chọn thuốc với datalist -->
+              <div class="col-md-4">
+                <label for="inMedicineName" class="form-label">Chọn thuốc <span class="text-danger">*</span></label>
+                <input list="medicineList" id="inMedicineName" class="form-control" placeholder="Nhập tên hoặc mã thuốc"
+                  required />
+                <datalist id="medicineList"></datalist>
+                <div class="invalid-feedback">Vui lòng chọn thuốc hợp lệ.</div>
+              </div>
+
+              <!-- Mã thuốc (readonly) -->
+              <div class="col-md-2">
+                <label for="inMedicineCode" class="form-label">Mã thuốc</label>
+                <input type="text" id="inMedicineCode" class="form-control" readonly />
+              </div>
+
+              <!-- Tồn kho hiện tại (readonly) -->
+              <div class="col-md-2">
+                <label for="inCurrentStock" class="form-label">Tồn kho hiện tại</label>
+                <input type="number" id="inCurrentStock" class="form-control text-end" readonly />
+              </div>
+
+              <!-- Mức tồn tối thiểu (readonly) -->
+              <div class="col-md-2">
+                <label for="inMinStock" class="form-label">Mức tối thiểu</label>
+                <input type="number" id="inMinStock" class="form-control text-end" readonly />
+              </div>
+
+              <!-- Số lượng nhập -->
+              <div class="col-md-2">
+                <label for="inQuantity" class="form-label">Số lượng nhập <span class="text-danger">*</span></label>
+                <input type="number" class="form-control text-end" id="inQuantity" min="1" required />
+                <div class="invalid-feedback">Số lượng phải là số nguyên lớn hơn 0.</div>
+              </div>
+
+              <!-- Ngày nhập -->
+              <div class="col-md-4">
+                <label for="inDate" class="form-label">Ngày nhập <span class="text-danger">*</span></label>
+                <input type="date" class="form-control text-center" id="inDate" required />
+                <div class="invalid-feedback">Ngày nhập không được vượt quá ngày hôm nay.</div>
+              </div>
+
+              <!-- Nguồn cung cấp -->
+              <div class="col-md-4">
+                <label for="inSupplier" class="form-label">Nguồn cung cấp <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-start" id="inSupplier" placeholder="Nhập tên nhà cung cấp"
+                  required />
+                <div class="invalid-feedback">Vui lòng nhập tên nhà cung cấp.</div>
+              </div>
+
+              <!-- Ghi chú -->
+              <div class="col-md-4">
+                <label for="inNotes" class="form-label">Ghi chú</label>
+                <textarea id="inNotes" class="form-control text-start" rows="2"
+                  placeholder="Ghi chú thêm (không bắt buộc)"></textarea>
+              </div>
+
+              <!-- Nút lưu -->
+              <div class="col-12 text-end">
+                <button id="btnSaveStockIn" type="submit" class="btn btn-primary">
+                  <i class="fas fa-check"></i> Xác nhận nhập kho
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Lịch sử Nhập kho gần nhất -->
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h5 class="mb-0">Lịch sử nhập kho gần nhất</h5>
+          </div>
+          <div class="card-body">
+            <div id="historyInTableContainer" class="table-responsive">
+              <table id="historyInTable" class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="text-start" style="width: 10%;">Mã thuốc</th>
+                    <th class="text-start" style="width: 25%;">Tên thuốc</th>
+                    <th class="text-end" style="width: 10%;">Số lượng</th>
+                    <th class="text-start" style="width: 20%;">Nguồn cung cấp</th>
+                    <th class="text-center" style="width: 15%;">Ngày nhập</th>
+                    <th class="text-start" style="width: 20%;">Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="mt-2 text-end text-secondary">
+              <small>Hiển thị <span id="historyCount">0</span> bản ghi</small>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Toast container -->
+  <div id="toastContainer"></div>
+
+  <!-- Bootstrap 5 JS Bundle + Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery 3.6 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Script auth.js (nếu dùng) -->
+  <script src="/utils/auth.js"></script>
+
+  <script>
+    // Dữ liệu tạm lưu danh sách thuốc (sẽ thay bằng call API thực tế).
+    let medicines = [
+      { id: 1, code: "MED001", name: "Paracetamol 500mg", currentStock: 100, minStock: 20 },
+      { id: 2, code: "MED002", name: "Amoxicillin 250mg", currentStock: 50, minStock: 30 },
+      { id: 3, code: "MED003", name: "Vitamin C 1000mg", currentStock: 200, minStock: 50 },
+      { id: 4, code: "MED004", name: "Thuốc Giảm Cảm Sốt", currentStock: 10, minStock: 20 }
+    ];
+
+    // Danh sách lịch sử nhập kho (tạm)
+    let historyIn = [];
+
+    $(document).ready(function () {
+      // Load header, sidebar, footer
+      $("#header").load("/components/header.html");
+      $("#sidebar").load("/components/sidebar.html", () => setTimeout(setupNavigation, 100));
+      $("#footer").load("/components/footer.html");
+
+      populateMedicineDatalist();
+
+      // Ngày hôm nay
+      const today = new Date().toISOString().split("T")[0];
+      $("#inDate").val(today).attr("max", today);
+
+      // Khi chọn thuốc
+      $("#inMedicineName").on("input change", fillMedicineDetails);
+
+      // Submit
+      $("#formStockIn").on("submit", function (e) {
+        e.preventDefault();
+        if (!this.checkValidity()) {
+          $(this).addClass("was-validated");
+          return;
+        }
+        saveStockIn();
+      });
+    });
+
+    function populateMedicineDatalist() {
+      const $list = $("#medicineList").empty();
+      medicines.forEach(m => {
+        $list.append(`<option value="${m.code} - ${m.name}">`);
+      });
+    }
+
+    function fillMedicineDetails() {
+      const val = $("#inMedicineName").val().trim();
+      const med = medicines.find(m => `${m.code} - ${m.name}` === val);
+      if (med) {
+        $("#inMedicineCode").val(med.code);
+        $("#inCurrentStock").val(med.currentStock);
+        $("#inMinStock").val(med.minStock);
+      } else {
+        $("#inMedicineCode, #inCurrentStock, #inMinStock").val("");
+      }
+    }
+
+    function showStockInToast(callback) {
+      const toast = $(`
+        <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              <i class="fas fa-check-circle me-2"></i>Nhập kho thành công!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+          </div>
+        </div>
+      `);
+      $("#toastContainer").append(toast);
+      const bsToast = new bootstrap.Toast(toast[0], { delay: 1500 });
+      bsToast.show();
+      toast.on('hidden.bs.toast', () => {
+        toast.remove();
+        callback();
+      });
+    }
+
+    function saveStockIn() {
+      const full = $("#inMedicineName").val().trim();
+      const med = medicines.find(m => `${m.code} - ${m.name}` === full);
+      const qty = parseInt($("#inQuantity").val(), 10);
+      const dateIn = $("#inDate").val();
+      const supplier = $("#inSupplier").val().trim();
+      const notes = $("#inNotes").val().trim();
+      const today = new Date().toISOString().split("T")[0];
+
+      if (!med) { alert("Vui lòng chọn thuốc hợp lệ."); return; }
+      if (dateIn > today) { alert("Ngày nhập không được vượt quá hôm nay."); return; }
+      if (qty <= 0) { alert("Số lượng phải > 0."); return; }
+
+      med.currentStock += qty;
+      historyIn.unshift({ code: med.code, name: med.name, quantity: qty, supplier, dateIn, notes });
+
+      // Hiển thị toast, sau đó cập nhật lại bảng
+      showStockInToast(renderHistoryIn);
+
+      // Reset form
+      $("#formStockIn")[0].reset();
+      $("#formStockIn").removeClass("was-validated");
+      $("#inDate").val(today);
+      $("#inMedicineCode, #inCurrentStock, #inMinStock").val("");
+    }
+
+    function renderHistoryIn() {
+      const $tbody = $("#historyInTable tbody").empty();
+      historyIn.forEach(item => {
+        $tbody.append(`
+          <tr>
+            <td class="text-start">${item.code}</td>
+            <td class="text-start">${item.name}</td>
+            <td class="text-end">${item.quantity}</td>
+            <td class="text-start">${item.supplier}</td>
+            <td class="text-center">${item.dateIn}</td>
+            <td class="text-start">${item.notes || ""}</td>
+          </tr>
+        `);
+      });
+      $("#historyCount").text(historyIn.length);
+    }
+  </script>
+</body>
+
+</html>
