@@ -644,3 +644,11 @@
     border-color    : #dee2e6;
     color           : #212529;
 }
+
+#cancelInvoiceConfirmModal .modal-footer .btn,
+#cancelChangesConfirmModal .modal-footer .btn {
+    min-width : 165px;
+    width     : 165px;
+    text-align: center;
+    padding   : 0.5rem 1.5rem;
+}

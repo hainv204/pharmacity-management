@@ -3,12 +3,12 @@ function addMedicineToEditTable(id, name, price, quantity, targetListId = 'medic
     // Kiểm tra mã thuốc đã tồn tại chưa
     const existingRow = $('#' + targetListId).find(`tr#${id}`);
     if (existingRow.length > 0) {
-        showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Mã thuốc đã tồn tại trong danh sách!', 'error');
+        window.showToast('<i class="fas fa-info-circle me-2"></i> Mã thuốc đã tồn tại trong danh sách!', 'info');
         return false;
     }
     // Kiểm tra mã thuốc có tồn tại trong cơ sở dữ liệu không
     if (!id || id.length < 3) {
-        showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong cơ sở dữ liệu', 'error');
+        window.showToast('<i class="fas fa-times-circle me-2"></i> Thuốc không tồn tại trong cơ sở dữ liệu', 'error');
         return false;
     }
     // Tính thành tiền
@@ -40,7 +40,7 @@ function addMedicineToEditTable(id, name, price, quantity, targetListId = 'medic
         updateEditInvoiceTotals();
     }
     // Hiển thị thông báo thành công
-    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã thêm thuốc vào hoá đơn thành công!');
+    window.showToast('<i class="fas fa-check-circle me-2"></i> Thêm thuốc vào hoá đơn thành công!');
 }
 
 // Cập nhật tổng tiền khi chỉnh sửa
@@ -145,6 +145,13 @@ function completeInvoice(paymentMethod) {
         updateInvoiceStatusAfterPayment(editInvoiceId, paymentMethod);
         // Xóa ID hóa đơn đã lưu
         sessionStorage.removeItem('currentEditInvoiceId');
+        // Đóng modal thanh toán
+        $('#paymentModal, #cashPaymentModal, #transferPaymentModal, #momoPaymentModal').modal('hide');
+
+        // Đóng modal chỉnh sửa sau khi thanh toán
+        setTimeout(function () {
+            $('#editInvoiceModal').modal('hide');
+        }, 300);
     } else {
         // Lưu thông tin hóa đơn vào cơ sở dữ liệu (trong thực tế)
 
@@ -188,7 +195,13 @@ function completeInvoice(paymentMethod) {
         </tr>
     `;
         $('#invoiceTable tbody').prepend(newRow);
+        // Đóng modal thanh toán
+        $('#paymentModal, #cashPaymentModal, #transferPaymentModal, #momoPaymentModal').modal('hide');
 
+        // Đóng modal lập hóa đơn sau khi thanh toán
+        setTimeout(function () {
+            $('#createInvoiceModal').modal('hide');
+        }, 300);
         // Hiển thị thông báo thành công
         const methodText = {
             'cash': 'tiền mặt',
@@ -197,14 +210,19 @@ function completeInvoice(paymentMethod) {
             'momo': 'ví MoMo'
         };
         setTimeout(function () {
-            window.showToast(`<i class="fas fa-check-circle text-success me-2"></i> Lập hóa đơn thành công! Thanh toán bằng ${methodText[paymentMethod]}.`);
+            window.showToast('<i class="fas fa-check-circle me-2"></i> <b>Lập hóa đơn thành công!</b><br>Thanh toán bằng ' + methodText[paymentMethod] + '.');
         }, 300);
 
         // Reset form lập hóa đơn cho lần sử dụng tiếp theo
         resetInvoiceForm();
     }
-    // Đóng modal lập hóa đơn nếu đang mở
-    $('#createInvoiceModal').modal('hide');
+    // Đóng modal thanh toán
+    $('#paymentModal, #cashPaymentModal, #transferPaymentModal, #momoPaymentModal').modal('hide');
+
+    // Đóng modal lập hóa đơn sau khi thanh toán
+    setTimeout(function () {
+        $('#createInvoiceModal').modal('hide');
+    }, 300);
 }
 
 // Thêm hàm showToast toàn cục để có thể truy cập từ bất kỳ đâu
@@ -340,7 +358,7 @@ function validateInvoiceForm() {
     // Kiểm tra danh sách thuốc
     if ($('#medicineList tr').length === 0) {
         // Thông báo toast
-        showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Hóa đơn phải có ít nhất một sản phẩm', 'error');
+        showToast('<i class="fas fa-info-circle me-2"></i> Hoá đơn phải có ít nhất một sản phẩm!', 'info');
         isValid = false;
     }
 
@@ -610,7 +628,7 @@ function completeTransferPayment() {
 
     // Kiểm tra đã tick xác nhận hoàn tất chuyển khoản chưa
     if (!$('#transferCompleted').is(':checked')) {
-        showToast('Vui lòng xác nhận tôi đã hoàn tất chuyển khoản!', 'error');
+        showToast('<i class="fas fa-info-circle me-2"></i> Vui lòng tích chọn "Tôi đã hoàn tất quá trình chuyển khoản"', 'info');
         return;
     }
 
@@ -883,7 +901,6 @@ function initializeInvoiceEvents() {
     $(document).on('click', '#proceedToPaymentBtn', function () {
         processEditInvoicePayment();
     });
-    // console.log("Đang khởi tạo các sự kiện cho quản lý hóa đơn...");
 
     // Khởi tạo tooltip
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
@@ -1065,7 +1082,7 @@ function initializeInvoiceEvents() {
             });
         } else {
             $('#deleteInvoiceConfirmModal').modal('hide');
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Không tìm thấy dòng để xoá!', 'error');
+            showToast('<i class="fas fa-times-circle me-2"></i> Không tìm thấy dòng để xoá!', 'error');
         }
     });
     // Xử lý khi thay đổi phương thức thanh toán
@@ -1086,7 +1103,8 @@ function initializeInvoiceEvents() {
         }
 
         const paymentMethod = $('#paymentMethodSelect').val();
-
+        // Lưu nguồn gốc là modal lập hóa đơn
+        sourceModal = '#createInvoiceModal';
         // Nếu thanh toán bằng thẻ ngân hàng, mở modal thanh toán
         if (paymentMethod === 'card') {
             // Hiển thị thông tin tổng tiền trong modal thanh toán
@@ -1094,19 +1112,15 @@ function initializeInvoiceEvents() {
             $('#paymentTotalAmount').text(totalAmount);
 
             // Mở modal thanh toán
-            $('#createInvoiceModal').modal('hide');
             $('#paymentModal').modal('show');
         } else if (paymentMethod === 'cash') {
             // Thanh toán tiền mặt
-            $('#createInvoiceModal').modal('hide');
             $('#cashPaymentModal').modal('show');
         } else if (paymentMethod === 'transfer') {
             // Thanh toán chuyển khoản
-            $('#createInvoiceModal').modal('hide');
             $('#transferPaymentModal').modal('show');
         } else if (paymentMethod === 'momo') {
             // Thanh toán MoMo
-            $('#createInvoiceModal').modal('hide');
             $('#momoPaymentModal').modal('show');
         }
     });
@@ -1154,7 +1168,7 @@ function initializeInvoiceEvents() {
 
         // Kiểm tra đã tick xác nhận hoàn tất chuyển khoản chưa
         if (!$('#transferCompleted').is(':checked')) {
-            showToast('Vui lòng xác nhận tôi đã hoàn tất chuyển khoản!', 'error');
+            showToast('<i class="fas fa-info-circle me-2"></i> Vui lòng tích chọn "Tôi đã hoàn tất quá trình chuyển khoản"', 'info');
             return;
         }
 
@@ -1190,7 +1204,7 @@ function initializeInvoiceEvents() {
         const isMedicineExist = searchValue.length > 2;
 
         if (!isMedicineExist) {
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong hệ thống!', 'error');
+            showToast('<i class="fas fa-exclamation-circle me-2"></i> Thuốc không tồn tại trong cơ sở dữ liệu!', 'error');
             return;
         }
 
@@ -1203,7 +1217,7 @@ function initializeInvoiceEvents() {
         const existingRow = $('#medicineList').find(`tr[id="${medicineId}"]`);
 
         if (existingRow.length > 0) {
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc này đã có trong đơn hàng!', 'error');
+            showToast('<i class="fas fa-exclamation-circle me-2"></i> Mã thuốc đã tồn tại trong danh sách!', 'info');
             return;
         }
 
@@ -1217,7 +1231,7 @@ function initializeInvoiceEvents() {
         updateEditTotals();
 
         // Hiển thị thông báo
-        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã thêm thuốc vào đơn hàng!');
+        showToast('<i class="fas fa-check-circle text-success me-2"></i> Thêm thuốc vào hoá đơn thành công!');
     });
 
     // Xử lý khi thay đổi số lượng thuốc
@@ -1272,14 +1286,6 @@ function initializeInvoiceEvents() {
         printInvoice();
     });
 
-    // Nút "Quay lại" trong các modal thanh toán
-    $(document).on('click', '#paymentModal .btn-light, #cashPaymentModal .btn-light, #transferPaymentModal .btn-light, #momoPaymentModal .btn-light', function (e) {
-        e.preventDefault();
-        const modalId = $(this).closest('.modal').attr('id');
-        $(`#${modalId}`).modal('hide');
-        $('#createInvoiceModal').modal('show');
-    });
-
     console.log("Khởi tạo sự kiện thành công!");
     $(document).off('change', '#editPaymentMethodSelect').on('change', '#editPaymentMethodSelect', function () {
         const selectedOption = $(this).find('option:selected');
@@ -1290,33 +1296,45 @@ function initializeInvoiceEvents() {
         $('#editPaymentMethodIcon').removeClass().addClass(`fas ${iconClass} ${textColor}`);
     });
     // Xử lý khi nhấn nút áp dụng bộ lọc
-    $('#applyFilter').click(function () {
-        // Xóa tất cả thông báo lỗi cũ
+    $('#applyFilter').off('click').on('click', function () {
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
-
-        // Kiểm tra điều kiện lọc
-        const startDate = new Date($('#startDate').val());
-        const endDate = new Date($('#endDate').val());
-
-        // Kiểm tra ngày bắt đầu không lớn hơn ngày kết thúc
-        if ($('#startDate').val() && $('#endDate').val() && startDate > endDate) {
-            // Phản hồi trực tiếp
-            addInvalidFeedback($('#startDate'), "Thời gian bắt đầu không được lớn hơn thời gian kết thúc");
+        // Đóng modal ngay khi nhấn Lọc
+        $('#filterModal').modal('hide');
+        // Lấy giá trị từ modal
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
+        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+            addInvalidFeedback($('#startDate'), "Thời gian bắt đầu không lớn hơn thời gian kết thúc");
             return;
         }
-
-        // Giả lập áp dụng bộ lọc
-        $('#filterModal').modal('hide');
-
-        // Hiển thị thông báo thành công
-        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng bộ lọc thành công!');
-
-        // Giả lập không tìm thấy hóa đơn phù hợp
-        if (Math.random() < 0.2) { // 20% khả năng không tìm thấy kết quả
-            setTimeout(() => {
-                showToast('<i class="fas fa-exclamation-circle text-warning me-2"></i> Thông tin hoá đơn không tồn tại', 'error');
-            }, 1000);
+        // Trạng thái (checkbox, mapping về đúng text)
+        let statuses = [];
+        if ($('#statusPaid').is(':checked')) statuses.push('Đã thanh toán');
+        if ($('#statusProcessing').is(':checked')) statuses.push('Đang xử lý');
+        if ($('#statusCancelled').is(':checked')) statuses.push('Đã huỷ');
+        // Khách hàng
+        let customer = $('#customerFilter').val() ? $('#customerFilter').val().toLowerCase() : '';
+        // Tổng tiền
+        const minAmount = $('#minAmount').val() ? parseInt($('#minAmount').val()) : null;
+        const maxAmount = $('#maxAmount').val() ? parseInt($('#maxAmount').val()) : null;
+        // Hình thức thanh toán
+        let payment = $('#paymentFilter').val();
+        if (payment === '') payment = '';
+        const conditions = {
+            invoiceId: '',
+            startDate: startDate || null,
+            endDate: endDate || null,
+            statuses,
+            customer,
+            minAmount,
+            maxAmount,
+            payment
+        };
+        if (filterInvoices(conditions)) {
+            showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng bộ lọc thành công!');
+        } else {
+            showToast('<i class="fas fa-times-circle me-2"></i> Thông tin hoá đơn không tồn tại', 'error');
         }
     });
     // Xử lý thêm thuốc trong modal chỉnh sửa
@@ -1330,7 +1348,7 @@ function initializeInvoiceEvents() {
         // Giả lập kiểm tra thuốc có tồn tại trong hệ thống không
         const isMedicineExist = searchValue.length > 2;
         if (!isMedicineExist) {
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong hệ thống!', 'error');
+            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc không tồn tại trong cơ sở dữ liệu', 'error');
             return;
         }
         // Giả lập tìm kiếm thuốc từ API
@@ -1340,7 +1358,7 @@ function initializeInvoiceEvents() {
         // Kiểm tra thuốc đã tồn tại trong đơn hàng chưa
         const existingRow = $('#editMedicineList').find(`tr[id="${medicineId}"]`);
         if (existingRow.length > 0) {
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Thuốc này đã có trong đơn hàng!', 'error');
+            showToast('<i class="fas fa-exclamation-circle me-2"></i> Mã thuốc đã tồn tại trong danh sách', 'info');
             return;
         }
         // Thêm thuốc vào bảng chỉnh sửa
@@ -1356,7 +1374,7 @@ function initializeInvoiceEvents() {
 
         // Kiểm tra số lượng thuốc còn lại
         if ($('#medicineList tr').length <= 1) {
-            showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Hóa đơn phải có ít nhất một sản phẩm', 'error');
+            showToast('<i class="fas fa-info-circle me-2"></i> Hoá đơn phải có ít nhất một sản phẩm!', 'info');
             return;
         }
 
@@ -1367,7 +1385,7 @@ function initializeInvoiceEvents() {
         updateEditTotals();
 
         // Hiển thị thông báo
-        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xóa thuốc khỏi đơn hàng!');
+        showToast('<i class="fas fa-times-circle me-2"></i> Đã xoá thuốc khỏi đơn hàng!', 'error');
     });
     $('#cardNumber').on('input', function () {
         // Chỉ cho nhập số
@@ -1442,12 +1460,12 @@ function updateEditInvoiceTotals() {
 $(document).on('click', '#editMedicineList .delMedicine', function () {
     const row = $(this).closest('tr');
     if ($('#editMedicineList tr').length <= 1) {
-        showToast('<i class="fas fa-exclamation-circle text-danger me-2"></i> Hóa đơn phải có ít nhất một sản phẩm', 'error');
+        showToast('<i class="fas fa-info-circle me-2"></i> Hoá đơn phải có ít nhất một sản phẩm!', 'info');
         return;
     }
     row.remove();
     updateEditInvoiceTotals(); // Cập nhật tổng tiền
-    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xóa thuốc khỏi hoá đơn!');
+    showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã xóa thuốc khỏi đơn hàng!');
 });
 
 // Thay đổi số lượng trong modal chỉnh sửa
@@ -1508,6 +1526,7 @@ function formatDateTimeVN(datetimeStr) {
 
 // Khi mở modal lập hoá đơn, set mặc định ngày lập là thời gian hiện tại
 $(document).on('show.bs.modal', '#createInvoiceModal', function () {
+    sourceModal = '#createInvoiceModal';
     const now = new Date();
     const pad = n => n.toString().padStart(2, '0');
     const local = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
@@ -1515,21 +1534,23 @@ $(document).on('show.bs.modal', '#createInvoiceModal', function () {
 });
 // Khi mở modal chỉnh sửa hoá đơn, cũng set ngày lập hiện tại (hoặc lấy từ dữ liệu nếu có)
 $(document).on('show.bs.modal', '#editInvoiceModal', function () {
+    sourceModal = '#editInvoiceModal';
     const now = new Date();
     const pad = n => n.toString().padStart(2, '0');
     const local = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
     $('#editInvoiceDate').val(local);
 });
 
-
+// Lưu nguồn gốc khi mở modal thanh toán
+let sourceModal = '#createInvoiceModal'; // Mặc định là modal lập hóa đơn
 // Chỉnh sửa chi tiết hoá đơn
 function processEditInvoicePayment() {
     // Lấy thông tin cần thiết từ modal chỉnh sửa
     const invoiceId = $('#editInvoiceId').text().trim();
     const paymentMethod = $('#paymentMethodSelect').val();
 
-    // Đóng modal chỉnh sửa
-    $('#editInvoiceModal').modal('hide');
+    // Lưu nguồn gốc là modal chỉnh sửa hóa đơn
+    sourceModal = '#editInvoiceModal';
 
     // Hiển thị modal thanh toán tương ứng với phương thức thanh toán
     if (paymentMethod === 'card') {
@@ -1554,6 +1575,19 @@ function processEditInvoicePayment() {
     // Lưu ID hóa đơn đang được thanh toán để sử dụng sau khi thanh toán
     sessionStorage.setItem('currentEditInvoiceId', invoiceId);
 }
+
+// Sửa đổi xử lý khi ấn nút "Quay lại" trong các modal thanh toán
+$(document).on('click', '#paymentModal .btn-light, #cashPaymentModal .btn-light, #transferPaymentModal .btn-light, #momoPaymentModal .btn-light', function (e) {
+    e.preventDefault();
+    const modalId = $(this).closest('.modal').attr('id');
+    $(`#${modalId}`).modal('hide');
+    // Reset nguồn gốc về mặc định sau khi quay lại
+    if (sourceModal === '#editInvoiceModal') {
+        // Không reset sourceModal ở đây để giữ nguyên giá trị nếu người dùng mở lại modal thanh toán
+    } else {
+        sourceModal = '#createInvoiceModal'; // Reset về mặc định chỉ khi không phải từ modal chỉnh sửa
+    }
+});
 
 // Hàm cập nhật trạng thái hóa đơn sau khi thanh toán
 function updateInvoiceStatusAfterPayment(invoiceId, paymentMethod) {
@@ -1583,6 +1617,290 @@ function updateInvoiceStatusAfterPayment(invoiceId, paymentMethod) {
             'momo': 'ví MoMo'
         };
 
-        showToast(`<i class="fas fa-check-circle text-success me-2"></i> Thanh toán hóa đơn ${invoiceId} thành công bằng ${methodText[paymentMethod]}!`);
+        showToast(`<i class="fas fa-check-circle text-success me-2"></i> Lập hoá đơn thành công! Thanh toán bằng ${methodText[paymentMethod]}!`);
     }
 }
+
+// Đảm bảo các modal xác nhận được tải
+if ($('#cancelInvoiceConfirmModal').length === 0) {
+    $.get('/components/invoice/cancel-invoice-modals.html', function (data) {
+        $('body').append(data);
+    });
+}
+if ($('#cancelChangesConfirmModal').length === 0) {
+    $.get('/components/invoice/cancel-changes-modals.html', function (data) {
+        $('body').append(data);
+    });
+}
+
+// Kiểm tra xem người dùng đã nhập dữ liệu gì chưa trong form lập hoá đơn
+function hasCreateInvoiceData() {
+    if ($('#medicineList tr').length > 0) return true;
+    if ($('#customerName').val().trim() !== '') return true;
+    if ($('#customerPhone').val().trim() !== '') return true;
+    if ($('#customerEmail').val().trim() !== '') return true;
+    if ($('#invoiceNotes').val().trim() !== '') return true;
+    if ($('#customerGender').val() !== '') return true;
+    if ($('#newCustomer').is(':checked')) return true;
+    if ($('#discountSelect').val() !== '') return true;
+    return false;
+}
+
+// Kiểm tra xem người dùng đã thay đổi dữ liệu gì chưa trong form chỉnh sửa hoá đơn
+function hasEditInvoiceData() {
+    // Kiểm tra nếu số lượng thuốc đã thay đổi
+    const quantityChanged = $('#editMedicineList .quantity-input').toArray().some(input => {
+        return $(input).data('original-value') != $(input).val();
+    });
+    if (quantityChanged) return true;
+    // Kiểm tra nếu thuốc đã được thêm hoặc xoá
+    const originalMedicineCount = $('#editInvoiceModal').data('original-medicine-count');
+    const currentMedicineCount = $('#editMedicineList tr').length;
+    if (originalMedicineCount != currentMedicineCount) return true;
+    // Kiểm tra nếu ngày lập đã thay đổi
+    const originalDate = $('#editInvoiceModal').data('original-date');
+    const currentDate = $('#invoiceDate').val();
+    if (originalDate != currentDate) return true;
+    // Kiểm tra nếu phương thức thanh toán đã thay đổi
+    const originalPayment = $('#editInvoiceModal').data('original-payment');
+    const currentPayment = $('#paymentMethodSelect').val();
+    if (originalPayment != currentPayment) return true;
+    // Kiểm tra nếu ưu đãi đã thay đổi
+    const originalDiscount = $('#editInvoiceModal').data('original-discount');
+    const currentDiscount = $('#discountSelect').val();
+    if (originalDiscount != currentDiscount) return true;
+    // Kiểm tra ghi chú đã thay đổi
+    const originalNotes = $('#editInvoiceModal').data('original-notes');
+    const currentNotes = $('#invoiceNotes').val().trim();
+    if (originalNotes != currentNotes) return true;
+    return false;
+}
+
+// Khi mở modal chỉnh sửa, lưu lại giá trị gốc để so sánh thay đổi
+$(document).on('show.bs.modal', '#editInvoiceModal', function () {
+    $('#editMedicineList .quantity-input').each(function () {
+        $(this).data('original-value', $(this).val());
+    });
+    $('#editInvoiceModal').data('original-medicine-count', $('#editMedicineList tr').length);
+    $('#editInvoiceModal').data('original-date', $('#invoiceDate').val());
+    $('#editInvoiceModal').data('original-payment', $('#paymentMethodSelect').val());
+    $('#editInvoiceModal').data('original-discount', $('#discountSelect').val());
+    $('#editInvoiceModal').data('original-notes', $('#invoiceNotes').val().trim());
+});
+
+// --- LẬP HOÁ ĐƠN ---
+// Xử lý khi người dùng nhấn nút "Huỷ hoá đơn" trong modal lập hoá đơn
+$(document).on('click', '#cancelInvoiceBtn', function (e) {
+    if (hasCreateInvoiceData()) {
+        $('#cancelInvoiceConfirmModal').modal('show');
+    } else {
+        $('#createInvoiceModal').modal('hide');
+    }
+});
+// Xử lý khi người dùng xác nhận huỷ hoá đơn
+$(document).on('click', '#confirmCancelInvoiceBtn', function () {
+    $('#cancelInvoiceConfirmModal').modal('hide');
+    setTimeout(function () {
+        $('#createInvoiceModal').modal('hide');
+    }, 300);
+    setTimeout(function () {
+        resetInvoiceForm();
+    }, 500);
+});
+// Xử lý khi người dùng chọn "Huỷ bỏ" trong modal xác nhận huỷ hoá đơn
+$(document).on('click', '#cancelInvoiceConfirmModal .btn-light', function () {
+    $('#cancelInvoiceConfirmModal').modal('hide');
+});
+
+// --- CHỈNH SỬA HOÁ ĐƠN ---
+// Xử lý khi người dùng nhấn nút "Huỷ" trong modal chỉnh sửa
+$(document).on('click', '#cancelEdit', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (hasEditInvoiceData()) {
+        $('#cancelChangesConfirmModal').modal('show');
+    } else {
+        $('#editInvoiceModal').modal('hide');
+    }
+});
+// Xử lý khi người dùng xác nhận huỷ thay đổi
+$(document).on('click', '#confirmCancelChangesBtn', function () {
+    $('#cancelChangesConfirmModal').modal('hide');
+    setTimeout(function () {
+        $('#editInvoiceModal').modal('hide');
+    }, 300);
+});
+// Xử lý khi người dùng chọn "Huỷ bỏ" trong modal xác nhận huỷ thay đổi
+$(document).on('click', '#cancelChangesConfirmModal .btn-light', function () {
+    $('#cancelChangesConfirmModal').modal('hide');
+});
+
+// Ẩn/hiện nút in hoá đơn theo tab trong modal chi tiết hoá đơn
+$(document).on('shown.bs.tab', '#invoiceDetailTabs button[data-bs-toggle="tab"]', function (e) {
+    const target = $(e.target).attr('data-bs-target');
+    if (target === '#details') {
+        $('#printInvoiceBtn').show();
+    } else {
+        $('#printInvoiceBtn').hide();
+    }
+});
+// Khi mở modal chi tiết, đảm bảo nút in hoá đơn đúng trạng thái
+$(document).on('show.bs.modal', '#invoiceDetailModal', function () {
+    if ($('#invoiceDetailTabs .nav-link.active').attr('data-bs-target') === '#details') {
+        $('#printInvoiceBtn').show();
+    } else {
+        $('#printInvoiceBtn').hide();
+    }
+});
+
+// --- HÀM LỌC HOÁ ĐƠN CHUẨN HOÁ ---
+// Helper: Chuyển yyyy-mm-dd hoặc dd/mm/yyyy về số nguyên yyyymmdd
+function parseDateToInt(dateStr) {
+    if (!dateStr) return null;
+    // Nếu có cả giờ phút, chỉ lấy phần ngày
+    if (dateStr.includes(' ')) dateStr = dateStr.split(' ')[0];
+    if (dateStr.includes('-')) {
+        // yyyy-mm-dd
+        const [y, m, d] = dateStr.split('-');
+        return parseInt(`${y}${m.padStart(2, '0')}${d.padStart(2, '0')}`);
+    } else if (dateStr.includes('/')) {
+        // dd/mm/yyyy
+        const [d, m, y] = dateStr.split('/');
+        return parseInt(`${y}${m.padStart(2, '0')}${d.padStart(2, '0')}`);
+    }
+    return null;
+}
+function filterInvoices(conditions) {
+    let found = false;
+    let visibleCount = 0;
+    $('#invoiceTable tbody tr').each(function () {
+        const $row = $(this);
+        if ($row.hasClass('no-data-row')) return;
+        let show = true;
+        // Mã hóa đơn
+        if (conditions.invoiceId && !$row.find('td:eq(0)').text().toLowerCase().includes(conditions.invoiceId)) show = false;
+        // Ngày lập
+        if (conditions.startDate || conditions.endDate) {
+            const dateText = $row.find('td:eq(1)').text().trim();
+            const [datePart] = dateText.split(' ');
+            const rowDateInt = parseDateToInt(datePart);
+            if (rowDateInt === null || isNaN(rowDateInt)) return; // Bỏ qua dòng lỗi ngày
+            if (conditions.startDate) {
+                const startDateInt = parseDateToInt(conditions.startDate);
+                if (rowDateInt < startDateInt) show = false;
+            }
+            if (conditions.endDate) {
+                const endDateInt = parseDateToInt(conditions.endDate);
+                if (rowDateInt > endDateInt) show = false;
+            }
+        }
+        // Trạng thái (nhiều lựa chọn)
+        if (conditions.statuses && conditions.statuses.length > 0) {
+            const statusText = $row.find('td:eq(5)').text().trim().toLowerCase();
+            const statusClass = $row.find('td:eq(5) span').attr('class') || '';
+
+            let match = false;
+            for (const st of conditions.statuses) {
+                // Kiểm tra dựa trên cả text và class để đảm bảo chính xác
+                if (statusText.includes(st.toLowerCase())) {
+                    match = true;
+                    break;
+                }
+
+                // Kiểm tra thêm dựa vào class
+                if (st === 'Đã thanh toán' && statusClass.includes('text-success')) {
+                    match = true;
+                    break;
+                } else if (st === 'Đang xử lý' && statusClass.includes('text-warning')) {
+                    match = true;
+                    break;
+                } else if (st === 'Đã huỷ' && statusClass.includes('text-danger')) {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match) show = false;
+        }
+        // Khách hàng
+        if (conditions.customer && conditions.customer !== '' && conditions.customer !== 'all') {
+            const customerText = $row.find('td:eq(2)').text().toLowerCase();
+            if (!customerText.includes(conditions.customer)) show = false;
+        }
+        // Tổng tiền
+        if (conditions.minAmount !== null || conditions.maxAmount !== null) {
+            let totalText = $row.find('td:eq(3)').text();
+            if (totalText.includes('span')) totalText = $row.find('td:eq(3) span').text();
+            const total = parseInt((totalText || '').replace(/[^\d]/g, '')) || 0;
+            if (conditions.minAmount !== null && total < conditions.minAmount) show = false;
+            if (conditions.maxAmount !== null && total > conditions.maxAmount) show = false;
+        }
+        // Hình thức thanh toán
+        if (conditions.payment && conditions.payment !== '') {
+            const discountText = $row.find('td:eq(4)').text().toLowerCase();
+            if (!discountText.includes(conditions.payment)) show = false;
+        }
+        if (show) {
+            $row.show();
+            found = true;
+            visibleCount++;
+        } else {
+            $row.hide();
+        }
+    });
+    if (visibleCount === 0) {
+        if ($('#invoiceTable .no-data-row').length === 0) {
+            $('#invoiceTable tbody').append('<tr class="no-data-row"><td colspan="7" class="text-center py-4">Không tìm thấy hóa đơn phù hợp</td></tr>');
+        } else {
+            $('#invoiceTable .no-data-row').show();
+        }
+    } else {
+        $('#invoiceTable .no-data-row').hide();
+    }
+    return found;
+}
+
+// Sửa phần xử lý lọc từ search bar
+$(document).on('click', '#searchButton', function () {
+    $('.invalid-feedback').remove();
+    $('.is-invalid').removeClass('is-invalid');
+    const invoiceId = ($('#invoiceSearch').val() || '').trim().toLowerCase();
+    let startDate = '', endDate = '';
+    const dateRange = ($('#dateFilter').val() || '').split('đến');
+    if (dateRange.length === 2) {
+        startDate = dateRange[0].trim().split('/').reverse().join('-');
+        endDate = dateRange[1].trim().split('/').reverse().join('-');
+    }
+    let statuses = [];
+    const statusVal = $('#statusFilter').val();
+
+    // Sửa map trạng thái 
+    const statusMap = {
+        'paid': 'Đã thanh toán',
+        'processing': 'Đang xử lý',
+        'cancelled': 'Đã huỷ',
+        'all': ''
+    };
+
+    if (statusVal && statusVal !== 'all') {
+        statuses.push(statusMap[statusVal] || statusVal);
+    }
+
+    const conditions = {
+        invoiceId,
+        startDate: startDate || null,
+        endDate: endDate || null,
+        statuses,
+        customer: '',
+        minAmount: null,
+        maxAmount: null,
+        payment: ''
+    };
+
+    console.log("Điều kiện lọc:", conditions); // Log để debug
+
+    if (filterInvoices(conditions)) {
+        showToast('<i class="fas fa-check-circle text-success me-2"></i> Đã áp dụng bộ lọc thành công!');
+    } else {
+        showToast('<i class="fas fa-times-circle me-2"></i> Thông tin hoá đơn không tồn tại', 'error');
+    }
+});
