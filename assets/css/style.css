@@ -533,84 +533,424 @@ body {
 }
 
 .alert-success-custom {
-  background-color: #d4edda;       /* Màu xanh nhạt */
-  border-left: 5px solid #28a745;  /* Viền bên trái xanh đậm */
-  color: #155724;                  /* Màu chữ xanh đậm */
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin: 16px 0;
-  width: fit-content;
+    background-color: #d4edda;
+    /* Màu xanh nhạt */
+    border-left     : 5px solid #28a745;
+    /* Viền bên trái xanh đậm */
+    color           : #155724;
+    /* Màu chữ xanh đậm */
+    padding         : 12px 16px;
+    border-radius   : 8px;
+    font-size       : 16px;
+    display         : flex;
+    align-items     : center;
+    box-shadow      : 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin          : 16px 0;
+    width           : fit-content;
 }
 
 .icon-check {
-  background-color: #28a745;
-  color: white;
-  border-radius: 50%;
-  padding: 4px 7px;
-  margin-right: 10px;
-  font-weight: bold;
+    background-color: #28a745;
+    color           : white;
+    border-radius   : 50%;
+    padding         : 4px 7px;
+    margin-right    : 10px;
+    font-weight     : bold;
 }
 
 .success-alert {
-  display: inline-flex;
-  align-items: center;
-  background-color: #E6FAE6 !important; /* Màu xanh lá cây nhạt */
-  padding: 16px 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 0 1px #E6E6E6;
-  max-width: fit-content;
-  font-family: Arial, sans-serif;
+    display         : inline-flex;
+    align-items     : center;
+    background-color: #E6FAE6 !important;
+    /* Màu xanh lá cây nhạt */
+    padding         : 16px 20px;
+    border-radius   : 12px;
+    box-shadow      : 0 0 0 1px #E6E6E6;
+    max-width       : fit-content;
+    font-family     : Arial, sans-serif;
 }
 
 .success-icon {
-  width: 32px;
-  height: 32px;
-  background-color: #50B777; /* màu xanh icon */
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  margin-right: 12px;
+    width           : 32px;
+    height          : 32px;
+    background-color: #50B777;
+    /* màu xanh icon */
+    color           : white;
+    border-radius   : 50%;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 16px;
+    margin-right    : 12px;
 }
 
 .success-message {
-  font-size: 16px;
-  color: #222; /* màu chữ đen nhạt */
-  font-weight: 500;
+    font-size  : 16px;
+    color      : #222;
+    /* màu chữ đen nhạt */
+    font-weight: 500;
 }
 
 .delete-alert {
-  display: inline-flex;
-  align-items: center;
-  background-color: #F8D7DA !important; /* Màu đỏ nhạt */
-  padding: 16px 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 0 1px #E6E6E6;
-  max-width: fit-content;
-  font-family: Arial, sans-serif;
+    display         : inline-flex;
+    align-items     : center;
+    background-color: #F8D7DA !important;
+    /* Màu đỏ nhạt */
+    padding         : 16px 20px;
+    border-radius   : 12px;
+    box-shadow      : 0 0 0 1px #E6E6E6;
+    max-width       : fit-content;
+    font-family     : Arial, sans-serif;
 }
 
 .delete-icon {
-  width: 32px;
-  height: 32px;
-  background-color: #DC3545; /* Màu đỏ icon */
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  margin-right: 12px;
+    width           : 32px;
+    height          : 32px;
+    background-color: #DC3545;
+    /* Màu đỏ icon */
+    color           : white;
+    border-radius   : 50%;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 16px;
+    margin-right    : 12px;
 }
 
 .delete-message {
-  font-size: 16px;
-  color: #222; /* màu chữ đen nhạt */
-  font-weight: 500;
+    font-size  : 16px;
+    color      : #222;
+    /* màu chữ đen nhạt */
+    font-weight: 500;
+}
+
+/*Supplier-management */
+
+/*Modal Thêm/sửa nhà cung cấp*/
+.supplier-section-title {
+    position  : absolute;
+    top       : -14px;
+    left      : 24px;
+    background: #fff;
+    padding   : 0 12px;
+    font-size : 16px;
+    z-index   : 2;
+}
+
+/*Modal Thêm/sửa chi tiết phiếu thuốc */
+.modal-drug-detail .modal-dialog {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    min-height     : 100vh;
+    margin         : 0 auto;
+}
+
+.modal-drug-detail .modal-content {
+    border-radius: 8px;
+    border       : 1px solid #000;
+    box-shadow   : 0px 2px 10px black;
+    background   : #fff;
+    position     : relative;
+    /* overflow  : hidden; */
+}
+
+.modal-drug-detail .modal-title {
+    font-size  : 18px;
+    font-weight: 700;
+    font-family: Inter, Arial, sans-serif;
+}
+
+.modal-drug-detail .section-title {
+    font-size    : 16px;
+    font-weight  : 700;
+    color        : #333;
+    margin-bottom: 16px;
+    margin-left  : 20px;
+    margin-top   : 0;
+    font-family  : Inter, Arial, sans-serif;
+}
+
+.modal-drug-detail .info-box {
+    background   : rgba(204, 204, 204, 0.25);
+    border-radius: 8px;
+    padding      : 32px 0 24px 30px;
+    margin       : 24px 0 24px 0;
+    position     : relative;
+    width        : 501px;
+    margin-left  : 52px;
+}
+
+.modal-drug-detail .info-form-row {
+    display      : flex;
+    align-items  : center;
+    margin-bottom: 24px;
+    margin-left  : 70px;
+}
+
+.modal-drug-detail .info-form-row label {
+    min-width   : fit-content;
+    font-size   : 14px;
+    font-weight : 600;
+    color       : #333;
+    margin-right: 8px;
+    font-family : Inter, Arial, sans-serif;
+}
+
+.modal-drug-detail .info-form-row input {
+    border       : 1px solid #ddd;
+    border-radius: 4px;
+    height       : 24px;
+    font-size    : 14px;
+    padding      : 2px 16px;
+    background   : #fff;
+    width        : 288px;
+    margin-right : 16px;
+}
+
+.modal-drug-detail .info-form-row .short-input {
+    width       : 87px;
+    margin-right: 16px;
+    margin-left : 4px;
+    margin-top  : 38px;
+}
+
+.modal-drug-detail .info-form-row .price-input {
+    width       : 107px;
+    margin-right: 4px;
+    margin-top  : 38px;
+}
+
+.modal-drug-detail .info-form-row .name-medicine {
+    width       : 288px;
+    margin-right: 16px;
+    margin-top  : 18px;
+
+}
+
+.modal-drug-detail .info-form-row .unit {
+    font-size   : 10px;
+    font-style  : italic;
+    font-weight : 100;
+    color       : #b2afaf;
+    margin-right: 4px;
+}
+
+.modal-drug-detail .side-buttons {
+    position       : absolute;
+    right          : -100px;
+    top            : 0;
+    display        : flex;
+    flex-direction : column;
+    gap            : 40px;
+    height         : 100%;
+    justify-content: flex-start;
+}
+
+.modal-drug-detail .side-buttons .btn {
+    width          : 85px;
+    height         : 39.5px;
+    border-radius  : 4px;
+    font-size      : 14px;
+    font-weight    : 500;
+    font-family    : Inter, Arial, sans-serif;
+    border         : 1px solid #ddd;
+    margin-bottom  : 0;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.modal-drug-detail .side-buttons .btn-primary {
+    background: #0D6EFD;
+    color     : #fff;
+}
+
+.modal-drug-detail .side-buttons .btn-light {
+    background: #F5F5F5;
+    color     : #333;
+}
+
+.modal-drug-detail .table-section {
+    background   : rgba(204, 204, 204, 0.25);
+    border-radius: 10px;
+    padding      : 24px 0 16px 0;
+    margin       : 0 0 24px 0;
+    width        : 634px;
+    margin-left  : 52px;
+    margin-top   : 20px;
+    position     : relative;
+}
+
+.modal-drug-detail .section-title {
+    position   : absolute;
+    top        : -14px;
+    left       : 20px;
+    background : #fff;
+    padding    : 0 8px;
+    font-size  : 16px;
+    font-weight: 700;
+    color      : #333;
+    z-index    : 2;
+}
+
+.modal-drug-detail .custom-table {
+    width          : 618px;
+    margin-left    : 4px;
+    background     : #fff;
+    border-collapse: separate;
+    border-spacing : 0;
+    font-family    : Inter, Arial, sans-serif;
+    font-size      : 14px;
+}
+
+.modal-drug-detail .custom-table th,
+.modal-drug-detail .custom-table td {
+    border     : 1px solid #666;
+    height     : 31px;
+    padding    : 0 8px;
+    text-align : left;
+    font-weight: 700;
+    background : #fff;
+}
+
+.modal-drug-detail .custom-table th {
+    background : none;
+    color      : #000;
+    font-size  : 14px;
+    font-weight: 700;
+}
+
+.modal-drug-detail .custom-table td {
+    font-weight: 400;
+}
+
+.modal-drug-detail .total-row {
+    display    : flex;
+    align-items: center;
+    margin-top : 12px;
+    margin-left: 17px;
+    gap        : 8px;
+}
+
+.modal-drug-detail .total-row label {
+    font-size    : 10px;
+    font-weight  : 600;
+    color        : #000;
+    margin-bottom: 0;
+    font-family  : Inter, Arial, sans-serif;
+}
+
+.modal-drug-detail .total-row input {
+    width        : 113px;
+    height       : 21px;
+    border-radius: 2px;
+    border       : 1px solid 333;
+    font-size    : 14px;
+    padding      : 2px 8px;
+    background   : #dbd9d9;
+}
+
+.modal-drug-detail .total-row .unit {
+    font-size  : 10px;
+    font-style : italic;
+    font-weight: 100;
+    color      : #000;
+    margin-left: 0;
+}
+
+.modal-drug-detail .footer-btns {
+    display        : flex;
+    gap            : 18px;
+    justify-content: flex-end;
+    margin-top     : 24px;
+    margin-bottom  : 8px;
+    padding-right  : 52px;
+    position       : static;
+    /* Đảm bảo không bị absolute gây lệch */
+}
+
+.modal-drug-detail .footer-btns .btn {
+    width          : 85px;
+    height         : 39.5px;
+    border-radius  : 4px;
+    font-size      : 14px;
+    font-weight    : 500;
+    font-family    : Inter, Arial, sans-serif;
+    border         : 1px solid #ddd;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    padding        : 0;
+}
+
+.modal-drug-detail .footer-btns .btn-primary {
+    background: #0D6EFD;
+    color     : #fff;
+}
+
+.modal-drug-detail .footer-btns .btn-light {
+    background: #F5F5F5;
+    color     : #333;
+}
+
+@media (max-width: 900px) {
+    .modal-drug-detail {
+        width: 99vw;
+    }
+
+    .modal-drug-detail .info-box,
+    .modal-drug-detail .table-section {
+        width      : 98vw;
+        margin-left: 1vw;
+    }
+
+    .modal-drug-detail .custom-table {
+        width: 96vw;
+    }
+
+    .modal-drug-detail .side-buttons,
+    .modal-drug-detail .footer-btns {
+        right: 10px;
+    }
+}
+
+/* Ngoại lệ phiếu nhập thuốc*/
+.input-wrap {
+    display       : flex;
+    flex-direction: column;
+    width         : 100%;
+    min-width     : 0;
+}
+
+.input-wrap .invalid-feedback {
+    font-size  : 0.85em;
+    margin-top : 2px;
+    white-space: normal;
+    word-break : break-word;
+    max-width  : 100%;
+    min-height : 18px;
+    /* Đảm bảo luôn chiếm chỗ, không xê dịch khi hiện/ẩn */
+    visibility : hidden;
+    display    : block;
+}
+
+.input-wrap .form-control.is-invalid+.invalid-feedback {
+    visibility: visible;
+}
+
+/* Thông báo tìm kiếm */
+.supplier-alert {
+    display      : none;
+    background   : #fff;
+    border       : 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow   : 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding      : 8px 20px 8px 14px;
+    font-size    : 16px;
+    color        : #222;
+    min-width    : 260px;
+    align-items  : center;
+    gap          : 8px;
+    margin-left  : 16px;
 }
