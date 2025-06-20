@@ -1,6 +1,6 @@
 # Pharmacity Management System
 
-Hệ thống quản lý hiệu thuốc Pharmacity, được phát triển để quản lý hiệu quả các hoạt động kinh doanh bao gồm: quản lý thuốc, quản lý khách hàng, quản lý hoá đơn, quản lý nhà cung cấp và báo cáo thống kê.
+Hệ thống quản lý hiệu thuốc Pharmacity, được phát triển để quản lý hiệu quả các chức năng bao gồm: quản lý thuốc, quản lý hoá đơn, quản lý khách hàng, quản lý nhà cung cấp và báo cáo thống kê.
 
 ## Thành phần chính
 
@@ -14,34 +14,78 @@ Hệ thống quản lý hiệu thuốc Pharmacity, được phát triển để 
 ## Cấu trúc thư mục
 
 ```
-pharmacity-management/
-│
-├── index.html                   # Trang chủ
-├── login.html                   # Trang đăng nhập
-│
-├── assets/                      # Thư mục chứa tài nguyên tĩnh
-│   ├── css/
-│   │   └── style.css            # File CSS chính
-│   ├── images/
-│   │   ├── favicon.svg          # Icon cho website
-│   │   └── pharmacity-logo.svg
-│   └── js/                      # JavaScript files
-│
-├── components/                  # Các thành phần có thể tái sử dụng
-│   ├── footer.html              # Footer chung
-│   ├── header.html              # Header chung
-│   └── sidebar.html             # Sidebar điều hướng
-│
-├── pages/                       # Các trang chức năng
-│   ├── dashboard.html           # Trang tổng quan
-│   ├── customer-management.html # Quản lý khách hàng
-│   ├── medicine-management.html # Quản lý thuốc
-│   ├── invoice-management.html  # Quản lý đơn hàng
-│   ├── supplier-management.html # Quản lý nhà cung cấp
-│   └── statistical-report.html  # Báo cáo thống kê
-│
-└── utils/
-    └── auth.js                  # Xử lý phân quyền
+Pharmacity-management
+|   index.html
+|   login.html
+|   README.md
+|
++---assets
+|   +---css
+|   |       dashboard.css
+|   |       invoice.css
+|   |       sodonhang.css
+|   |       style.css
+|   |
+|   +---images
+|   |       bank-qr-code.jpg
+|   |       favicon.svg
+|   |       momo-qr-code.jpg
+|   |       pharmacity-logo.svg
+|   |
+|   \---js
+|           dashboard.js
+|           invoice.js
+|           supplier-management.js
+|
++---components
+|   |   footer.html
+|   |   header.html
+|   |   sidebar.html
+|   |
+|   \---invoice
+|       |   cancel-changes-modals.html
+|       |   cancel-invoice-modals.html
+|       |   create-invoice-modal.html
+|       |   delete-confirm-modal.html
+|       |   edit-invoice-modal.html
+|       |   filter-modal.html
+|       |   invoice-detail-modal.html
+|       |   invoice-table.html
+|       |   pagination.html
+|       |   search-bar.html
+|       |   toast-notifications.html
+|       |   top-bar.html
+|       |
+|       \---payment
+|               card-payment-modal.html
+|               cash-payment-modal.html
+|               momo-payment-modal.html
+|               transfer-payment-modal.html
+|
++---pages
+|   |   customer_management.html
+|   |   dashboard.html
+|   |   invoice-management.html
+|   |   statistical-report.html
+|   |   supplier-management.html
+|   |
+|   +---manage-medicine
+|   |       medicine-alerts.html
+|   |       medicine-lists.html
+|   |
+|   +---manage-warehouse
+|   |       manage-stock.html
+|   |       stock-in.html
+|   |       stock-out.html
+|   |
+|   \---report
+|           doanhthu.html
+|           khachhang.html
+|           loinhuan.html
+|           sodonhang.html
+|
+\---utils
+        auth.js
 ```
 
 ## Cài đặt
